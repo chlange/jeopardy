@@ -41,8 +41,9 @@
  *  @todo
  *      - add fourth player for final
  *      - dynamic resize of layout
+ *      - ...little here and there
  *
- *  @version 0.9 (Beta) - but stable!
+ *  @version 0.9 - stable
  *
  *  @author Christian Lange <chlange@htwg-konstanz.de>
  *                          <Christian_Lange@hotmail.com>
