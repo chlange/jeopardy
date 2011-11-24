@@ -45,18 +45,23 @@ Screenshots
 -----------
 
 Round choice:
+
 ![](http://i.imgur.com/PdzVW.png)
 
 Player input:* - add double jeopardy
+
 ![](http://i.imgur.com/kZTJF.png)
 
 Game field:
+
 ![](http://i.imgur.com/TojZ7.png)
 
 Answer:
+
 ![](http://i.imgur.com/hMVrk.png)
 
 Podium:
+
 ![](http://i.imgur.com/lIQgj.png)
 
 Bugs? Feature request? You have some Beer?
