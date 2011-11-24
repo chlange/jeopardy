@@ -56,6 +56,10 @@ Game field:
 
 ![](http://i.imgur.com/TojZ7.png)
 
+Colored game field:
+
+![](http://i.imgur.com/4kwY6.png)
+
 Answer:
 
 ![](http://i.imgur.com/hMVrk.png)
