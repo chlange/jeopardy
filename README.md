@@ -12,7 +12,7 @@ Jeopardy
 Description
 -----------
 
-Implementation of well known Jeopardy! quiz show in C++ using Qt library
+* Implementation of well known Jeopardy! quiz show in C++ using Qt library
 
 Features
 --------
