@@ -83,16 +83,22 @@ private:
     void setNames();
     void openAnswer(int category, int points);
     void processResult(QString result, int points);
+
     /* Update points and names */
     void updateGameFieldValues();
+
     /* Update names on game field */
     void updateNames();
+
     /* Update points of players on game field */
     void updatePoints();
+
     /* Point to players - Sort of workaround */
     void insertPlayers(Player *players[3]);
+
     /* Calculate points after answer gets closed */
     void calcPoints(Player *player, QString result, int points);
+
     void showPodium();
     /*
      * Save game state
@@ -100,11 +106,13 @@ private:
      * @param backup automated backup every answer without file dialog prompt in gameStates/backup
      */
     void openFileSaver(bool backup);
+
     /* Open Editor to change player points */
     void openEditor();
+
     /* Load game State */
     void openFileLoader();
-    QString getButtonColor();
+    QString getButtonColorByLastWinner();
     void assignButtons();
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();

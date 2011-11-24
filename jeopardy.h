@@ -43,6 +43,7 @@ class Jeopardy : public QMainWindow {
 public:
     Jeopardy(QWidget *parent = 0);
     ~Jeopardy();
+
     /* Initialize player infos */
     bool initPlayers(QWidget *context);
 

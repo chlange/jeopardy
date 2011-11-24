@@ -59,6 +59,7 @@ private:
 
     void showButtons();
     void hideButtons();
+
     /* Listen to buttons */
     /* If player presses his button all other buttons get locked and the right/wrong buttons get visible */
     void keyPressEvent(QKeyEvent *event);
@@ -66,6 +67,7 @@ private:
     bool keyListenerIsLocked();
     void lockKeyListener();
     void releaseKeyListener();
+
     /* Point to players - Sort of workaround */
     void insertPlayers(Player *players[3]);
     void processKeypress(int player);

@@ -251,10 +251,15 @@ void GameField::openAnswer(int category, int points)
 
     this->lastWinner = this->answer->exec();
 
+    /* Set color of button by last winner - Look at assignButtons() for understanding */
+    this->buttons[( points / 100 - 1) * 5 + category - 1]->setStyleSheet(this->getButtonColorByLastWinner());
+
     /* Calculate points of players after answer gets closed */
     this->processResult(answer->getResult(), points);
+
     /* Update points on game field */
     this->updatePoints();
+
     /* Increase number of "questioned answers" */
     this->incAnswered(1);
 
@@ -447,6 +452,9 @@ void GameField::openFileLoader()
           case 8:
               this->players[lineNr - 6]->setColor(line);
               break;
+          case 59:
+              this->alreadyAnswered = line.toInt();
+              break;
           default:
               /* Already questioned answers */
               if(9 <= lineNr && lineNr <= 33)
@@ -454,6 +462,15 @@ void GameField::openFileLoader()
               /* Color buttons with player color */
               else if(34 <= lineNr && lineNr <= 58)
               {
+                  if(line == "r")
+                      line = "red";
+                  else if (line == "g")
+                      line = "green";
+                  else if(line == "y")
+                      line = "yellow";
+                  else if(line == "b")
+                      line = "blue";
+
                   line.prepend("QPushButton { background-color : ");
                   line.append("; }");
                   this->buttons[lineNr - 34]->setStyleSheet(line);
@@ -509,11 +526,16 @@ void GameField::openFileSaver(bool backup)
 
         for(int i = 0; i < 25; i++)
         {
+            /* Just save first character of color */
             QString stylesheet = this->buttons[i]->styleSheet();
             stylesheet.remove(0,33);
-            stylesheet.chop(3);
+            int len = stylesheet.length();
+            stylesheet.chop(--len);
+
             stream << stylesheet << '\n';
         }
+
+        stream << this->alreadyAnswered << '\n';
 
         stream.flush();
         file.close();
@@ -521,7 +543,7 @@ void GameField::openFileSaver(bool backup)
     }
 }
 
-QString GameField::getButtonColor()
+QString GameField::getButtonColorByLastWinner()
 {
     QString color;
 
@@ -540,153 +562,128 @@ void GameField::on_button_1_100_clicked()
 {
     this->buttons[0]->setDisabled(true);
     this->openAnswer(1, 100);
-    this->buttons[0]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_2_100_clicked()
 {
     this->buttons[1]->setDisabled(true);
     this->openAnswer(2, 100);
-    this->buttons[1]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_3_100_clicked()
 {
     this->buttons[2]->setDisabled(true);
     this->openAnswer(3, 100);
-    this->buttons[2]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_4_100_clicked()
 {
     this->buttons[3]->setDisabled(true);
     this->openAnswer(4, 100);
-    this->buttons[3]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_5_100_clicked()
 {
     this->buttons[4]->setDisabled(true);
     this->openAnswer(5, 100);
-    this->buttons[4]->setStyleSheet(this->getButtonColor());
 }
 /* 200 points buttons */
 void GameField::on_button_1_200_clicked()
 {
     this->buttons[5]->setDisabled(true);
     this->openAnswer(1, 200);
-    this->buttons[5]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_2_200_clicked()
 {
     this->buttons[6]->setDisabled(true);
     this->openAnswer(2, 200);
-    this->buttons[6]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_3_200_clicked()
 {
     this->buttons[7]->setDisabled(true);
     this->openAnswer(3, 200);
-    this->buttons[7]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_4_200_clicked()
 {
     this->buttons[8]->setDisabled(true);
     this->openAnswer(4, 200);
-    this->buttons[8]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_5_200_clicked()
 {
     this->buttons[9]->setDisabled(true);
     this->openAnswer(5, 200);
-    this->buttons[9]->setStyleSheet(this->getButtonColor());
 }
 /* 300 points buttons */
 void GameField::on_button_1_300_clicked()
 {
     this->buttons[10]->setDisabled(true);
     this->openAnswer(1, 300);
-    this->buttons[10]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_2_300_clicked()
 {
     this->buttons[11]->setDisabled(true);
     this->openAnswer(2, 300);
-    this->buttons[11]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_3_300_clicked()
 {
     this->buttons[12]->setDisabled(true);
     this->openAnswer(3, 300);
-    this->buttons[12]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_4_300_clicked()
 {
     this->buttons[13]->setDisabled(true);
     this->openAnswer(4, 300);
-    this->buttons[13]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_5_300_clicked()
 {
     this->buttons[14]->setDisabled(true);
     this->openAnswer(5, 300);
-    this->buttons[14]->setStyleSheet(this->getButtonColor());
 }
 /* 400 points buttons */
 void GameField::on_button_1_400_clicked()
 {
     this->buttons[15]->setDisabled(true);
     this->openAnswer(1, 400);
-    this->buttons[15]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_2_400_clicked()
 {
     this->buttons[16]->setDisabled(true);
     this->openAnswer(2, 400);
-    this->buttons[16]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_3_400_clicked()
 {
     this->buttons[17]->setDisabled(true);
     this->openAnswer(3, 400);
-    this->buttons[17]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_4_400_clicked()
 {
     this->buttons[18]->setDisabled(true);
     this->openAnswer(4, 400);
-    this->buttons[18]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_5_400_clicked()
 {
     this->buttons[19]->setDisabled(true);
     this->openAnswer(5, 400);
-    this->buttons[19]->setStyleSheet(this->getButtonColor());
 }
 /* 500 points buttons */
 void GameField::on_button_1_500_clicked()
 {
     this->buttons[20]->setDisabled(true);
     this->openAnswer(1, 500);
-    this->buttons[20]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_2_500_clicked()
 {
     this->buttons[21]->setDisabled(true);
     this->openAnswer(2, 500);
-    this->buttons[21]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_3_500_clicked()
 {
     this->buttons[22]->setDisabled(true);
     this->openAnswer(3, 500);
-    this->buttons[22]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_4_500_clicked()
 {
     this->buttons[23]->setDisabled(true);
     this->openAnswer(4, 500);
-    this->buttons[23]->setStyleSheet(this->getButtonColor());
 }
 void GameField::on_button_5_500_clicked()
 {
     this->buttons[24]->setDisabled(true);
     this->openAnswer(5, 500);
-    this->buttons[24]->setStyleSheet(this->getButtonColor());
 }
