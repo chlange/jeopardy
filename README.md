@@ -48,7 +48,7 @@ Round choice:
 
 ![](http://i.imgur.com/PdzVW.png)
 
-Player input:* - add double jeopardy
+Player input:
 
 ![](http://i.imgur.com/kZTJF.png)
 
