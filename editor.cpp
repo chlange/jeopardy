@@ -29,12 +29,14 @@
 #include "editor.h"
 #include "ui_editor.h"
 
-Editor::Editor(QWidget *parent, Player *players[3]) :
+Editor::Editor(QWidget *parent, Player *players[NUMBER_PLAYERS]):
     QDialog(parent),
     ui(new Ui::Editor)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
+    this->assignPlayerNamesLines();
+    this->assignPlayerPointsLines();
     this->showValues();
 }
 
@@ -43,22 +45,31 @@ Editor::~Editor()
     delete ui;
 }
 
+void Editor::assignPlayerPointsLines()
+{
+    this->playerPointsLines[0] = ui->linePlayer1;
+    this->playerPointsLines[1] = ui->linePlayer2;
+    this->playerPointsLines[2] = ui->linePlayer3;
+}
+
+void Editor::assignPlayerNamesLines()
+{
+    this->playerNamesLines[0] = ui->player1;
+    this->playerNamesLines[1] = ui->player2;
+    this->playerNamesLines[2] = ui->player3;
+}
+
 void Editor::showValues()
 {
     QString points;
 
-    points = QString("%1").arg(this->players[0]->getPoints());
-    ui->linePlayer1->setText(points);
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    {
+        points = QString("%1").arg(this->players[i]->getPoints());
+        this->playerPointsLines[i]->setText(points);
 
-    points = QString("%1").arg(this->players[1]->getPoints());
-    ui->linePlayer2->setText(points);
-
-    points = QString("%1").arg(this->players[2]->getPoints());
-    ui->linePlayer3->setText(points);
-
-    ui->player1->setText(this->players[0]->getName());
-    ui->player2->setText(this->players[1]->getName());
-    ui->player3->setText(this->players[2]->getName());
+        this->playerNamesLines[i]->setText(this->players[i]->getName());
+    }
 }
 
 void Editor::changeEvent(QEvent *e)
@@ -73,22 +84,19 @@ void Editor::changeEvent(QEvent *e)
     }
 }
 
-/* Point to players - Sort of workaround */
-void Editor::insertPlayers(Player *players[3])
+void Editor::insertPlayers(Player *players[NUMBER_PLAYERS])
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->players[i] = players[i];
 }
 
  void Editor::saveChanges()
  {
-     this->players[0]->setPoints(ui->linePlayer1->text().toInt());
-     this->players[1]->setPoints(ui->linePlayer2->text().toInt());
-     this->players[2]->setPoints(ui->linePlayer3->text().toInt());
-
-     this->players[0]->setName(ui->player1->text());
-     this->players[1]->setName(ui->player2->text());
-     this->players[2]->setName(ui->player3->text());
+     for(int i = 0; i < NUMBER_PLAYERS; i++)
+     {
+         this->players[i]->setPoints(this->playerPointsLines[i]->text().toInt());
+         this->players[i]->setName(this->playerNamesLines[i]->text());
+     }
 
      done(0);
  }

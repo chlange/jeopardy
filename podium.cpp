@@ -29,12 +29,13 @@
 #include "podium.h"
 #include "ui_podium.h"
 
-Podium::Podium(QWidget *parent, Player *players[3]) :
+Podium::Podium(QWidget *parent, Player *players[NUMBER_PLAYERS]) :
     QDialog(parent),
     ui(new Ui::Podium)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
+    this->assignLabels();
     this->sort();
     this->showPodium();
 }
@@ -56,21 +57,28 @@ void Podium::changeEvent(QEvent *e)
     }
 }
 
+void Podium::assignLabels()
+{
+    this->podiumPlaceLabels[FIRST_PLAYER] = ui->first;
+    this->podiumPlaceLabels[SECOND_PLAYER] = ui->second;
+    this->podiumPlaceLabels[THIRD_PLAYER] = ui->third;
+}
+
 void Podium::showPodium()
 {
     QString text;
 
-    ui->first->setStyleSheet(this->getLabelColorString(this->order[2]));
-    text = QString("** %1 **").arg(this->players[this->order[2]]->getName());
-    ui->first->setText(text);
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    {
+        this->podiumPlaceLabels[i]->setStyleSheet(this->getLabelColorString(this->order[i]));
 
-    ui->second->setStyleSheet(this->getLabelColorString(this->order[1]));
-    text = QString("2. %1").arg(this->players[this->order[1]]->getName());
-    ui->second->setText(text);
+        if(i == FIRST_PLACE_PODIUM)
+            text = QString("** %1 **").arg(this->players[this->order[i]]->getName());
+        else
+            text = QString("%1. %2").arg(i+1).arg(this->players[this->order[i]]->getName());
 
-    ui->third->setStyleSheet(this->getLabelColorString(this->order[0]));
-    text = QString("3. %1").arg(this->players[this->order[0]]->getName());
-    ui->third->setText(text);
+        this->podiumPlaceLabels[i]->setText(text);
+    }
 }
 
 QString Podium::getLabelColorString(int player)
@@ -86,9 +94,9 @@ void Podium::sort()
 {
     Player *first, *second, *third;
 
-    first = this->players[0];
-    second = this->players[1];
-    third = this->players[2];
+    first = this->players[FIRST_PLAYER];
+    second = this->players[SECOND_PLAYER];
+    third = this->players[THIRD_PLAYER];
 
     /* Manual sorting for 3 numbers scales better than known sorting algorithms, I think */
     if(first->getPoints() <= second->getPoints() && first->getPoints() <= third->getPoints())
@@ -117,14 +125,14 @@ void Podium::sort()
 
 void Podium::setOrder(int first, int second, int third)
 {
-    order[0] = first;
-    order[1] = second;
-    order[2] = third;
+    order[THIRD_PLACE] = third;
+    order[SECOND_PLACE] = second;
+    order[FIRST_PLACE] = first;
 }
 
 /* Point to players - Sort of workaround */
-void Podium::insertPlayers(Player *players[3])
+void Podium::insertPlayers(Player *players[NUMBER_PLAYERS])
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->players[i] = players[i];
 }

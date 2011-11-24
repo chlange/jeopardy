@@ -47,19 +47,19 @@ GameField::GameField(QWidget *parent) :
 GameField::~GameField()
 {
     delete ui;
-    if(this->answer != 0)
+    if(this->answer != NOT_DEFINED)
         delete this->answer;
-    if(this->editor != 0)
+    if(this->editor != NOT_DEFINED)
         delete this->editor;
-    if(this->editorCtx != 0)
+    if(this->editorCtx != NOT_DEFINED)
         delete this->editorCtx;
-    if(this->loadCtx != 0)
+    if(this->loadCtx != NOT_DEFINED)
         delete this->loadCtx;
-    if(this->saveCtx != 0)
+    if(this->saveCtx != NOT_DEFINED)
         delete this->saveCtx;
-    if(this->endRoundCtx != 0)
+    if(this->endRoundCtx != NOT_DEFINED)
         delete this->endRoundCtx;
-    if(this->podium != 0)
+    if(this->podium != NOT_DEFINED)
         delete this->podium;
 }
 
@@ -75,8 +75,10 @@ void GameField::changeEvent(QEvent *e)
     }
 }
 
-GameField::GameField(QWidget *parent, int roundArg, Player *players[3]) :
-    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(0), lastWinner(-1), answer(0), editor(0), podium(0), editorCtx(0), loadCtx(0), saveCtx(0), endRoundCtx(0)
+GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
+    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NOT_DEFINED),
+    lastWinner(-1), answer(NOT_DEFINED), editor(NOT_DEFINED), podium(NOT_DEFINED),
+    editorCtx(NOT_DEFINED), loadCtx(NOT_DEFINED), saveCtx(NOT_DEFINED), endRoundCtx(NOT_DEFINED)
 {
     ui->setupUi(this);
 
@@ -161,16 +163,18 @@ void GameField::setCategoryNames()
 {
     int categoryLine;
     QString categoryName;
-    int lineNr;
 
     QString fileString;
 
     /* Prepare filestring */
     fileString = QString("answers/%1.jrf").arg(this->round);
 
-    for(int i = 1; i < 6; i++)
+    for(int i = 1; i < NUMBER_CATEGORIES + OFFSET; i++)
     {
-        categoryLine = (i == 1) ? 1 : ((i - 1) * 5) + i;
+        int CATEGORY = i;
+
+        /* Calculate on which line the categories in the file start */
+        categoryLine = (CATEGORY == 1) ? 1 : ((CATEGORY - OFFSET) * NUMBER_CATEGORIES) + CATEGORY;
 
         QFile file(fileString);
 
@@ -183,26 +187,22 @@ void GameField::setCategoryNames()
         QTextStream in(&file);
 
         /* Step to appropriate category section */
-        lineNr = 0;
-        while(lineNr != categoryLine)
-        {
+        for(int lineNr = 0; lineNr != categoryLine; lineNr++)
             categoryName = in.readLine();
-            lineNr++;
-        }
 
-        this->categories[i - 1]->setText(categoryName);
+        this->categories[CATEGORY - OFFSET]->setText(categoryName);
     }
 }
 
 void GameField::setNames()
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->playerNameLabels[i]->setText(this->players[i]->getName());
 }
 
 void GameField::setPoints()
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->playerPointsLabels[i]->setText("0");
 }
 
@@ -210,7 +210,7 @@ void GameField::setLabelColor()
 {
     QString color;
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
     {
         color = QString("QLabel { background-color : %1; }").arg(this->players[i]->getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
@@ -219,52 +219,54 @@ void GameField::setLabelColor()
 
 void GameField::updateGameFieldValues()
 {
-    this->updatePoints();
-    this->updateNames();
+    this->updatePointsLabels();
+    this->updateNamesLabels();
     this->setLabelColor();
 }
 
-/* Update points of players on game field */
-void GameField::updatePoints()
+void GameField::updatePointsLabels()
 {
     QString points;
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
     {
         points = QString("%1").arg(this->players[i]->getPoints());
         this->playerPointsLabels[i]->setText(points);
     }
 }
 
-/* Update names of players on game field */
-void GameField::updateNames()
+void GameField::updateNamesLabels()
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->playerNameLabels[i]->setText(this->players[i]->getName());
+}
+
+void GameField::updateLabelsAfterAnswer()
+{
+    this->updatePointsLabels();
+    this->updateNamesLabels();
+}
+
+void GameField::updateAfterAnswer()
+{
+    this->incAlreadyAnswered(1);
+    this->updateLabelsAfterAnswer();
 }
 
 void GameField::openAnswer(int category, int points)
 {
     this->answer = new Answer(this, this->round, this->players);
-
     this->answer->setAnswer(category, points);
 
     this->lastWinner = this->answer->exec();
+    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->lastPoints = points;
+    this->result = answer->getResult();
 
-    /* Set color of button by last winner - Look at assignButtons() for understanding */
-    this->buttons[( points / 100 - 1) * 5 + category - 1]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->processResult();
+    this->updateAfterAnswer();
 
-    /* Calculate points of players after answer gets closed */
-    this->processResult(answer->getResult(), points);
-
-    /* Update points on game field */
-    this->updatePoints();
-
-    /* Increase number of "questioned answers" */
-    this->incAnswered(1);
-
-    /* Check if round is completely played */
-    if(this->getAnswered() < 25)
+    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
     {
         /* Do backup after each answer */
         this->openFileSaver(true);
@@ -282,74 +284,33 @@ void GameField::showPodium()
     this->podium->exec();
 }
 
-/* Calculate points after return from answer */
-void GameField::processResult(QString result, int points)
+void GameField::processResult()
 {
-    Player *player;
+    int playerId;
 
-    while(result.length() > 0)
+    while(this->result.length() > 0)
     {
-        /* Player 1 */
-        if(result.startsWith("1"))
-        {
-            /* Remove first character (player indicator) */
-            result.remove(0,1);
-
-            /* Increase/Decrease points */
-            player = this->players[0];
-            this->calcPoints(player, result, points);
-
-            /* Remove first character (result indicator) */
-            result.remove(0,1);
-        }
-        /* Player 2 */
-        else if(result.startsWith("2"))
-        {
-            /* Remove first character (player indicator) */
-            result.remove(0,1);
-
-            /* Increase/Decrease points */
-            player = this->players[1];
-            this->calcPoints(player, result, points);
-
-            /* Remove first character (result indicator) */
-            result.remove(0,1);
-        }
-        /* Player 3 */
+        if(this->result.startsWith(PLAYER_ONE_STRING))
+            playerId = PLAYER_ONE;
+        else if(this->result.startsWith(PLAYER_TWO_STRING))
+            playerId = PLAYER_TWO;
         else
-        {
-            /* Remove first character (player indicator) */
-            result.remove(0,1);
+            playerId = PLAYER_THREE;
 
-            /* Increase/Decerase points */
-            player = this->players[2];
-            this->calcPoints(player, result, points);
+        this->result.remove(0, PLAYER_INDICATOR);
 
-            /* Remove first character (result indicator) */
-            result.remove(0,1);
-        }
+        if(this->result.startsWith(WON))
+            this->players[playerId]->incPoints(this->lastPoints);
+        else
+            this->players[playerId]->decPoints(this->lastPoints);
+
+        this->result.remove(0, RESULT_INDICATOR);
     }
 }
 
-/* Calculate points of player */
-void GameField::calcPoints(Player *player, QString result, int points)
+void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
 {
-    if(result.startsWith("1"))
-    {
-        /* Won */
-        player->incPoints(points);
-    }
-    else
-    {
-        /* Lost */
-        player->decPoints(points);
-    }
-}
-
-/* Point to players - Sort of workaround */
-void GameField::insertPlayers(Player *players[3])
-{
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->players[i] = players[i];
 }
 
@@ -363,17 +324,17 @@ int GameField::getRound()
     return this->round;
 }
 
-void GameField::incAnswered(int number)
+void GameField::incAlreadyAnswered(int number)
 {
     this->alreadyAnswered += number;
 }
 
-void GameField::setAnswered(int number)
+void GameField::setAlreadyAnswered(int number)
 {
     this->alreadyAnswered = number;
 }
 
-int GameField::getAnswered()
+int GameField::getAlreadyAnswered()
 {
     return this->alreadyAnswered;
 }
@@ -497,7 +458,7 @@ void GameField::openFileSaver(bool backup)
     else
         fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
-    if(!fileName.endsWith(".jgs"))
+    if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");
 
     if (fileName != "")
@@ -512,23 +473,23 @@ void GameField::openFileSaver(bool backup)
       {
         QTextStream stream(&file);
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < NUMBER_PLAYERS; i++)
             stream << this->players[i]->getName() << '\n';
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < NUMBER_PLAYERS; i++)
             stream << this->players[i]->getPoints() << '\n';
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < NUMBER_PLAYERS; i++)
             stream << this->players[i]->getColor() << '\n';
 
-        for(int i = 0; i < 25; i++)
+        for(int i = 0; i < NUMBER_CATEGORIES * NUMBER_ANSWERS; i++)
             stream << !this->buttons[i]->isEnabled() << '\n';
 
-        for(int i = 0; i < 25; i++)
+        for(int i = 0; i < NUMBER_CATEGORIES * NUMBER_ANSWERS; i++)
         {
             /* Just save first character of color */
             QString stylesheet = this->buttons[i]->styleSheet();
-            stylesheet.remove(0,33);
+            stylesheet.remove(0,COLOR_TEXT_LENGTH);
             int len = stylesheet.length();
             stylesheet.chop(--len);
 
@@ -545,11 +506,9 @@ void GameField::openFileSaver(bool backup)
 
 QString GameField::getButtonColorByLastWinner()
 {
-    QString color;
+    QString color = "";
 
-    color = "";
-
-    if(this->lastWinner == -1)
+    if(this->lastWinner == NO_WINNER)
         return color;
 
     color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());

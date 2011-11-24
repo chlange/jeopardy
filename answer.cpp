@@ -52,7 +52,7 @@ void Answer::changeEvent(QEvent *e)
     }
 }
 
-Answer::Answer(QWidget *parent, int round, Player *players[3]) :
+Answer::Answer(QWidget *parent, int round, Player *players[NUMBER_PLAYERS]) :
         QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false)
 {
     ui->setupUi(this);
@@ -67,13 +67,10 @@ void Answer::keyPressEvent(QKeyEvent *event)
 {
     int key;
 
-    /* Don't accept new key presses if a player pressed already */
     if(this->keyListenerIsLocked() == true)
         return;
 
     key= event->key();
-
-    /* If player presses his button all other buttons get locked and the right/wrong buttons get visible */
     if(key == 0x41)
     {
         processKeypress(0);
@@ -99,9 +96,9 @@ void Answer::processKeypress(int player)
 }
 
 /* Point to players - Sort of workaround */
-void Answer::insertPlayers(Player *players[3])
+void Answer::insertPlayers(Player *players[NUMBER_PLAYERS])
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
         this->players[i] = players[i];
 }
 
@@ -150,8 +147,7 @@ void Answer::on_buttonEnd_clicked()
     msgBox.setDefaultButton(QMessageBox::Abort);
     int ret = msgBox.exec();
 
-    /* yes */
-    if(ret == 0x00004000)
+    if(ret == YES)
     {
         this->music->stop();
         done(-1);
@@ -163,27 +159,27 @@ void Answer::on_buttonRight_clicked()
 {
     QString resultTmp;
     resultTmp = QString("%1").arg(this->currentPlayer->getId());
-    resultTmp.append("1");
+    resultTmp.append(WON);
     this->result.append(resultTmp);
     this->releaseKeyListener();
     this->music->stop();
-    done(this->currentPlayer->getId()-1);
+    done(this->currentPlayer->getId() - OFFSET);
 }
 
 void Answer::on_buttonWrong_clicked()
 {
     QString resultTmp;
     resultTmp = QString("%1").arg(this->currentPlayer->getId());
-    resultTmp.append("0");
+    resultTmp.append(LOST);
     this->result.append(resultTmp);
-    this->currentPlayer = 0;
+    this->currentPlayer = NOT_DEFINED;
     this->hideButtons();
     this->releaseKeyListener();
 }
 
 void Answer::on_buttonCancel_clicked()
 {
-    this->currentPlayer = 0;
+    this->currentPlayer = NOT_DEFINED;
     this->hideButtons();
     this->releaseKeyListener();
 }
@@ -203,8 +199,7 @@ void Answer::setAnswer(int category, int points)
     /* Check if answer is an image */
     if(answer.startsWith("[img]"))
     {
-        /* Remove [img] tag */
-        answer.remove(0,5);
+        answer.remove(0, IMG_TAG);
 
         answer.prepend(QString("/answers/%1/").arg(this->round));
         answer.prepend(QDir::currentPath());
@@ -217,7 +212,7 @@ void Answer::setAnswer(int category, int points)
         if(answer.startsWith("[l]"))
         {
             ui->answer->setAlignment(Qt::AlignLeft);
-            answer.remove(0, 3);
+            answer.remove(0, ALIGN_TAG);
         }
 
         int count = answer.count("<br>");
@@ -231,11 +226,11 @@ QFont Answer::meassureFontSize(int count)
 {
     QFont font;
 
-    if(count > 20)
+    if(count > MANY_LINE_BREAKS)
         font.setPointSize(7);
-    if(count > 15)
+    else if(count > MORE_LINE_BREAKS)
         font.setPointSize(15);
-    else if(count > 10)
+    else if(count > SOME_LINE_BREAKS)
         font.setPointSize(20);
     else
         font.setPointSize(28);
@@ -247,7 +242,6 @@ QFont Answer::meassureFontSize(int count)
 void Answer::getAnswer(int category, int points, QString *answer)
 {
     int categoryFileLine;
-    int lineNr;
     QString currentLine;
     QString delimiter;
 
@@ -265,12 +259,8 @@ void Answer::getAnswer(int category, int points, QString *answer)
     QTextStream in(&file);
 
     /* Step to appropriate category section */
-    lineNr = 0;
-    while(lineNr != categoryFileLine)
-    {
+    for(int lineNr = 0; lineNr != categoryFileLine; lineNr++)
         currentLine = in.readLine();
-        lineNr++;
-    }
 
     /* Prepare answer and delimiter variable (Points: Answer)*/
     delimiter = QString("%1:").arg(points);
@@ -281,7 +271,7 @@ void Answer::getAnswer(int category, int points, QString *answer)
 
     /* Remove preceding points */
     *answer = currentLine;
-    answer->remove(0,5);
+    answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
 }
 
 QString Answer::getRoundFile()
@@ -298,9 +288,7 @@ int Answer::getCategoryLine(int category)
 {
     int categoryLine;
 
-    categoryLine = (category == 1) ? 1 : ((category - 1) * 5) + category;
+    categoryLine = (category == 1) ? 1 : ((category - OFFSET) * NUMBER_CATEGORIES) + category;
 
     return categoryLine;
 }
-
-

@@ -38,6 +38,21 @@
 #include <QAction>
 #include <QLabel>
 
+#define PLAYER_ONE_STRING "1"
+#define PLAYER_TWO_STRING "2"
+#define WON "1"
+#define PLAYER_ONE 0
+#define PLAYER_TWO 1
+#define PLAYER_THREE 2
+#define NUMBER_ANSWERS 5
+#define COMPLETELY_ANSWERED 25
+#define POINTS_FACTOR 100
+#define NO_WINNER -1
+#define COLOR_TEXT_LENGTH 33
+#define PLAYER_INDICATOR 1
+#define RESULT_INDICATOR 1
+#define NOT false
+
 namespace Ui {
     class gameField;
 }
@@ -45,16 +60,16 @@ namespace Ui {
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = 0);
-    GameField(QWidget *parent = 0, int round = 1, Player *players[3] = 0);
+    GameField(QWidget *parent = NOT_DEFINED);
+    GameField(QWidget *parent = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
     ~GameField();
     void init();
     void setRound(int round);
     int getRound();
     /* Methods to check if game field is playes completely */
-    void incAnswered(int number);
-    void setAnswered(int number);
-    int getAnswered();
+    void incAlreadyAnswered(int number);
+    void setAlreadyAnswered(int number);
+    int getAlreadyAnswered();
 
 protected:
     void changeEvent(QEvent *e);
@@ -64,7 +79,8 @@ private:
     int round;
     int alreadyAnswered;
     int lastWinner;
-    Player *players[3];
+    int lastPoints;
+    Player *players[NUMBER_PLAYERS];
     Answer *answer;
     Editor *editor;
     Podium *podium;
@@ -72,51 +88,38 @@ private:
     QAction *loadCtx;
     QAction *saveCtx;
     QAction *endRoundCtx;
-    QPushButton *buttons[25];
-    QLabel *playerNameLabels[3];
-    QLabel *playerPointsLabels[3];
-    QLabel *categories[5];
+    QPushButton *buttons[NUMBER_CATEGORIES * NUMBER_ANSWERS];
+    QLabel *playerNameLabels[NUMBER_PLAYERS];
+    QLabel *playerPointsLabels[NUMBER_PLAYERS];
+    QLabel *categories[NUMBER_CATEGORIES];
+    QString result;
 
-    void setCategoryNames();
-    void setLabelColor();
-    void setPoints();
-    void setNames();
-    void openAnswer(int category, int points);
-    void processResult(QString result, int points);
-
-    /* Update points and names */
-    void updateGameFieldValues();
-
-    /* Update names on game field */
-    void updateNames();
-
-    /* Update points of players on game field */
-    void updatePoints();
-
-    /* Point to players - Sort of workaround */
-    void insertPlayers(Player *players[3]);
-
-    /* Calculate points after answer gets closed */
-    void calcPoints(Player *player, QString result, int points);
-
-    void showPodium();
-    /*
-     * Save game state
-     *
-     * @param backup automated backup every answer without file dialog prompt in gameStates/backup
-     */
-    void openFileSaver(bool backup);
-
-    /* Open Editor to change player points */
-    void openEditor();
-
-    /* Load game State */
-    void openFileLoader();
-    QString getButtonColorByLastWinner();
     void assignButtons();
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
     void assignCategoryLabels();
+    void setCategoryNames();
+    void setLabelColor();
+    void setPoints();
+    void setNames();
+    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+
+    void updateGameFieldValues();
+    void updateNamesLabels();
+    void updatePointsLabels();
+    void updateLabelsAfterAnswer();
+    void updateAfterAnswer();
+
+    QString getButtonColorByLastWinner();
+
+    void openFileLoader();
+    void openFileSaver(bool automatedBackup);
+    void openEditor();
+
+    void openAnswer(int category, int points);
+    void processResult();
+    void showPodium();
+
 
 private slots:
     /* Context Menu */

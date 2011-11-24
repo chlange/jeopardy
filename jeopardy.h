@@ -41,7 +41,7 @@ namespace Ui {
 class Jeopardy : public QMainWindow {
     Q_OBJECT
 public:
-    Jeopardy(QWidget *parent = 0);
+    Jeopardy(QWidget *parent = NOT_DEFINED);
     ~Jeopardy();
 
     /* Initialize player infos */
@@ -52,7 +52,7 @@ protected:
 
 private:
     Ui::Jeopardy *ui;
-    Player *players[3];
+    Player *players[NUMBER_PLAYERS];
     Phonon::MediaObject *music;
     GameField *gameField;
 

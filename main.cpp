@@ -26,32 +26,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- *  Jeopardy
- *
- *  @features
- *      - 3 players
- *      - sound
- *      - colors
- *      - names
- *      - right click context menu including load/save game state, player name and points editor and early round ending option
- *      - automated game state backup after each answer (backups can be found in gameStates/backups/)
- *      - formatted text and images as answer (see answers/template for further instructions)
- *
- *  @todo
- *      - add fourth player for final
- *      - dynamic resize of layout
- *      - ...little here and there
- *
- *  @version 0.9 - stable
- *
- *  @author Christian Lange <chlange@htwg-konstanz.de>
- *                          <Christian_Lange@hotmail.com>
- *
- *  @info made with Qt Creator 1.3.1 based on Qt 4.6.2
- *
- */
-
 #include <QtGui/QApplication>
 #include "jeopardy.h"
 

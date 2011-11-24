@@ -39,10 +39,10 @@ Jeopardy::Jeopardy(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for(int i = 0; i < 3; i++)
-        this->players[i] = 0;
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = NOT_DEFINED;
 
-    this->gameField = 0;
+    this->gameField = NOT_DEFINED;
 }
 
 Jeopardy::~Jeopardy()
@@ -50,11 +50,11 @@ Jeopardy::~Jeopardy()
     delete ui;
 
     /* Don't delete field! "new Player(..)" gets called for every player seperate */
-    for(int i = 0; i < 3; i++)
-        if(this->players[i] != 0)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        if(this->players[i] != NOT_DEFINED)
             delete this->players[i];
 
-    if(this->gameField != 0)
+    if(this->gameField != NOT_DEFINED)
         delete this->gameField;
 }
 
@@ -84,7 +84,7 @@ bool Jeopardy::initPlayers(QWidget *context)
     bool ok;
     bool complete = true;
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
     {
         /* reload colors */
         if(i == 0)
@@ -117,10 +117,6 @@ bool Jeopardy::initPlayers(QWidget *context)
 
         /* break if input isn't correct */
         if(complete == false && i < 2)
-            break;
-
-        /* Stop name input */
-        if(!ok)
             break;
     }
 

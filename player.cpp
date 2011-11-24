@@ -30,11 +30,11 @@
 
 Player::Player()
 {
-    this->points = 0;
+    this->points = NOT_DEFINED;
 }
 
 Player::Player(QString name, int id) :
-        name(name), points(0), id(id)
+        name(name), points(NOT_DEFINED), id(id)
 {
 
 }

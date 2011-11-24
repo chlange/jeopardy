@@ -31,6 +31,16 @@
 
 #include <QDialog>
 #include <player.h>
+#include <QLabel>
+
+#define FIRST_PLACE_PODIUM 0
+#define FIRST_PLACE 2
+#define SECOND_PLACE 1
+#define THIRD_PLACE 0
+#define FIRST_PLAYER 0
+#define SECOND_PLAYER 1
+#define THIRD_PLAYER 2
+#define NUMBER_PLAYERS 3
 
 namespace Ui {
     class Podium;
@@ -39,7 +49,7 @@ namespace Ui {
 class Podium : public QDialog {
     Q_OBJECT
 public:
-    Podium(QWidget *parent = 0, Player *players[3] = 0);
+    Podium(QWidget *parent = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
     ~Podium();
 
 protected:
@@ -47,14 +57,16 @@ protected:
 
 private:
     Ui::Podium *ui;
-    Player *players[3];
-    int order[3];
-    QString getLabelColorString(int player);
+    Player *players[NUMBER_PLAYERS];
+    int order[NUMBER_PLAYERS];
+    QLabel *podiumPlaceLabels[NUMBER_PLAYERS];
 
     void showPodium();
     void sort();
     void setOrder(int first, int second, int third);
-    void insertPlayers(Player *players[3]);
+    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+    QString getLabelColorString(int player);
+    void assignLabels();
 };
 
 #endif // PODIUM_H

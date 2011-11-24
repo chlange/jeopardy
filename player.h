@@ -31,6 +31,11 @@
 #include <QString>
 #include <QColor>
 
+#define NUMBER_PLAYERS 3
+#define NOT_DEFINED 0
+#define NUMBER_CATEGORIES 5
+#define OFFSET 1
+
 class Player
 {
     private:
