@@ -182,7 +182,7 @@ void GameField::setCategoryNames()
         {
             QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
-            fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+            fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Game States (*.jgs)"));
             QFile file(fileString);
 
             if (!file.open(QIODevice::ReadOnly))
