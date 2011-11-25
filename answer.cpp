@@ -52,8 +52,8 @@ void Answer::changeEvent(QEvent *e)
     }
 }
 
-Answer::Answer(QWidget *parent, int round, Player *players[NUMBER_PLAYERS]) :
-        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false)
+Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_PLAYERS]) :
+        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
@@ -280,12 +280,7 @@ void Answer::getAnswer(int category, int points, QString *answer)
 
 QString Answer::getRoundFile()
 {
-    QString fileString;
-
-    /* Prepare filestring */
-    fileString = QString("answers/%1.jrf").arg(this->round);
-
-    return fileString;
+    return this->fileString;
 }
 
 int Answer::getCategoryLine(int category)

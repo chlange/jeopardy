@@ -164,10 +164,8 @@ void GameField::setCategoryNames()
     int categoryLine;
     QString categoryName;
 
-    QString fileString;
-
     /* Prepare filestring */
-    fileString = QString("answers/%1.jrf").arg(this->round);
+    this->fileString = QString("answers/%1.jrf").arg(this->round);
 
     for(int i = 1; i < NUMBER_CATEGORIES + OFFSET; i++)
     {
@@ -176,16 +174,16 @@ void GameField::setCategoryNames()
         /* Calculate on which line the categories in the file start */
         categoryLine = (CATEGORY == 1) ? 1 : ((CATEGORY - OFFSET) * NUMBER_CATEGORIES) + CATEGORY;
 
-        QFile file(fileString);
+        QFile file(this->fileString);
 
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
-            fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Game States (*.jgs)"));
-            QFile file(fileString);
+            this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Game States (*.jrf)"));
+            QFile file(this->fileString);
 
-            if (!file.open(QIODevice::ReadOnly))
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
             {
               QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
               return;
@@ -263,7 +261,7 @@ void GameField::updateAfterAnswer()
 
 void GameField::openAnswer(int category, int points)
 {
-    this->answer = new Answer(this, this->round, this->players);
+    this->answer = new Answer(this, this->fileString, this->round, this->players);
     this->answer->setAnswer(category, points);
 
     this->lastWinner = this->answer->exec();
