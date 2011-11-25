@@ -41,6 +41,16 @@ Software used
 * g++
 * Qt 4.6.2
 
+Install
+-------
+
+* wget https://github.com/chlange/jeopardy/tarball/v0.9.1
+* tar xfv v0.9.1
+* cd chlange-jeopardy-34031a3
+* make
+* chmod +x jeopardy
+* ./jeopardy
+
 Screenshots
 -----------
 
