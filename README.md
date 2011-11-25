@@ -78,7 +78,7 @@ Podium:
 
 ![](http://i.imgur.com/lIQgj.png)
 
-Bugs? Feature request? You have some Beer?
+Bugs? Feature request? Have some Beer?
 ------------------------------------------
 
 Don't hesitate to contact me!
