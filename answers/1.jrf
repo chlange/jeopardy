@@ -17,8 +17,8 @@ images
 400: [img]1.bmp - Don't mix an image with text
 500: [img]1.jpeg
 category4name
-100: 
-200: 
+100: text 	- ##comment won't be shown##
+200: ##comment##
 300: 
 400: 
 500: 

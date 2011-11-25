@@ -180,8 +180,16 @@ void GameField::setCategoryNames()
 
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open round file"));
-            return;
+            QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
+
+            fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+            QFile file(fileString);
+
+            if (!file.open(QIODevice::ReadOnly))
+            {
+              QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+              return;
+            }
         }
 
         QTextStream in(&file);
