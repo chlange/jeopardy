@@ -196,10 +196,21 @@ void Answer::setAnswer(int category, int points)
 
     this->getAnswer(category, points, &answer);
 
-    /* Check if answer is an image */
-    if(answer.startsWith("[img]"))
+    QRegExp comment("##.+##");
+    QRegExp imgTag("^[[]img[]]");
+    QRegExp alignLeftTag("[[]l[]]");
+
+    answer.remove(comment);
+
+    if(answer.contains(alignLeftTag))
     {
-        answer.remove(0, IMG_TAG);
+        answer.remove(alignLeftTag);
+        ui->answer->setAlignment(Qt::AlignLeft);
+    }
+
+    if(answer.contains(imgTag))
+    {
+        answer.remove(imgTag);
 
         answer.prepend(QString("/answers/%1/").arg(this->round));
         answer.prepend(QDir::currentPath());
@@ -208,15 +219,7 @@ void Answer::setAnswer(int category, int points)
     }
     else
     {
-        /* Align left */
-        if(answer.startsWith("[l]"))
-        {
-            ui->answer->setAlignment(Qt::AlignLeft);
-            answer.remove(0, ALIGN_TAG);
-        }
-
         int count = answer.count("<br>");
-
         ui->answer->setFont(this->meassureFontSize(count));
         ui->answer->setText(answer);
     }
@@ -271,6 +274,7 @@ void Answer::getAnswer(int category, int points, QString *answer)
 
     /* Remove preceding points */
     *answer = currentLine;
+
     answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
 }
 

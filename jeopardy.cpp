@@ -32,6 +32,7 @@
 #include "gamefield.h"
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QRegExp>
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
@@ -49,7 +50,7 @@ Jeopardy::~Jeopardy()
 {
     delete ui;
 
-    /* Don't delete field! "new Player(..)" gets called for every player seperate */
+    /* Don't delete field! "new Player(..)" gets called for every player seperately */
     for(int i = 0; i < NUMBER_PLAYERS; i++)
         if(this->players[i] != NOT_DEFINED)
             delete this->players[i];
