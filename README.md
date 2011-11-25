@@ -4,7 +4,7 @@ Jeopardy
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
 * Date:		24. November 2011
-* Version:	0.9.1 stable
+* Version:	0.9.2 stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
