@@ -33,6 +33,8 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QRegExp>
+#include <QKeyEvent>
+#include <QWidget>
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
@@ -79,6 +81,8 @@ bool Jeopardy::initPlayers(QWidget *context)
     QString color;
     QStringList colorListOriginal;
     QStringList colorList;
+    QStringList keyListOriginal;
+    QStringList keyList;
 
     colorListOriginal << "red" << "green" << "yellow" << "blue";
 
@@ -94,7 +98,14 @@ bool Jeopardy::initPlayers(QWidget *context)
         /* Repeat name input until cancel buton gets pressed or valid name was entered */
         while(true)
         {
-            playerName = QString("Player %1:").arg(i+1);
+            playerName = QString("Player %1").arg(i+1);
+            if(i == 0)
+                playerName.append(" Key a");
+            else if(i == 1)
+                playerName.append(" Key g");
+            else
+                playerName.append(" Key k");
+
             text = QInputDialog::getText(context, "Enter name",playerName, QLineEdit::Normal,"", &ok);
 
             /* Check if name is valid */
@@ -103,9 +114,10 @@ bool Jeopardy::initPlayers(QWidget *context)
                 /* Set name and color */
                 this->players[i] = new Player(text, (i+1));
 
-                color = QInputDialog::getItem(context, "Choose color", "Color:", colorList, 0, false);
+                color = QInputDialog::getItem(context, "Choose color ", "Color:", colorList, 0, false);
                 this->players[i]->setColor(color);
                 colorList.removeOne(color);
+
                 break;
             }
             else

@@ -62,7 +62,6 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_
     this->music->play();
 }
 
-/* Listen to buttons */
 void Answer::keyPressEvent(QKeyEvent *event)
 {
     int key;
@@ -71,15 +70,15 @@ void Answer::keyPressEvent(QKeyEvent *event)
         return;
 
     key= event->key();
-    if(key == 0x41)
+    if(key == Qt::Key_A)
     {
         processKeypress(0);
     }
-    else if(key == 0x44)
+    else if(key == Qt::Key_G)
     {
         processKeypress(1);
     }
-    else if(key == 0x53)
+    else if(key == Qt::Key_K)
     {
         processKeypress(2);
     }

@@ -180,7 +180,7 @@ void GameField::setCategoryNames()
         {
             QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
-            this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Game States (*.jrf)"));
+            this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
             QFile file(this->fileString);
 
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -345,7 +345,6 @@ int GameField::getAlreadyAnswered()
     return this->alreadyAnswered;
 }
 
-/* Context Menu */
 void GameField::on_gameField_customContextMenuRequested(QPoint pos)
 {
     QPoint globalPos = this->mapToGlobal(pos);

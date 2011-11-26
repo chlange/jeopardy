@@ -121,7 +121,6 @@ private:
     void processResult();
     void showPodium();
 
-
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);

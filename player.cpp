@@ -34,7 +34,7 @@ Player::Player()
 }
 
 Player::Player(QString name, int id) :
-        name(name), points(NOT_DEFINED), id(id)
+        name(name), points(NOT_DEFINED), id(id), key(-1)
 {
 
 }
@@ -42,6 +42,16 @@ Player::Player(QString name, int id) :
 QString Player::getName()
 {
     return this->name;
+}
+
+void Player::setKey(int key)
+{
+    this->key = key;
+}
+
+int Player::getKey()
+{
+    return this->key;
 }
 
 void Player::setName(QString name)
