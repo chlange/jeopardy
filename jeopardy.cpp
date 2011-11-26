@@ -81,8 +81,6 @@ bool Jeopardy::initPlayers(QWidget *context)
     QString color;
     QStringList colorListOriginal;
     QStringList colorList;
-    QStringList keyListOriginal;
-    QStringList keyList;
 
     colorListOriginal << "red" << "green" << "yellow" << "blue";
 

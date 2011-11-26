@@ -13,15 +13,18 @@ SOURCES += main.cpp \
     gamefield.cpp \
     answer.cpp \
     editor.cpp \
-    podium.cpp
+    podium.cpp \
+    doublejeopardy.cpp
 HEADERS += jeopardy.h \
     player.h \
     gamefield.h \
     answer.h \
     editor.h \
-    podium.h
+    podium.h \
+    doublejeopardy.h
 FORMS += jeopardy.ui \
     gamefield.ui \
     answer.ui \
     editor.ui \
-    podium.ui
+    podium.ui \
+    doublejeopardy.ui

@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <doublejeopardy.h>
 
 Answer::~Answer()
 {
@@ -188,9 +189,15 @@ QString Answer::getResult()
     return this->result;
 }
 
+int Answer::getPoints()
+{
+    return this->points;
+}
+
 /* Read in round file and set text of label to answer */
 void Answer::setAnswer(int category, int points)
 {
+    this->points = points;
     QString answer;
 
     this->getAnswer(category, points, &answer);
@@ -198,6 +205,7 @@ void Answer::setAnswer(int category, int points)
     QRegExp comment("##.+##");
     QRegExp imgTag("^[[]img[]]");
     QRegExp alignLeftTag("[[]l[]]");
+    QRegExp doubleJeopardyTag("[[]dj[]]");
 
     answer.remove(comment);
 
@@ -205,6 +213,19 @@ void Answer::setAnswer(int category, int points)
     {
         answer.remove(alignLeftTag);
         ui->answer->setAlignment(Qt::AlignLeft);
+    }
+
+    if(answer.contains(doubleJeopardyTag))
+    {
+        answer.remove(doubleJeopardyTag);
+
+        doubleJeopardy *dj = new doubleJeopardy(this, points / 2, points * 2, this->players);
+        dj->setLabels();
+        this->currentPlayerId = dj->exec();
+        this->points = dj->getPoints();
+
+        this->processKeypress(this->currentPlayerId);
+        this->showButtons();
     }
 
     if(answer.contains(imgTag))

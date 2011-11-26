@@ -266,7 +266,7 @@ void GameField::openAnswer(int category, int points)
 
     this->lastWinner = this->answer->exec();
     this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = points;
+    this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();
 
     this->processResult();

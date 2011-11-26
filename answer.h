@@ -55,6 +55,7 @@ public:
     QString getResult();
     /* Read in round file and set text of label to answer */
     void setAnswer(int category, int points);
+    int getPoints();
 
 protected:
     void changeEvent(QEvent *e);
@@ -62,6 +63,8 @@ protected:
 private:
     Ui::Answer *ui;
     int round;
+    int points;
+    int currentPlayerId;
     QString result;
     Player *players[NUMBER_PLAYERS];
     Player *currentPlayer;
