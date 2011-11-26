@@ -30,9 +30,13 @@
 #define JEOPARDY_H
 
 #include <QMainWindow>
-#include <player.h>
+#include <QInputDialog>
+#include <QRegExp>
+#include <QKeyEvent>
+#include <QWidget>
 #include <phonon/phonon>
 #include <gamefield.h>
+#include <player.h>
 
 namespace Ui {
     class Jeopardy;

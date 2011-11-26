@@ -28,13 +28,6 @@
 
 #include "jeopardy.h"
 #include "ui_jeopardy.h"
-#include "player.h"
-#include "gamefield.h"
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QRegExp>
-#include <QKeyEvent>
-#include <QWidget>
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
@@ -43,9 +36,9 @@ Jeopardy::Jeopardy(QWidget *parent) :
     ui->setupUi(this);
 
     for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = NOT_DEFINED;
+        this->players[i] = NULL;
 
-    this->gameField = NOT_DEFINED;
+    this->gameField = NULL;
 }
 
 Jeopardy::~Jeopardy()
@@ -54,10 +47,10 @@ Jeopardy::~Jeopardy()
 
     /* Don't delete field! "new Player(..)" gets called for every player seperately */
     for(int i = 0; i < NUMBER_PLAYERS; i++)
-        if(this->players[i] != NOT_DEFINED)
+        if(this->players[i] != NULL)
             delete this->players[i];
 
-    if(this->gameField != NOT_DEFINED)
+    if(this->gameField != NULL)
         delete this->gameField;
 }
 

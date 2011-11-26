@@ -28,7 +28,6 @@
 
 #include "doublejeopardy.h"
 #include "ui_doublejeopardy.h"
-#include <QMessageBox>
 
 DoubleJeopardy::DoubleJeopardy(QWidget *parent, int min, int max, Player *players[NUMBER_PLAYERS]) :
     QDialog(parent),

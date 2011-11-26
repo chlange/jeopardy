@@ -29,19 +29,19 @@
 #ifndef ANSWER_H
 #define ANSWER_H
 
-#include <QDialog>
-#include <player.h>
+#include <QKeyEvent>
+#include <QSound>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
 #include <phonon/phonon>
 #include <doublejeopardy.h>
 
-#define IMG_TAG 5
-#define ALIGN_TAG 3
 #define ANSWER_POINTS_INDICATOR_LENGTH 5
 #define SOME_LINE_BREAKS 10
 #define MORE_LINE_BREAKS 15
 #define MANY_LINE_BREAKS 20
 #define NO_WINNER -1
-#define YES 0x00004000
 #define WON "1"
 #define LOST "0"
 
@@ -52,7 +52,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NOT_DEFINED, QString file = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    Answer(QWidget *parent = NULL, QString file = NULL, int round = NULL, Player *players[NUMBER_PLAYERS] = NULL);
     ~Answer();
     QString getResult();
     /* Read in round file and set text of label to answer */

@@ -28,11 +28,13 @@
 
 #ifndef PLAYER_H
 #define PLAYER_H
+
 #include <QString>
 #include <QColor>
+#include <QDialog>
+#include <QLabel>
 
 #define NUMBER_PLAYERS 3
-#define NOT_DEFINED 0
 #define NUMBER_CATEGORIES 5
 #define OFFSET 1
 

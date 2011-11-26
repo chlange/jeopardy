@@ -29,15 +29,18 @@
 #ifndef GAMEFIELD_H
 #define GAMEFIELD_H
 
-#include <QDialog>
-#include <player.h>
 #include <QMenu>
-#include <editor.h>
-#include <podium.h>
-#include <answer.h>
 #include <QAction>
 #include <QLabel>
 #include <QFile>
+#include <QColor>
+#include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDateTime>
+#include <editor.h>
+#include <podium.h>
+#include <answer.h>
 
 #define PLAYER_ONE_STRING "1"
 #define PLAYER_TWO_STRING "2"

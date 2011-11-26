@@ -29,9 +29,8 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QDialog>
-#include <player.h>
 #include <QLineEdit>
+#include <player.h>
 
 #define NOT_DEFINED 0
 

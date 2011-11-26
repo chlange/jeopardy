@@ -29,8 +29,9 @@
 #ifndef DOUBLEJEOPARDY_H
 #define DOUBLEJEOPARDY_H
 
-#include <QDialog>
+#include <QMessageBox>
 #include <player.h>
+
 #define DOUBLE_JEOPARDY_MIN_POINTS 100
 
 namespace Ui {

@@ -28,18 +28,13 @@
 
 #include "answer.h"
 #include "ui_answer.h"
-#include <QKeyEvent>
-#include <QMessageBox>
-#include <QSound>
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-#include <doublejeopardy.h>
 
 Answer::~Answer()
 {
     delete ui;
     delete this->music;
+    if(this->dj != 0)
+        delete this->dj;
 }
 
 void Answer::changeEvent(QEvent *e)
@@ -55,7 +50,7 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_PLAYERS]) :
-        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file), doubleJeopardy(false)
+        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(NULL), dj(NULL)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
@@ -96,7 +91,6 @@ void Answer::processKeypress(int player)
     this->showButtons();
 }
 
-/* Point to players - Sort of workaround */
 void Answer::insertPlayers(Player *players[NUMBER_PLAYERS])
 {
     for(int i = 0; i < NUMBER_PLAYERS; i++)
@@ -148,7 +142,7 @@ void Answer::on_buttonEnd_clicked()
     msgBox.setDefaultButton(QMessageBox::Abort);
     int ret = msgBox.exec();
 
-    if(ret == YES)
+    if(ret == QMessageBox::Yes)
     {
         this->music->stop();
         done(NO_WINNER);
@@ -173,7 +167,7 @@ void Answer::on_buttonWrong_clicked()
     resultTmp = QString("%1").arg(this->currentPlayer->getId());
     resultTmp.append(LOST);
     this->result.append(resultTmp);
-    this->currentPlayer = NOT_DEFINED;
+    this->currentPlayer = NULL;
     this->hideButtons();
     this->releaseKeyListener();
     if(this->doubleJeopardy)
@@ -185,7 +179,7 @@ void Answer::on_buttonWrong_clicked()
 
 void Answer::on_buttonCancel_clicked()
 {
-    this->currentPlayer = NOT_DEFINED;
+    this->currentPlayer = NULL;
     this->hideButtons();
     this->releaseKeyListener();
 }

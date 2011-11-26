@@ -28,14 +28,6 @@
 
 #include "gamefield.h"
 #include "ui_gamefield.h"
-#include "QColor"
-#include "answer.h"
-#include "editor.h"
-#include "podium.h"
-#include <QDebug>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QDateTime>
 
 GameField::GameField(QWidget *parent) :
     QDialog(parent),
@@ -44,22 +36,37 @@ GameField::GameField(QWidget *parent) :
     ui->setupUi(this);
 }
 
+GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
+    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NULL),
+    lastWinner(NO_WINNER), answer(NULL), editor(NULL), podium(NULL),
+    editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
+{
+    ui->setupUi(this);
+
+    /* Declare new context menu and connect it with the right mouse button */
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
+
+    this->insertPlayers(players);
+    this->init();
+}
+
 GameField::~GameField()
 {
     delete ui;
-    if(this->answer != NOT_DEFINED)
+    if(this->answer != NULL)
         delete this->answer;
-    if(this->editor != NOT_DEFINED)
+    if(this->editor != NULL)
         delete this->editor;
-    if(this->editorCtx != NOT_DEFINED)
+    if(this->editorCtx != NULL)
         delete this->editorCtx;
-    if(this->loadCtx != NOT_DEFINED)
+    if(this->loadCtx != NULL)
         delete this->loadCtx;
-    if(this->saveCtx != NOT_DEFINED)
+    if(this->saveCtx != NULL)
         delete this->saveCtx;
-    if(this->endRoundCtx != NOT_DEFINED)
+    if(this->endRoundCtx != NULL)
         delete this->endRoundCtx;
-    if(this->podium != NOT_DEFINED)
+    if(this->podium != NULL)
         delete this->podium;
 }
 
@@ -75,20 +82,6 @@ void GameField::changeEvent(QEvent *e)
     }
 }
 
-GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
-    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NOT_DEFINED),
-    lastWinner(NO_WINNER), answer(NOT_DEFINED), editor(NOT_DEFINED), podium(NOT_DEFINED),
-    editorCtx(NOT_DEFINED), loadCtx(NOT_DEFINED), saveCtx(NOT_DEFINED), endRoundCtx(NOT_DEFINED)
-{
-    ui->setupUi(this);
-
-    /* Declare new context menu and connect it with the right mouse button */
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
-
-    this->insertPlayers(players);
-    this->init();
-}
 
 void GameField::init()
 {
@@ -158,13 +151,13 @@ void GameField::assignCategoryLabels()
     this->categories[4] = ui->category5;
 }
 
-/* Todo: refactor - same functionality in answer.cpp */
+/* Todo: refactor */
 void GameField::setCategoryNames()
 {
     int categoryLine;
     QString categoryName;
 
-    /* Prepare filestring */
+    this->fileString = QString("answers/%1.jrf").arg(this->round);
     QFile file(this->fileString);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
