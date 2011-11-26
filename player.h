@@ -43,6 +43,7 @@ class Player
         QString color;
         int points;
         int id;
+        int key;
 
     public:
         Player();
@@ -51,6 +52,8 @@ class Player
         int getPoints();
         QString getName();
         QString getColor();
+        void setKey(int key);
+        int getKey();
 
         void setName(QString name);
         void setPoints(int points);

@@ -52,8 +52,8 @@ void Answer::changeEvent(QEvent *e)
     }
 }
 
-Answer::Answer(QWidget *parent, int round, Player *players[NUMBER_PLAYERS]) :
-        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false)
+Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_PLAYERS]) :
+        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
@@ -62,7 +62,6 @@ Answer::Answer(QWidget *parent, int round, Player *players[NUMBER_PLAYERS]) :
     this->music->play();
 }
 
-/* Listen to buttons */
 void Answer::keyPressEvent(QKeyEvent *event)
 {
     int key;
@@ -71,15 +70,15 @@ void Answer::keyPressEvent(QKeyEvent *event)
         return;
 
     key= event->key();
-    if(key == 0x41)
+    if(key == Qt::Key_A)
     {
         processKeypress(0);
     }
-    else if(key == 0x44)
+    else if(key == Qt::Key_G)
     {
         processKeypress(1);
     }
-    else if(key == 0x53)
+    else if(key == Qt::Key_K)
     {
         processKeypress(2);
     }
@@ -196,10 +195,21 @@ void Answer::setAnswer(int category, int points)
 
     this->getAnswer(category, points, &answer);
 
-    /* Check if answer is an image */
-    if(answer.startsWith("[img]"))
+    QRegExp comment("##.+##");
+    QRegExp imgTag("^[[]img[]]");
+    QRegExp alignLeftTag("[[]l[]]");
+
+    answer.remove(comment);
+
+    if(answer.contains(alignLeftTag))
     {
-        answer.remove(0, IMG_TAG);
+        answer.remove(alignLeftTag);
+        ui->answer->setAlignment(Qt::AlignLeft);
+    }
+
+    if(answer.contains(imgTag))
+    {
+        answer.remove(imgTag);
 
         answer.prepend(QString("/answers/%1/").arg(this->round));
         answer.prepend(QDir::currentPath());
@@ -208,15 +218,7 @@ void Answer::setAnswer(int category, int points)
     }
     else
     {
-        /* Align left */
-        if(answer.startsWith("[l]"))
-        {
-            ui->answer->setAlignment(Qt::AlignLeft);
-            answer.remove(0, ALIGN_TAG);
-        }
-
         int count = answer.count("<br>");
-
         ui->answer->setFont(this->meassureFontSize(count));
         ui->answer->setText(answer);
     }
@@ -271,17 +273,13 @@ void Answer::getAnswer(int category, int points, QString *answer)
 
     /* Remove preceding points */
     *answer = currentLine;
+
     answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
 }
 
 QString Answer::getRoundFile()
 {
-    QString fileString;
-
-    /* Prepare filestring */
-    fileString = QString("answers/%1.jrf").arg(this->round);
-
-    return fileString;
+    return this->fileString;
 }
 
 int Answer::getCategoryLine(int category)

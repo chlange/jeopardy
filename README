@@ -3,8 +3,8 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		24. November 2011
-* Version:	0.9 stable
+* Date:		26. November 2011
+* Version:	0.9.2 stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -12,54 +12,84 @@ Jeopardy
 Description
 -----------
 
-Implementation of well known Jeopardy! quiz show in C++ using Qt library
+* Implementation of well known Jeopardy! quiz show in C++ using Qt library
 
 Features
 --------
 
-* - 3 players
-* - sound
-* - colors
-* - names
-* - right click context menu including load/save game state, player name and points editor and early round ending option
-* - automated game state backup after each answer (backups can be found in gameStates/backups/)
-* - formatted text and images as answer (see answers/template for further instructions)
+* 3 players
+* sound
+* colors
+* names
+* right click context menu including load/save game state, player name and points editor and early round ending option
+* automated game state backup after each answer (backups can be found in gameStates/backups/)
+* formatted text and images as answer (see answers/template for further instructions)
 
 Todo
 ----
 
-* - add fourth player for final
-* - add double jeopardy answers
-* - dynamic resize of layout
-* - smoother design
-* - ...little here and there
+* player can choose key
+* add fourth player for final
+* add double jeopardy answers
+* dynamic resize of layout
+* smoother design
+* ...little here and there
 
 Software used
 -------------
 
-* - Ubuntu 10.04
-* - g++
-* - Qt 4.6.2
+* Ubuntu 10.04
+* g++
+* Qt 4.6.2
+
+Install
+-------
+
+* wget https://github.com/chlange/jeopardy/tarball/v0.9.2
+* tar xfv v0.9.2
+* cd chlange-jeopardy-c5957f6
+* make
+* chmod +x jeopardy
+* ./jeopardy
+
+Play
+----
+
+* Choose round to play
+* Enter names of players
+* Select question
+* Use 	A for player 1
+	G for player 2
+	K for player 3
 
 Screenshots
 -----------
 
 Round choice:
+
 ![](http://i.imgur.com/PdzVW.png)
 
-Player input:* - add double jeopardy
+Player input:
+
 ![](http://i.imgur.com/kZTJF.png)
 
-Game field:
+Game field: 
+
 ![](http://i.imgur.com/TojZ7.png)
 
+Colored game field:
+
+![](http://i.imgur.com/4kwY6.png)
+
 Answer:
+
 ![](http://i.imgur.com/hMVrk.png)
 
 Podium:
+
 ![](http://i.imgur.com/lIQgj.png)
 
-Bugs? Feature request? You have some Beer?
+Bugs? Feature request? Have some Beer?
 ------------------------------------------
 
 Don't hesitate to contact me!

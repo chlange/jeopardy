@@ -3,8 +3,8 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		24. November 2011
-* Version:	0.9.1 stable
+* Date:		26. November 2011
+* Version:	0.9.2 stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -28,6 +28,7 @@ Features
 Todo
 ----
 
+* player can choose key
 * add fourth player for final
 * add double jeopardy answers
 * dynamic resize of layout
@@ -44,12 +45,22 @@ Software used
 Install
 -------
 
-* wget https://github.com/chlange/jeopardy/tarball/v0.9.1
-* tar xfv v0.9.1
-* cd chlange-jeopardy-34031a3
+* wget https://github.com/chlange/jeopardy/tarball/v0.9.2
+* tar xfv v0.9.2
+* cd chlange-jeopardy-c5957f6
 * make
 * chmod +x jeopardy
 * ./jeopardy
+
+Play
+----
+
+* Choose round to play
+* Enter names of players
+* Select question
+* Use 	A for player 1
+	G for player 2
+	K for player 3
 
 Screenshots
 -----------

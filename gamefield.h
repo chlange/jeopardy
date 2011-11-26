@@ -93,6 +93,7 @@ private:
     QLabel *playerPointsLabels[NUMBER_PLAYERS];
     QLabel *categories[NUMBER_CATEGORIES];
     QString result;
+    QString fileString;
 
     void assignButtons();
     void assignPlayerNameLabels();
@@ -119,7 +120,6 @@ private:
     void openAnswer(int category, int points);
     void processResult();
     void showPodium();
-
 
 private slots:
     /* Context Menu */

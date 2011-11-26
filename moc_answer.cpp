@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'answer.h'
 **
-** Created: Thu Nov 24 22:19:16 2011
+** Created: Fri Nov 25 19:55:43 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!

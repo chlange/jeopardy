@@ -50,7 +50,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    Answer(QWidget *parent = NOT_DEFINED, QString file = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
     ~Answer();
     QString getResult();
     /* Read in round file and set text of label to answer */
@@ -85,6 +85,7 @@ private:
     QString getRoundFile();
     int getCategoryLine(int category);
     QFont meassureFontSize(int count);
+    QString fileString;
 
 private slots:
     void on_buttonCancel_clicked();

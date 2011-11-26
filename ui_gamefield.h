@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'gamefield.ui'
 **
-** Created: Wed Nov 23 02:44:43 2011
+** Created: Fri Nov 25 19:12:39 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -153,7 +153,7 @@ public:
         button_1_200 = new QPushButton(gameField);
         button_1_200->setObjectName(QString::fromUtf8("button_1_200"));
         button_1_200->setGeometry(QRect(1, 150, 198, 107));
-        button_1_200->setCursor(QCursor(Qt::BlankCursor));
+        button_1_200->setCursor(QCursor(Qt::ArrowCursor));
         player2Points = new QLabel(gameField);
         player2Points->setObjectName(QString::fromUtf8("player2Points"));
         player2Points->setGeometry(QRect(500, 590, 120, 20));
