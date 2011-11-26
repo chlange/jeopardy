@@ -77,7 +77,7 @@ void GameField::changeEvent(QEvent *e)
 
 GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
     QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NOT_DEFINED),
-    lastWinner(-1), answer(NOT_DEFINED), editor(NOT_DEFINED), podium(NOT_DEFINED),
+    lastWinner(NO_WINNER), answer(NOT_DEFINED), editor(NOT_DEFINED), podium(NOT_DEFINED),
     editorCtx(NOT_DEFINED), loadCtx(NOT_DEFINED), saveCtx(NOT_DEFINED), endRoundCtx(NOT_DEFINED)
 {
     ui->setupUi(this);

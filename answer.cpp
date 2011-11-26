@@ -39,6 +39,7 @@
 Answer::~Answer()
 {
     delete ui;
+    delete this->music;
 }
 
 void Answer::changeEvent(QEvent *e)
@@ -54,7 +55,7 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_PLAYERS]) :
-        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file)
+        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file), doubleJeopardy(false)
 {
     ui->setupUi(this);
     this->insertPlayers(players);
@@ -150,7 +151,7 @@ void Answer::on_buttonEnd_clicked()
     if(ret == YES)
     {
         this->music->stop();
-        done(-1);
+        done(NO_WINNER);
     }
 }
 
@@ -175,6 +176,8 @@ void Answer::on_buttonWrong_clicked()
     this->currentPlayer = NOT_DEFINED;
     this->hideButtons();
     this->releaseKeyListener();
+    if(this->doubleJeopardy)
+        done(NO_WINNER);
 }
 
 void Answer::on_buttonCancel_clicked()
@@ -219,13 +222,13 @@ void Answer::setAnswer(int category, int points)
     {
         answer.remove(doubleJeopardyTag);
 
-        doubleJeopardy *dj = new doubleJeopardy(this, points / 2, points * 2, this->players);
+        this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
         dj->setLabels();
         this->currentPlayerId = dj->exec();
         this->points = dj->getPoints();
+        this->doubleJeopardy = true;
 
         this->processKeypress(this->currentPlayerId);
-        this->showButtons();
     }
 
     if(answer.contains(imgTag))

@@ -32,6 +32,7 @@
 #include <QDialog>
 #include <player.h>
 #include <phonon/phonon>
+#include <doublejeopardy.h>
 
 #define IMG_TAG 5
 #define ALIGN_TAG 3
@@ -39,6 +40,7 @@
 #define SOME_LINE_BREAKS 10
 #define MORE_LINE_BREAKS 15
 #define MANY_LINE_BREAKS 20
+#define NO_WINNER -1
 #define YES 0x00004000
 #define WON "1"
 #define LOST "0"
@@ -66,9 +68,13 @@ private:
     int points;
     int currentPlayerId;
     QString result;
+    bool keyLock;
+    QString fileString;
+    bool doubleJeopardy;
     Player *players[NUMBER_PLAYERS];
     Player *currentPlayer;
     Phonon::MediaObject *music;
+    DoubleJeopardy *dj;
 
     void showButtons();
     void hideButtons();
@@ -76,19 +82,17 @@ private:
     /* Listen to buttons */
     /* If player presses his button all other buttons get locked and the right/wrong buttons get visible */
     void keyPressEvent(QKeyEvent *event);
-    bool keyLock;
     bool keyListenerIsLocked();
     void lockKeyListener();
     void releaseKeyListener();
+    QString getRoundFile();
+    QFont meassureFontSize(int count);
+    int getCategoryLine(int category);
 
     /* Point to players - Sort of workaround */
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
     void processKeypress(int player);
     void getAnswer(int category, int points, QString *answer);
-    QString getRoundFile();
-    int getCategoryLine(int category);
-    QFont meassureFontSize(int count);
-    QString fileString;
 
 private slots:
     void on_buttonCancel_clicked();
