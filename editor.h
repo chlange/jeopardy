@@ -32,8 +32,6 @@
 #include <QLineEdit>
 #include <player.h>
 
-#define NOT_DEFINED 0
-
 namespace Ui {
     class Editor;
 }
@@ -41,7 +39,7 @@ namespace Ui {
 class Editor : public QDialog {
     Q_OBJECT
 public:
-    Editor(QWidget *parent = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    Editor(QWidget *parent = NULL, Player *players[NUMBER_PLAYERS] = NULL);
     ~Editor();
 
 protected:

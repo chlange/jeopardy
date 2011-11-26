@@ -48,7 +48,6 @@ class Player
         int key;
 
     public:
-        Player();
         Player(QString name, int id);
         int getId();
         int getPoints();

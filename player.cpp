@@ -28,11 +28,6 @@
 
 #include "player.h"
 
-Player::Player()
-{
-    this->points = NULL;
-}
-
 Player::Player(QString name, int id) :
         name(name), points(NULL), id(id), key(-1)
 {

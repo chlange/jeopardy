@@ -45,9 +45,8 @@ namespace Ui {
 class Jeopardy : public QMainWindow {
     Q_OBJECT
 public:
-    Jeopardy(QWidget *parent = NOT_DEFINED);
+    Jeopardy(QWidget *parent = NULL);
     ~Jeopardy();
-
     bool initPlayers(QWidget *context);
 
 protected:

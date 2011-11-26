@@ -41,7 +41,7 @@ namespace Ui {
 class DoubleJeopardy : public QDialog {
     Q_OBJECT
 public:
-    DoubleJeopardy(QWidget *parent = 0, int min = 0, int max = 0, Player *players[NUMBER_PLAYERS] = 0);
+    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players[NUMBER_PLAYERS] = NULL);
     ~DoubleJeopardy();
     void setLabels();
     int getPoints();

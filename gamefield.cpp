@@ -29,13 +29,6 @@
 #include "gamefield.h"
 #include "ui_gamefield.h"
 
-GameField::GameField(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::gameField)
-{
-    ui->setupUi(this);
-}
-
 GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
     QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NULL),
     lastWinner(NO_WINNER), answer(NULL), editor(NULL), podium(NULL),

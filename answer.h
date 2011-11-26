@@ -52,7 +52,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NULL, QString file = NULL, int round = NULL, Player *players[NUMBER_PLAYERS] = NULL);
+    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
     ~Answer();
     QString getResult();
     /* Read in round file and set text of label to answer */

@@ -64,8 +64,7 @@ namespace Ui {
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NOT_DEFINED);
-    GameField(QWidget *parent = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    GameField(QWidget *parent = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
     ~GameField();
     void init();
     void setRound(int round);
