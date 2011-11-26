@@ -1,0 +1,30 @@
+answer
+100: answer 	- Whitespace between ":" and the answer
+200: 		
+300: 		- One answer per line
+400: 		
+500: 		- Call this file either 1.jrf, 2.jrf, 3.jrf or 4.jrf for desired round
+text
+100: a<br>b	- Line breaks with <br>
+200: 		- HTML elements allowed, too
+300: 		- Bug: Whitespaces after <br> won't be shown
+400: 
+500: [l]text	- Align text left e.g. for source code
+images
+100: [img]1.png	- Image behind [img] tag must be in answers/round/ e.g. [img]1.png lays in answers/1/1.png
+200: [img]1.jpg	- Image size max. 980px x 500px
+300: [img]1.gif	- [img] tag must be at the beginning
+400: [img]1.bmp - Don't mix an image with text
+500: [img]1.jpeg
+category4name
+100: text 	- ##comment won't be shown##
+200: ##comment##
+300: 
+400: 
+500: 
+category5name
+100: 
+200: 
+300: 
+400: 
+500: 
