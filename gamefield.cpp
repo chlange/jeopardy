@@ -75,7 +75,6 @@ void GameField::changeEvent(QEvent *e)
     }
 }
 
-
 void GameField::init()
 {
     this->assignButtons();

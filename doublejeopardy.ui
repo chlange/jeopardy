@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Double Jeopardy</string>
   </property>
   <widget class="QLineEdit" name="points">
    <property name="geometry">
