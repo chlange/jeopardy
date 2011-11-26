@@ -93,6 +93,7 @@ private:
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
     void processKeypress(int player);
     void getAnswer(int category, int points, QString *answer);
+    void openDoubleJeopardy();
 
 private slots:
     void on_buttonCancel_clicked();

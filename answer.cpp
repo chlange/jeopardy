@@ -177,7 +177,10 @@ void Answer::on_buttonWrong_clicked()
     this->hideButtons();
     this->releaseKeyListener();
     if(this->doubleJeopardy)
+    {
+        this->music->stop();
         done(NO_WINNER);
+    }
 }
 
 void Answer::on_buttonCancel_clicked()
@@ -221,14 +224,7 @@ void Answer::setAnswer(int category, int points)
     if(answer.contains(doubleJeopardyTag))
     {
         answer.remove(doubleJeopardyTag);
-
-        this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
-        dj->setLabels();
-        this->currentPlayerId = dj->exec();
-        this->points = dj->getPoints();
-        this->doubleJeopardy = true;
-
-        this->processKeypress(this->currentPlayerId);
+        this->openDoubleJeopardy();
     }
 
     if(answer.contains(imgTag))
@@ -246,6 +242,17 @@ void Answer::setAnswer(int category, int points)
         ui->answer->setFont(this->meassureFontSize(count));
         ui->answer->setText(answer);
     }
+}
+
+void Answer::openDoubleJeopardy()
+{
+    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
+    dj->setLabels();
+    this->currentPlayerId = dj->exec();
+    this->points = dj->getPoints();
+    this->doubleJeopardy = true;
+
+    this->processKeypress(this->currentPlayerId);
 }
 
 QFont Answer::meassureFontSize(int count)

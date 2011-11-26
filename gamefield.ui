@@ -41,7 +41,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -60,7 +60,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -79,7 +79,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -122,7 +122,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -141,7 +141,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -160,7 +160,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -179,7 +179,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -198,7 +198,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -217,7 +217,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -260,7 +260,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -279,7 +279,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -325,7 +325,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -344,7 +344,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -363,7 +363,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -430,7 +430,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="cursor">
@@ -1360,7 +1360,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1379,7 +1379,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1398,7 +1398,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1417,7 +1417,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1436,7 +1436,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1455,7 +1455,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1916,7 +1916,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1935,7 +1935,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -1978,7 +1978,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
@@ -2021,7 +2021,7 @@
    <property name="font">
     <font>
      <family>Andale Mono</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">
