@@ -21,9 +21,10 @@ Features
 * sound
 * colors
 * names
-* right click context menu including load/save game state, player name and points editor and early round ending option
+* right click context menu 
+	* including load/save game state, player name and points editor and early round ending option
 * automated game state backup after each answer (backups can be found in gameStates/backups/)
-* formatted text and images as answer (see answers/template for further instructions)
+* formatted text and images as answer (see answers/1.jrf for further instructions)
 * double jeopardy questions (see answers/1.jrf for futher instructions)
 
 Todo
@@ -45,9 +46,9 @@ Software used
 Install
 -------
 
-* wget https://github.com/chlange/jeopardy/tarball/v0.9.2
-* tar xfv v0.9.2
-* cd chlange-jeopardy-c5957f6
+* wget https://github.com/chlange/jeopardy/tarball/v0.9.3
+* tar xfv v0.9.3
+* cd chlange-jeopardy-...
 * make
 * chmod +x jeopardy
 * ./jeopardy
