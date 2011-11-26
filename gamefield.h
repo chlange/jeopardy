@@ -37,6 +37,7 @@
 #include <answer.h>
 #include <QAction>
 #include <QLabel>
+#include <QFile>
 
 #define PLAYER_ONE_STRING "1"
 #define PLAYER_TWO_STRING "2"
@@ -113,6 +114,7 @@ private:
 
     QString getButtonColorByLastWinner();
 
+    QFile openRoundFile();
     void openFileLoader();
     void openFileSaver(bool automatedBackup);
     void openEditor();

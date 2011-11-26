@@ -26,42 +26,72 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JEOPARDY_H
-#define JEOPARDY_H
+#include "doublejeopardy.h"
+#include "ui_doublejeopardy.h"
+#include <QMessageBox>
 
-#include <QMainWindow>
-#include <player.h>
-#include <phonon/phonon>
-#include <gamefield.h>
-
-namespace Ui {
-    class Jeopardy;
+DoubleJeopardy::DoubleJeopardy(QWidget *parent, int min, int max, Player *players[NUMBER_PLAYERS]) :
+    QDialog(parent),
+    ui(new Ui::DoubleJeopardy), min(min), max(max)
+{
+    ui->setupUi(this);
+    this->insertPlayers(players);
 }
 
-class Jeopardy : public QMainWindow {
-    Q_OBJECT
-public:
-    Jeopardy(QWidget *parent = NOT_DEFINED);
-    ~Jeopardy();
+DoubleJeopardy::~DoubleJeopardy()
+{
+    delete ui;
+}
 
-    bool initPlayers(QWidget *context);
+void DoubleJeopardy::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
 
-protected:
-    void changeEvent(QEvent *e);
+void DoubleJeopardy::setLabels()
+{
+    if(this->min < DOUBLE_JEOPARDY_MIN_POINTS)
+        this->min = DOUBLE_JEOPARDY_MIN_POINTS;
 
-private:
-    Ui::Jeopardy *ui;
-    Player *players[NUMBER_PLAYERS];
-    Phonon::MediaObject *music;
-    GameField *gameField;
+    ui->min->setText(QString("Min: %1").arg(this->min));
+    ui->max->setText(QString("Max: %1").arg(this->max));
 
-    void initGameField(int round);
+    QStringList playerList;
 
-private slots:
-    void on_buttonRound1_clicked();
-    void on_buttonRound2_clicked();
-    void on_buttonRound3_clicked();
-    void on_buttonRound4_clicked();
-};
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        playerList << this->players[i]->getName();
 
-#endif // JEOPARDY_H
+    ui->comboBox->addItems(playerList);
+}
+
+void DoubleJeopardy::on_button_clicked()
+{
+    if(this->min <= ui->points->text().toInt() && ui->points->text().toInt() <= this->max)
+    {
+        this->points = ui->points->text().toInt();
+        done(ui->comboBox->currentIndex());
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Points invalid, reenter points"));
+        ui->points->setText(0);
+    }
+}
+
+int DoubleJeopardy::getPoints()
+{
+    return this->points;
+}
+
+void DoubleJeopardy::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
+}

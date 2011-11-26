@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'gamefield.ui'
 **
-** Created: Sat Nov 26 03:13:08 2011
+** Created: Sat Nov 26 17:06:02 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -77,7 +77,7 @@ public:
         button_4_500->setGeometry(QRect(600, 480, 198, 107));
         QFont font;
         font.setFamily(QString::fromUtf8("Andale Mono"));
-        font.setPointSize(14);
+        font.setPointSize(18);
         button_4_500->setFont(font);
         button_5_300 = new QPushButton(gameField);
         button_5_300->setObjectName(QString::fromUtf8("button_5_300"));

@@ -165,32 +165,30 @@ void GameField::setCategoryNames()
     QString categoryName;
 
     /* Prepare filestring */
-    this->fileString = QString("answers/%1.jrf").arg(this->round);
+    QFile file(this->fileString);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
+
+        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+    }
 
     for(int i = 1; i < NUMBER_CATEGORIES + OFFSET; i++)
     {
+        QFile file(this->fileString);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          return;
+        }
+
+        QTextStream in(&file);
+
         int CATEGORY = i;
 
         /* Calculate on which line the categories in the file start */
         categoryLine = (CATEGORY == 1) ? 1 : ((CATEGORY - OFFSET) * NUMBER_CATEGORIES) + CATEGORY;
-
-        QFile file(this->fileString);
-
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
-
-            this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
-            QFile file(this->fileString);
-
-            if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
-              QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-              return;
-            }
-        }
-
-        QTextStream in(&file);
 
         /* Step to appropriate category section */
         for(int lineNr = 0; lineNr != categoryLine; lineNr++)
