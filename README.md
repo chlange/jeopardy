@@ -21,11 +21,17 @@ Features
 * sound
 * colors
 * names
-* right click context menu 
-	* including load/save game state, player name and points editor and early round ending option
-* automated game state backup after each answer (backups can be found in gameStates/backups/)
-* formatted text and images as answer (see answers/1.jrf for further instructions)
-* double jeopardy questions (see answers/1.jrf for futher instructions)
+* right click context menu including
+	* load/save game state
+	* player name and points editor
+	* early round ending option
+* automated game state backup after each answer 
+	* backups can be found in gameStates/backups/
+	* backups ordered by unix timestamp
+* formatted text and images as answer 
+	* see answers/1.jrf for further instructions
+* double jeopardy questions 
+	* see answers/1.jrf for further instructions
 
 Todo
 ----
@@ -40,7 +46,7 @@ Software used
 -------------
 
 * Ubuntu 10.04
-* g++
+* gcc
 * Qt 4.6.2
 
 Install
