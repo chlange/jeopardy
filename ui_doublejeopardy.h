@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'doublejeopardy.ui'
 **
-** Created: Sat Nov 26 04:37:18 2011
+** Created: Sat Nov 26 20:15:55 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -62,7 +62,7 @@ public:
 
     void retranslateUi(QDialog *DoubleJeopardy)
     {
-        DoubleJeopardy->setWindowTitle(QApplication::translate("DoubleJeopardy", "Dialog", 0, QApplication::UnicodeUTF8));
+        DoubleJeopardy->setWindowTitle(QApplication::translate("DoubleJeopardy", "Double Jeopardy", 0, QApplication::UnicodeUTF8));
         min->setText(QApplication::translate("DoubleJeopardy", "Min", 0, QApplication::UnicodeUTF8));
         max->setText(QApplication::translate("DoubleJeopardy", "Max", 0, QApplication::UnicodeUTF8));
         button->setText(QApplication::translate("DoubleJeopardy", "Ok", 0, QApplication::UnicodeUTF8));
