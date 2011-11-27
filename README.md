@@ -52,12 +52,12 @@ Software used
 Install
 -------
 
-* wget https://github.com/chlange/jeopardy/tarball/v0.9.3
-* tar xfv v0.9.3
-* cd chlange-jeopardy-...
-* make
-* chmod +x jeopardy
-* ./jeopardy
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.3
+	tar xfv v0.9.3
+	cd chlange-jeopardy-...
+	make
+	chmod +x jeopardy
+	./jeopardy
 
 Play
 ----
