@@ -59,6 +59,66 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_
     this->music->play();
 }
 
+/* Read in round file and set text of label to answer */
+void Answer::setAnswer(int category, int points)
+{
+    this->points = points;
+    QString answer;
+
+    this->getAnswer(category, points, &answer);
+
+    QRegExp comment("##.+##");
+    QRegExp imgTag("^[[]img[]]");
+    QRegExp alignLeftTag("[[]l[]]");
+    QRegExp doubleJeopardyTag("[[]dj[]]");
+
+    answer.remove(comment);
+
+    if(answer.contains(alignLeftTag))
+    {
+        answer.remove(alignLeftTag);
+        ui->answer->setAlignment(Qt::AlignLeft);
+    }
+
+    if(answer.contains(doubleJeopardyTag))
+    {
+        answer.remove(doubleJeopardyTag);
+        this->openDoubleJeopardy();
+    }
+
+    if(answer.contains(imgTag))
+    {
+        answer.remove(imgTag);
+
+        answer.prepend(QString("/answers/%1/").arg(this->round));
+        answer.prepend(QDir::currentPath());
+
+        ui->answer->setPixmap(answer);
+    }
+    else
+    {
+        int count = answer.count("<br>");
+        ui->answer->setFont(this->meassureFontSize(count));
+        ui->answer->setText(answer);
+    }
+}
+
+int Answer::getPoints()
+{
+    return this->points;
+}
+
+QString Answer::getResult()
+{
+    return this->result;
+}
+
+void Answer::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
+}
+
 void Answer::keyPressEvent(QKeyEvent *event)
 {
     int key;
@@ -89,12 +149,6 @@ void Answer::processKeypress(int player)
     ui->currentPlayer->setText(this->currentPlayer->getName());
 
     this->showButtons();
-}
-
-void Answer::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
 }
 
 bool Answer::keyListenerIsLocked()
@@ -130,6 +184,84 @@ void Answer::hideButtons()
     ui->buttonRight->setVisible(false);
     ui->buttonWrong->setVisible(false);
     ui->currentPlayer->setVisible(false);
+}
+
+QFont Answer::meassureFontSize(int count)
+{
+    QFont font;
+
+    if(count > MANY_LINE_BREAKS)
+        font.setPointSize(7);
+    else if(count > MORE_LINE_BREAKS)
+        font.setPointSize(15);
+    else if(count > SOME_LINE_BREAKS)
+        font.setPointSize(20);
+    else
+        font.setPointSize(28);
+
+    return font;
+}
+
+QString Answer::getRoundFile()
+{
+    return this->fileString;
+}
+
+int Answer::getCategoryLine(int category)
+{
+    int categoryLine;
+
+    categoryLine = (category == 1) ? 1 : ((category - OFFSET) * NUMBER_CATEGORIES) + category;
+
+    return categoryLine;
+}
+
+/* Open round file and get appropriate answer */
+void Answer::getAnswer(int category, int points, QString *answer)
+{
+    int categoryFileLine;
+    QString currentLine;
+    QString delimiter;
+
+    QFile file(this->getRoundFile());
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open round file"));
+        return;
+    }
+
+    /* Calculate round answer line */
+    categoryFileLine = this->getCategoryLine(category);
+
+    QTextStream in(&file);
+
+    /* Step to appropriate category section */
+    for(int lineNr = 0; lineNr != categoryFileLine; lineNr++)
+        currentLine = in.readLine();
+
+    /* Prepare answer and delimiter variable (Points: Answer)*/
+    delimiter = QString("%1:").arg(points);
+
+    /* Step to answer */
+    while(!currentLine.startsWith(delimiter))
+        currentLine = in.readLine();
+
+    /* Remove preceding points */
+    *answer = currentLine;
+
+    answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
+}
+
+void Answer::openDoubleJeopardy()
+{
+    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
+    dj->setLabels();
+    this->currentPlayerId = dj->exec();
+    this->points = dj->getPoints();
+    this->doubleJeopardy = true;
+
+    this->processKeypress(this->currentPlayerId);
 }
 
 void Answer::on_buttonEnd_clicked()
@@ -182,136 +314,4 @@ void Answer::on_buttonCancel_clicked()
     this->currentPlayer = NULL;
     this->hideButtons();
     this->releaseKeyListener();
-}
-
-QString Answer::getResult()
-{
-    return this->result;
-}
-
-int Answer::getPoints()
-{
-    return this->points;
-}
-
-/* Read in round file and set text of label to answer */
-void Answer::setAnswer(int category, int points)
-{
-    this->points = points;
-    QString answer;
-
-    this->getAnswer(category, points, &answer);
-
-    QRegExp comment("##.+##");
-    QRegExp imgTag("^[[]img[]]");
-    QRegExp alignLeftTag("[[]l[]]");
-    QRegExp doubleJeopardyTag("[[]dj[]]");
-
-    answer.remove(comment);
-
-    if(answer.contains(alignLeftTag))
-    {
-        answer.remove(alignLeftTag);
-        ui->answer->setAlignment(Qt::AlignLeft);
-    }
-
-    if(answer.contains(doubleJeopardyTag))
-    {
-        answer.remove(doubleJeopardyTag);
-        this->openDoubleJeopardy();
-    }
-
-    if(answer.contains(imgTag))
-    {
-        answer.remove(imgTag);
-
-        answer.prepend(QString("/answers/%1/").arg(this->round));
-        answer.prepend(QDir::currentPath());
-
-        ui->answer->setPixmap(answer);
-    }
-    else
-    {
-        int count = answer.count("<br>");
-        ui->answer->setFont(this->meassureFontSize(count));
-        ui->answer->setText(answer);
-    }
-}
-
-void Answer::openDoubleJeopardy()
-{
-    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
-    dj->setLabels();
-    this->currentPlayerId = dj->exec();
-    this->points = dj->getPoints();
-    this->doubleJeopardy = true;
-
-    this->processKeypress(this->currentPlayerId);
-}
-
-QFont Answer::meassureFontSize(int count)
-{
-    QFont font;
-
-    if(count > MANY_LINE_BREAKS)
-        font.setPointSize(7);
-    else if(count > MORE_LINE_BREAKS)
-        font.setPointSize(15);
-    else if(count > SOME_LINE_BREAKS)
-        font.setPointSize(20);
-    else
-        font.setPointSize(28);
-
-    return font;
-}
-
-/* Open round file and get appropriate answer */
-void Answer::getAnswer(int category, int points, QString *answer)
-{
-    int categoryFileLine;
-    QString currentLine;
-    QString delimiter;
-
-    QFile file(this->getRoundFile());
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open round file"));
-        return;
-    }
-
-    /* Calculate round answer line */
-    categoryFileLine = this->getCategoryLine(category);
-
-    QTextStream in(&file);
-
-    /* Step to appropriate category section */
-    for(int lineNr = 0; lineNr != categoryFileLine; lineNr++)
-        currentLine = in.readLine();
-
-    /* Prepare answer and delimiter variable (Points: Answer)*/
-    delimiter = QString("%1:").arg(points);
-
-    /* Step to answer */
-    while(!currentLine.startsWith(delimiter))
-        currentLine = in.readLine();
-
-    /* Remove preceding points */
-    *answer = currentLine;
-
-    answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
-}
-
-QString Answer::getRoundFile()
-{
-    return this->fileString;
-}
-
-int Answer::getCategoryLine(int category)
-{
-    int categoryLine;
-
-    categoryLine = (category == 1) ? 1 : ((category - OFFSET) * NUMBER_CATEGORIES) + category;
-
-    return categoryLine;
 }

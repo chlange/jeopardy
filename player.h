@@ -50,17 +50,21 @@ class Player
     public:
         Player(QString name, int id);
         int getId();
-        int getPoints();
-        QString getName();
-        QString getColor();
-        void setKey(int key);
-        int getKey();
 
-        void setName(QString name);
+        int getPoints();
         void setPoints(int points);
         void incPoints(int points);
         void decPoints(int points);
+
+        QString getName();
+        void setName(QString name);
+
+        QString getColor();
         void setColor(QString color);
+
+        int getKey();
+        void setKey(int key);
+
 };
 
 #endif // PLAYER_H

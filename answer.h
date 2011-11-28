@@ -54,10 +54,9 @@ class Answer : public QDialog {
 public:
     Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
     ~Answer();
-    QString getResult();
-    /* Read in round file and set text of label to answer */
     void setAnswer(int category, int points);
     int getPoints();
+    QString getResult();
 
 protected:
     void changeEvent(QEvent *e);
@@ -76,15 +75,16 @@ private:
     Phonon::MediaObject *music;
     DoubleJeopardy *dj;
 
-    void showButtons();
-    void hideButtons();
-
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
+
     void keyPressEvent(QKeyEvent *event);
     void processKeypress(int player);
     bool keyListenerIsLocked();
     void lockKeyListener();
     void releaseKeyListener();
+
+    void showButtons();
+    void hideButtons();
 
     QString getRoundFile();
     QFont meassureFontSize(int count);

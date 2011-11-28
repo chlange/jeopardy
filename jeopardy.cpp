@@ -127,6 +127,23 @@ bool Jeopardy::initPlayers(QWidget *context)
     return complete;
 }
 
+void Jeopardy::initGameField(int round)
+{
+    bool complete;
+    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
+    this->music->play();
+
+    complete = initPlayers(this);
+
+    this->music->stop();
+
+    if(complete)
+    {
+        this->gameField = new GameField(this, round, this->players);
+        this->gameField->exec();
+    }
+}
+
 void Jeopardy::on_buttonRound1_clicked()
 {
     initGameField(1);
@@ -145,22 +162,4 @@ void Jeopardy::on_buttonRound3_clicked()
 void Jeopardy::on_buttonRound4_clicked()
 {
     initGameField(4);
-}
-
-/* Open game field by round */
-void Jeopardy::initGameField(int round)
-{
-    bool complete;
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    this->music->play();
-
-    complete = initPlayers(this);
-
-    this->music->stop();
-
-    if(complete)
-    {
-        this->gameField = new GameField(this, round, this->players);
-        this->gameField->exec();
-    }
 }

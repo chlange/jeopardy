@@ -45,6 +45,24 @@ Editor::~Editor()
     delete ui;
 }
 
+void Editor::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+void Editor::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
+}
+
 void Editor::assignPlayerPointsLines()
 {
     this->playerPointsLines[0] = ui->linePlayer1;
@@ -70,24 +88,6 @@ void Editor::showValues()
 
         this->playerNamesLines[i]->setText(this->players[i]->getName());
     }
-}
-
-void Editor::changeEvent(QEvent *e)
-{
-    QDialog::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
-
-void Editor::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
 }
 
  void Editor::saveChanges()

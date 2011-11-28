@@ -34,24 +34,9 @@ Player::Player(QString name, int id) :
 
 }
 
-QString Player::getName()
+int Player::getId()
 {
-    return this->name;
-}
-
-void Player::setKey(int key)
-{
-    this->key = key;
-}
-
-int Player::getKey()
-{
-    return this->key;
-}
-
-void Player::setName(QString name)
-{
-    this->name = name;
+    return this->id;
 }
 
 int Player::getPoints()
@@ -74,9 +59,14 @@ void Player::decPoints(int points)
     this->points -= points;
 }
 
-void Player::setColor(QString color)
+QString Player::getName()
 {
-    this->color = color;
+    return this->name;
+}
+
+void Player::setName(QString name)
+{
+    this->name = name;
 }
 
 QString Player::getColor()
@@ -84,7 +74,17 @@ QString Player::getColor()
     return this->color;
 }
 
-int Player::getId()
+void Player::setColor(QString color)
 {
-    return this->id;
+    this->color = color;
+}
+
+int Player::getKey()
+{
+    return this->key;
+}
+
+void Player::setKey(int key)
+{
+    this->key = key;
 }

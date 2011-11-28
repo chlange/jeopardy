@@ -52,10 +52,12 @@ private:
     QLineEdit *playerNamesLines[NUMBER_PLAYERS];
 
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
-    void saveChanges();
-    void showValues();
     void assignPlayerPointsLines();
     void assignPlayerNamesLines();
+
+    void showValues();
+
+    void saveChanges();
 
 private slots:
     void on_save_clicked();

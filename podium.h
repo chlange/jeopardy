@@ -59,12 +59,14 @@ private:
     int order[NUMBER_PLAYERS];
     QLabel *podiumPlaceLabels[NUMBER_PLAYERS];
 
+    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+    void assignLabels();
+
     void showPodium();
     void sort();
     void setOrder(int first, int second, int third);
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+
     QString getLabelColorString(int player);
-    void assignLabels();
 };
 
 #endif // PODIUM_H

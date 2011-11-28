@@ -87,6 +87,31 @@ void GameField::init()
     this->setLabelColor();
 }
 
+void GameField::setRound(int round)
+{
+    this->round = round;
+}
+
+int GameField::getRound()
+{
+    return this->round;
+}
+
+void GameField::incAlreadyAnswered(int number)
+{
+    this->alreadyAnswered += number;
+}
+
+void GameField::setAlreadyAnswered(int number)
+{
+    this->alreadyAnswered = number;
+}
+
+int GameField::getAlreadyAnswered()
+{
+    return this->alreadyAnswered;
+}
+
 void GameField::assignButtons()
 {
     this->buttons[0] = ui->button_1_100;
@@ -183,18 +208,6 @@ void GameField::setCategoryNames()
     }
 }
 
-void GameField::setNames()
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerNameLabels[i]->setText(this->players[i]->getName());
-}
-
-void GameField::setPoints()
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerPointsLabels[i]->setText("0");
-}
-
 void GameField::setLabelColor()
 {
     QString color;
@@ -204,6 +217,24 @@ void GameField::setLabelColor()
         color = QString("QLabel { background-color : %1; }").arg(this->players[i]->getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
     }
+}
+
+void GameField::setPoints()
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->playerPointsLabels[i]->setText("0");
+}
+
+void GameField::setNames()
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->playerNameLabels[i]->setText(this->players[i]->getName());
+}
+
+void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
 }
 
 void GameField::updateGameFieldValues()
@@ -242,129 +273,16 @@ void GameField::updateAfterAnswer()
     this->updateLabelsAfterAnswer();
 }
 
-void GameField::openAnswer(int category, int points)
+QString GameField::getButtonColorByLastWinner()
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players);
-    this->answer->setAnswer(category, points);
+    QString color = "";
 
-    this->lastWinner = this->answer->exec();
-    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = this->answer->getPoints();
-    this->result = answer->getResult();
+    if(this->lastWinner == NO_WINNER)
+        return color;
 
-    this->processResult();
-    this->updateAfterAnswer();
+    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());
 
-    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
-    {
-        /* Do backup after each answer */
-        this->openFileSaver(true);
-    }
-    else
-    {
-        this->showPodium();
-        done(0);
-    }
-}
-
-void GameField::showPodium()
-{
-    this->podium = new Podium(this, this->players);
-    this->podium->exec();
-}
-
-void GameField::processResult()
-{
-    int playerId;
-
-    while(this->result.length() > 0)
-    {
-        if(this->result.startsWith(PLAYER_ONE_STRING))
-            playerId = PLAYER_ONE;
-        else if(this->result.startsWith(PLAYER_TWO_STRING))
-            playerId = PLAYER_TWO;
-        else
-            playerId = PLAYER_THREE;
-
-        this->result.remove(0, PLAYER_INDICATOR);
-
-        if(this->result.startsWith(WON))
-            this->players[playerId]->incPoints(this->lastPoints);
-        else
-            this->players[playerId]->decPoints(this->lastPoints);
-
-        this->result.remove(0, RESULT_INDICATOR);
-    }
-}
-
-void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
-}
-
-void GameField::setRound(int round)
-{
-    this->round = round;
-}
-
-int GameField::getRound()
-{
-    return this->round;
-}
-
-void GameField::incAlreadyAnswered(int number)
-{
-    this->alreadyAnswered += number;
-}
-
-void GameField::setAlreadyAnswered(int number)
-{
-    this->alreadyAnswered = number;
-}
-
-int GameField::getAlreadyAnswered()
-{
-    return this->alreadyAnswered;
-}
-
-void GameField::on_gameField_customContextMenuRequested(QPoint pos)
-{
-    QPoint globalPos = this->mapToGlobal(pos);
-
-    QMenu menu;
-    this->editorCtx = new QAction("Editor",this);
-    this->loadCtx = new QAction("Load",this);
-    this->saveCtx = new QAction("Save",this);
-    this->endRoundCtx = new QAction("End Round", this);
-
-    menu.addAction(this->editorCtx);
-    menu.addSeparator();
-    menu.addAction(this->loadCtx);
-    menu.addAction(this->saveCtx);
-    menu.addSeparator();
-    menu.addAction(this->endRoundCtx);
-
-    QAction *selectedItem = menu.exec(globalPos);
-
-    if(selectedItem == this->editorCtx)
-        this->openEditor();
-    else if(selectedItem == this->saveCtx)
-        this->openFileSaver(false);
-    else if(selectedItem == this->loadCtx)
-        this->openFileLoader();
-    else if(selectedItem == this->endRoundCtx)
-    {
-        this->showPodium();
-        done(0);
-    }
-}
-
-void GameField::openEditor()
-{
-    this->editor = new Editor(this, this->players);
-    this->editor->exec();
-    this->updateGameFieldValues();
+    return color;
 }
 
 void GameField::openFileLoader()
@@ -492,16 +410,98 @@ void GameField::openFileSaver(bool backup)
     }
 }
 
-QString GameField::getButtonColorByLastWinner()
+void GameField::openEditor()
 {
-    QString color = "";
+    this->editor = new Editor(this, this->players);
+    this->editor->exec();
+    this->updateGameFieldValues();
+}
 
-    if(this->lastWinner == NO_WINNER)
-        return color;
+void GameField::openAnswer(int category, int points)
+{
+    this->answer = new Answer(this, this->fileString, this->round, this->players);
+    this->answer->setAnswer(category, points);
 
-    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());
+    this->lastWinner = this->answer->exec();
+    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
 
-    return color;
+    this->processResult();
+    this->updateAfterAnswer();
+
+    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
+    {
+        /* Do backup after each answer */
+        this->openFileSaver(true);
+    }
+    else
+    {
+        this->showPodium();
+        done(0);
+    }
+}
+
+void GameField::processResult()
+{
+    int playerId;
+
+    while(this->result.length() > 0)
+    {
+        if(this->result.startsWith(PLAYER_ONE_STRING))
+            playerId = PLAYER_ONE;
+        else if(this->result.startsWith(PLAYER_TWO_STRING))
+            playerId = PLAYER_TWO;
+        else
+            playerId = PLAYER_THREE;
+
+        this->result.remove(0, PLAYER_INDICATOR);
+
+        if(this->result.startsWith(WON))
+            this->players[playerId]->incPoints(this->lastPoints);
+        else
+            this->players[playerId]->decPoints(this->lastPoints);
+
+        this->result.remove(0, RESULT_INDICATOR);
+    }
+}
+
+void GameField::on_gameField_customContextMenuRequested(QPoint pos)
+{
+    QPoint globalPos = this->mapToGlobal(pos);
+
+    QMenu menu;
+    this->editorCtx = new QAction("Editor",this);
+    this->loadCtx = new QAction("Load",this);
+    this->saveCtx = new QAction("Save",this);
+    this->endRoundCtx = new QAction("End Round", this);
+
+    menu.addAction(this->editorCtx);
+    menu.addSeparator();
+    menu.addAction(this->loadCtx);
+    menu.addAction(this->saveCtx);
+    menu.addSeparator();
+    menu.addAction(this->endRoundCtx);
+
+    QAction *selectedItem = menu.exec(globalPos);
+
+    if(selectedItem == this->editorCtx)
+        this->openEditor();
+    else if(selectedItem == this->saveCtx)
+        this->openFileSaver(false);
+    else if(selectedItem == this->loadCtx)
+        this->openFileLoader();
+    else if(selectedItem == this->endRoundCtx)
+    {
+        this->showPodium();
+        done(0);
+    }
+}
+
+void GameField::showPodium()
+{
+    this->podium = new Podium(this, this->players);
+    this->podium->exec();
 }
 
 /* 100 points buttons */

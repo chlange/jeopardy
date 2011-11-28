@@ -109,14 +109,13 @@ private:
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
 
     void updateGameFieldValues();
-    void updateNamesLabels();
     void updatePointsLabels();
+    void updateNamesLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
 
     QString getButtonColorByLastWinner();
 
-    QFile openRoundFile();
     void openFileLoader();
     void openFileSaver(bool automatedBackup);
     void openEditor();

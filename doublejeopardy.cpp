@@ -70,6 +70,17 @@ void DoubleJeopardy::setLabels()
     ui->comboBox->addItems(playerList);
 }
 
+int DoubleJeopardy::getPoints()
+{
+    return this->points;
+}
+
+void DoubleJeopardy::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
+}
+
 void DoubleJeopardy::on_button_clicked()
 {
     if(this->min <= ui->points->text().toInt() && ui->points->text().toInt() <= this->max)
@@ -82,15 +93,4 @@ void DoubleJeopardy::on_button_clicked()
         QMessageBox::critical(this, tr("Error"), tr("Points invalid, reenter points"));
         ui->points->setText(0);
     }
-}
-
-int DoubleJeopardy::getPoints()
-{
-    return this->points;
-}
-
-void DoubleJeopardy::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
 }

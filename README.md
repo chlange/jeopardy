@@ -3,8 +3,8 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		26. November 2011
-* Version:	0.9.3 experimental
+* Date:		28. November 2011
+* Version:	0.9.3 stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -96,7 +96,7 @@ Podium:
 
 ![](http://i.imgur.com/lIQgj.png)
 
-Bugs? Feature request? Have some Beer?
+Bugs? Feature requests? Have some Beer?
 ------------------------------------------
 
 Don't hesitate to contact me!
