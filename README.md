@@ -52,8 +52,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.3
-	tar xfv v0.9.3
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.3s
+	tar xfv v0.9.3s
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
@@ -62,6 +62,8 @@ Install
 Play
 ----
 
+* Edit answers/round.jrf
+	* see answers/1.jrf for further instructions
 * Choose round to play
 * Enter names of players
 * Select question
