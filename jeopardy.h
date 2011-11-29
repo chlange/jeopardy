@@ -30,9 +30,13 @@
 #define JEOPARDY_H
 
 #include <QMainWindow>
-#include <player.h>
+#include <QInputDialog>
+#include <QRegExp>
+#include <QKeyEvent>
+#include <QWidget>
 #include <phonon/phonon>
 #include <gamefield.h>
+#include <player.h>
 
 namespace Ui {
     class Jeopardy;
@@ -41,10 +45,8 @@ namespace Ui {
 class Jeopardy : public QMainWindow {
     Q_OBJECT
 public:
-    Jeopardy(QWidget *parent = NOT_DEFINED);
+    Jeopardy(QWidget *parent = NULL);
     ~Jeopardy();
-
-    /* Initialize player infos */
     bool initPlayers(QWidget *context);
 
 protected:
@@ -56,7 +58,6 @@ private:
     Phonon::MediaObject *music;
     GameField *gameField;
 
-    /* Open game field by round */
     void initGameField(int round);
 
 private slots:

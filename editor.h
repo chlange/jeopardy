@@ -29,11 +29,8 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QDialog>
-#include <player.h>
 #include <QLineEdit>
-
-#define NOT_DEFINED 0
+#include <player.h>
 
 namespace Ui {
     class Editor;
@@ -42,7 +39,7 @@ namespace Ui {
 class Editor : public QDialog {
     Q_OBJECT
 public:
-    Editor(QWidget *parent = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    Editor(QWidget *parent = NULL, Player *players[NUMBER_PLAYERS] = NULL);
     ~Editor();
 
 protected:
@@ -55,10 +52,12 @@ private:
     QLineEdit *playerNamesLines[NUMBER_PLAYERS];
 
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
-    void saveChanges();
-    void showValues();
     void assignPlayerPointsLines();
     void assignPlayerNamesLines();
+
+    void showValues();
+
+    void saveChanges();
 
 private slots:
     void on_save_clicked();

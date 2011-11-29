@@ -28,13 +28,6 @@
 
 #include "jeopardy.h"
 #include "ui_jeopardy.h"
-#include "player.h"
-#include "gamefield.h"
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QRegExp>
-#include <QKeyEvent>
-#include <QWidget>
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
@@ -43,9 +36,9 @@ Jeopardy::Jeopardy(QWidget *parent) :
     ui->setupUi(this);
 
     for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = NOT_DEFINED;
+        this->players[i] = NULL;
 
-    this->gameField = NOT_DEFINED;
+    this->gameField = NULL;
 }
 
 Jeopardy::~Jeopardy()
@@ -54,10 +47,10 @@ Jeopardy::~Jeopardy()
 
     /* Don't delete field! "new Player(..)" gets called for every player seperately */
     for(int i = 0; i < NUMBER_PLAYERS; i++)
-        if(this->players[i] != NOT_DEFINED)
+        if(this->players[i] != NULL)
             delete this->players[i];
 
-    if(this->gameField != NOT_DEFINED)
+    if(this->gameField != NULL)
         delete this->gameField;
 }
 
@@ -81,8 +74,6 @@ bool Jeopardy::initPlayers(QWidget *context)
     QString color;
     QStringList colorListOriginal;
     QStringList colorList;
-    QStringList keyListOriginal;
-    QStringList keyList;
 
     colorListOriginal << "red" << "green" << "yellow" << "blue";
 
@@ -136,6 +127,23 @@ bool Jeopardy::initPlayers(QWidget *context)
     return complete;
 }
 
+void Jeopardy::initGameField(int round)
+{
+    bool complete;
+    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
+    this->music->play();
+
+    complete = initPlayers(this);
+
+    this->music->stop();
+
+    if(complete)
+    {
+        this->gameField = new GameField(this, round, this->players);
+        this->gameField->exec();
+    }
+}
+
 void Jeopardy::on_buttonRound1_clicked()
 {
     initGameField(1);
@@ -154,22 +162,4 @@ void Jeopardy::on_buttonRound3_clicked()
 void Jeopardy::on_buttonRound4_clicked()
 {
     initGameField(4);
-}
-
-/* Open game field by round */
-void Jeopardy::initGameField(int round)
-{
-    bool complete;
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    this->music->play();
-
-    complete = initPlayers(this);
-
-    this->music->stop();
-
-    if(complete)
-    {
-        this->gameField = new GameField(this, round, this->players);
-        this->gameField->exec();
-    }
 }

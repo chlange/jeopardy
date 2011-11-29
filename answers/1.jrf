@@ -1,7 +1,7 @@
 answer
 100: answer 	- Whitespace between ":" and the answer
-200: 		
-300: 		- One answer per line
+200: 		- One answer per line
+300: 		
 400: 		
 500: 		- Call this file either 1.jrf, 2.jrf, 3.jrf or 4.jrf for desired round
 text
@@ -15,13 +15,13 @@ images
 200: [img]1.jpg	- Image size max. 980px x 500px
 300: [img]1.gif	- [img] tag must be at the beginning
 400: [img]1.bmp - Don't mix an image with text
-500: [img]1.jpeg
-category4name
-100: text 	- ##comment won't be shown##
-200: ##comment##
-300: 
-400: 
 500: 
+other
+100: ##comment##- ##comment won't be shown##
+200: 
+300: [dj]answer - [dj] indicates double jeopardy question
+400: 		- [dj] opens menu where the player and points can be selected
+500: 		- [dj] min. 100 and up to twice the points of the normal question 
 category5name
 100: 
 200: 

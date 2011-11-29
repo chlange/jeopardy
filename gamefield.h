@@ -29,14 +29,18 @@
 #ifndef GAMEFIELD_H
 #define GAMEFIELD_H
 
-#include <QDialog>
-#include <player.h>
 #include <QMenu>
+#include <QAction>
+#include <QLabel>
+#include <QFile>
+#include <QColor>
+#include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDateTime>
 #include <editor.h>
 #include <podium.h>
 #include <answer.h>
-#include <QAction>
-#include <QLabel>
 
 #define PLAYER_ONE_STRING "1"
 #define PLAYER_TWO_STRING "2"
@@ -60,8 +64,7 @@ namespace Ui {
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NOT_DEFINED);
-    GameField(QWidget *parent = NOT_DEFINED, int round = NOT_DEFINED, Player *players[NUMBER_PLAYERS] = NOT_DEFINED);
+    GameField(QWidget *parent = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
     ~GameField();
     void init();
     void setRound(int round);
@@ -106,8 +109,8 @@ private:
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
 
     void updateGameFieldValues();
-    void updateNamesLabels();
     void updatePointsLabels();
+    void updateNamesLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
 

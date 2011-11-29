@@ -26,78 +26,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ANSWER_H
-#define ANSWER_H
+#ifndef DOUBLEJEOPARDY_H
+#define DOUBLEJEOPARDY_H
 
-#include <QKeyEvent>
-#include <QSound>
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-#include <phonon/phonon>
-#include <doublejeopardy.h>
+#include <QMessageBox>
+#include <player.h>
 
-#define ANSWER_POINTS_INDICATOR_LENGTH 5
-#define SOME_LINE_BREAKS 10
-#define MORE_LINE_BREAKS 15
-#define MANY_LINE_BREAKS 20
-#define NO_WINNER -1
-#define WON "1"
-#define LOST "0"
+#define DOUBLE_JEOPARDY_MIN_POINTS 100
 
 namespace Ui {
-    class Answer;
+    class DoubleJeopardy;
 }
 
-class Answer : public QDialog {
+class DoubleJeopardy : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
-    ~Answer();
-    void setAnswer(int category, int points);
+    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players[NUMBER_PLAYERS] = NULL);
+    ~DoubleJeopardy();
+    void setLabels();
     int getPoints();
-    QString getResult();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::Answer *ui;
-    int round;
+    Ui::DoubleJeopardy *ui;
+    int min;
+    int max;
     int points;
-    int currentPlayerId;
-    QString result;
-    bool keyLock;
-    QString fileString;
-    bool doubleJeopardy;
     Player *players[NUMBER_PLAYERS];
-    Player *currentPlayer;
-    Phonon::MediaObject *music;
-    DoubleJeopardy *dj;
 
     void insertPlayers(Player *players[NUMBER_PLAYERS]);
 
-    void keyPressEvent(QKeyEvent *event);
-    void processKeypress(int player);
-    bool keyListenerIsLocked();
-    void lockKeyListener();
-    void releaseKeyListener();
-
-    void showButtons();
-    void hideButtons();
-
-    QString getRoundFile();
-    QFont meassureFontSize(int count);
-    int getCategoryLine(int category);
-
-    void getAnswer(int category, int points, QString *answer);
-    void openDoubleJeopardy();
-
 private slots:
-    void on_buttonCancel_clicked();
-    void on_buttonWrong_clicked();
-    void on_buttonRight_clicked();
-    void on_buttonEnd_clicked();
+    void on_button_clicked();
 };
 
-#endif // ANSWER_H
+#endif // DOUBLEJEOPARDY_H

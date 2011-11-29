@@ -28,38 +28,38 @@
 
 #include "gamefield.h"
 #include "ui_gamefield.h"
-#include "QColor"
-#include "answer.h"
-#include "editor.h"
-#include "podium.h"
-#include <QDebug>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QDateTime>
 
-GameField::GameField(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::gameField)
+GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
+    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NULL),
+    lastWinner(NO_WINNER), answer(NULL), editor(NULL), podium(NULL),
+    editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
     ui->setupUi(this);
+
+    /* Declare new context menu and connect it with the right mouse button */
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
+
+    this->insertPlayers(players);
+    this->init();
 }
 
 GameField::~GameField()
 {
     delete ui;
-    if(this->answer != NOT_DEFINED)
+    if(this->answer != NULL)
         delete this->answer;
-    if(this->editor != NOT_DEFINED)
+    if(this->editor != NULL)
         delete this->editor;
-    if(this->editorCtx != NOT_DEFINED)
+    if(this->editorCtx != NULL)
         delete this->editorCtx;
-    if(this->loadCtx != NOT_DEFINED)
+    if(this->loadCtx != NULL)
         delete this->loadCtx;
-    if(this->saveCtx != NOT_DEFINED)
+    if(this->saveCtx != NULL)
         delete this->saveCtx;
-    if(this->endRoundCtx != NOT_DEFINED)
+    if(this->endRoundCtx != NULL)
         delete this->endRoundCtx;
-    if(this->podium != NOT_DEFINED)
+    if(this->podium != NULL)
         delete this->podium;
 }
 
@@ -75,21 +75,6 @@ void GameField::changeEvent(QEvent *e)
     }
 }
 
-GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
-    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NOT_DEFINED),
-    lastWinner(-1), answer(NOT_DEFINED), editor(NOT_DEFINED), podium(NOT_DEFINED),
-    editorCtx(NOT_DEFINED), loadCtx(NOT_DEFINED), saveCtx(NOT_DEFINED), endRoundCtx(NOT_DEFINED)
-{
-    ui->setupUi(this);
-
-    /* Declare new context menu and connect it with the right mouse button */
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
-
-    this->insertPlayers(players);
-    this->init();
-}
-
 void GameField::init()
 {
     this->assignButtons();
@@ -100,6 +85,31 @@ void GameField::init()
     this->setNames();
     this->setPoints();
     this->setLabelColor();
+}
+
+void GameField::setRound(int round)
+{
+    this->round = round;
+}
+
+int GameField::getRound()
+{
+    return this->round;
+}
+
+void GameField::incAlreadyAnswered(int number)
+{
+    this->alreadyAnswered += number;
+}
+
+void GameField::setAlreadyAnswered(int number)
+{
+    this->alreadyAnswered = number;
+}
+
+int GameField::getAlreadyAnswered()
+{
+    return this->alreadyAnswered;
 }
 
 void GameField::assignButtons()
@@ -158,39 +168,37 @@ void GameField::assignCategoryLabels()
     this->categories[4] = ui->category5;
 }
 
-/* Todo: refactor - same functionality in answer.cpp */
+/* Todo: refactor */
 void GameField::setCategoryNames()
 {
     int categoryLine;
     QString categoryName;
 
-    /* Prepare filestring */
     this->fileString = QString("answers/%1.jrf").arg(this->round);
+    QFile file(this->fileString);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
+
+        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+    }
 
     for(int i = 1; i < NUMBER_CATEGORIES + OFFSET; i++)
     {
+        QFile file(this->fileString);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          return;
+        }
+
+        QTextStream in(&file);
+
         int CATEGORY = i;
 
         /* Calculate on which line the categories in the file start */
         categoryLine = (CATEGORY == 1) ? 1 : ((CATEGORY - OFFSET) * NUMBER_CATEGORIES) + CATEGORY;
-
-        QFile file(this->fileString);
-
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
-
-            this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
-            QFile file(this->fileString);
-
-            if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
-              QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-              return;
-            }
-        }
-
-        QTextStream in(&file);
 
         /* Step to appropriate category section */
         for(int lineNr = 0; lineNr != categoryLine; lineNr++)
@@ -198,18 +206,6 @@ void GameField::setCategoryNames()
 
         this->categories[CATEGORY - OFFSET]->setText(categoryName);
     }
-}
-
-void GameField::setNames()
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerNameLabels[i]->setText(this->players[i]->getName());
-}
-
-void GameField::setPoints()
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerPointsLabels[i]->setText("0");
 }
 
 void GameField::setLabelColor()
@@ -221,6 +217,24 @@ void GameField::setLabelColor()
         color = QString("QLabel { background-color : %1; }").arg(this->players[i]->getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
     }
+}
+
+void GameField::setPoints()
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->playerPointsLabels[i]->setText("0");
+}
+
+void GameField::setNames()
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->playerNameLabels[i]->setText(this->players[i]->getName());
+}
+
+void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
 }
 
 void GameField::updateGameFieldValues()
@@ -259,129 +273,16 @@ void GameField::updateAfterAnswer()
     this->updateLabelsAfterAnswer();
 }
 
-void GameField::openAnswer(int category, int points)
+QString GameField::getButtonColorByLastWinner()
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players);
-    this->answer->setAnswer(category, points);
+    QString color = "";
 
-    this->lastWinner = this->answer->exec();
-    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = points;
-    this->result = answer->getResult();
+    if(this->lastWinner == NO_WINNER)
+        return color;
 
-    this->processResult();
-    this->updateAfterAnswer();
+    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());
 
-    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
-    {
-        /* Do backup after each answer */
-        this->openFileSaver(true);
-    }
-    else
-    {
-        this->showPodium();
-        done(0);
-    }
-}
-
-void GameField::showPodium()
-{
-    this->podium = new Podium(this, this->players);
-    this->podium->exec();
-}
-
-void GameField::processResult()
-{
-    int playerId;
-
-    while(this->result.length() > 0)
-    {
-        if(this->result.startsWith(PLAYER_ONE_STRING))
-            playerId = PLAYER_ONE;
-        else if(this->result.startsWith(PLAYER_TWO_STRING))
-            playerId = PLAYER_TWO;
-        else
-            playerId = PLAYER_THREE;
-
-        this->result.remove(0, PLAYER_INDICATOR);
-
-        if(this->result.startsWith(WON))
-            this->players[playerId]->incPoints(this->lastPoints);
-        else
-            this->players[playerId]->decPoints(this->lastPoints);
-
-        this->result.remove(0, RESULT_INDICATOR);
-    }
-}
-
-void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
-}
-
-void GameField::setRound(int round)
-{
-    this->round = round;
-}
-
-int GameField::getRound()
-{
-    return this->round;
-}
-
-void GameField::incAlreadyAnswered(int number)
-{
-    this->alreadyAnswered += number;
-}
-
-void GameField::setAlreadyAnswered(int number)
-{
-    this->alreadyAnswered = number;
-}
-
-int GameField::getAlreadyAnswered()
-{
-    return this->alreadyAnswered;
-}
-
-void GameField::on_gameField_customContextMenuRequested(QPoint pos)
-{
-    QPoint globalPos = this->mapToGlobal(pos);
-
-    QMenu menu;
-    this->editorCtx = new QAction("Editor",this);
-    this->loadCtx = new QAction("Load",this);
-    this->saveCtx = new QAction("Save",this);
-    this->endRoundCtx = new QAction("End Round", this);
-
-    menu.addAction(this->editorCtx);
-    menu.addSeparator();
-    menu.addAction(this->loadCtx);
-    menu.addAction(this->saveCtx);
-    menu.addSeparator();
-    menu.addAction(this->endRoundCtx);
-
-    QAction *selectedItem = menu.exec(globalPos);
-
-    if(selectedItem == this->editorCtx)
-        this->openEditor();
-    else if(selectedItem == this->saveCtx)
-        this->openFileSaver(false);
-    else if(selectedItem == this->loadCtx)
-        this->openFileLoader();
-    else if(selectedItem == this->endRoundCtx)
-    {
-        this->showPodium();
-        done(0);
-    }
-}
-
-void GameField::openEditor()
-{
-    this->editor = new Editor(this, this->players);
-    this->editor->exec();
-    this->updateGameFieldValues();
+    return color;
 }
 
 void GameField::openFileLoader()
@@ -509,16 +410,98 @@ void GameField::openFileSaver(bool backup)
     }
 }
 
-QString GameField::getButtonColorByLastWinner()
+void GameField::openEditor()
 {
-    QString color = "";
+    this->editor = new Editor(this, this->players);
+    this->editor->exec();
+    this->updateGameFieldValues();
+}
 
-    if(this->lastWinner == NO_WINNER)
-        return color;
+void GameField::openAnswer(int category, int points)
+{
+    this->answer = new Answer(this, this->fileString, this->round, this->players);
+    this->answer->setAnswer(category, points);
 
-    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());
+    this->lastWinner = this->answer->exec();
+    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
 
-    return color;
+    this->processResult();
+    this->updateAfterAnswer();
+
+    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
+    {
+        /* Do backup after each answer */
+        this->openFileSaver(true);
+    }
+    else
+    {
+        this->showPodium();
+        done(0);
+    }
+}
+
+void GameField::processResult()
+{
+    int playerId;
+
+    while(this->result.length() > 0)
+    {
+        if(this->result.startsWith(PLAYER_ONE_STRING))
+            playerId = PLAYER_ONE;
+        else if(this->result.startsWith(PLAYER_TWO_STRING))
+            playerId = PLAYER_TWO;
+        else
+            playerId = PLAYER_THREE;
+
+        this->result.remove(0, PLAYER_INDICATOR);
+
+        if(this->result.startsWith(WON))
+            this->players[playerId]->incPoints(this->lastPoints);
+        else
+            this->players[playerId]->decPoints(this->lastPoints);
+
+        this->result.remove(0, RESULT_INDICATOR);
+    }
+}
+
+void GameField::on_gameField_customContextMenuRequested(QPoint pos)
+{
+    QPoint globalPos = this->mapToGlobal(pos);
+
+    QMenu menu;
+    this->editorCtx = new QAction("Editor",this);
+    this->loadCtx = new QAction("Load",this);
+    this->saveCtx = new QAction("Save",this);
+    this->endRoundCtx = new QAction("End Round", this);
+
+    menu.addAction(this->editorCtx);
+    menu.addSeparator();
+    menu.addAction(this->loadCtx);
+    menu.addAction(this->saveCtx);
+    menu.addSeparator();
+    menu.addAction(this->endRoundCtx);
+
+    QAction *selectedItem = menu.exec(globalPos);
+
+    if(selectedItem == this->editorCtx)
+        this->openEditor();
+    else if(selectedItem == this->saveCtx)
+        this->openFileSaver(false);
+    else if(selectedItem == this->loadCtx)
+        this->openFileLoader();
+    else if(selectedItem == this->endRoundCtx)
+    {
+        this->showPodium();
+        done(0);
+    }
+}
+
+void GameField::showPodium()
+{
+    this->podium = new Podium(this, this->players);
+    this->podium->exec();
 }
 
 /* 100 points buttons */

@@ -1,15 +1,15 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'answer.h'
+** Meta object code from reading C++ file 'doublejeopardy.h'
 **
-** Created: Mon Nov 28 23:31:39 2011
+** Created: Mon Nov 28 23:31:44 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "answer.h"
+#include "doublejeopardy.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'answer.h' doesn't include <QObject>."
+#error "The header file 'doublejeopardy.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
 #error "This file was generated using the moc from 4.6.2. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,13 +17,13 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_Answer[] = {
+static const uint qt_meta_data_DoubleJeopardy[] = {
 
  // content:
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,57 +31,48 @@ static const uint qt_meta_data_Answer[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-       8,    7,    7,    7, 0x08,
-      34,    7,    7,    7, 0x08,
-      59,    7,    7,    7, 0x08,
-      84,    7,    7,    7, 0x08,
+      16,   15,   15,   15, 0x08,
 
        0        // eod
 };
 
-static const char qt_meta_stringdata_Answer[] = {
-    "Answer\0\0on_buttonCancel_clicked()\0"
-    "on_buttonWrong_clicked()\0"
-    "on_buttonRight_clicked()\0"
-    "on_buttonEnd_clicked()\0"
+static const char qt_meta_stringdata_DoubleJeopardy[] = {
+    "DoubleJeopardy\0\0on_button_clicked()\0"
 };
 
-const QMetaObject Answer::staticMetaObject = {
-    { &QDialog::staticMetaObject, qt_meta_stringdata_Answer,
-      qt_meta_data_Answer, 0 }
+const QMetaObject DoubleJeopardy::staticMetaObject = {
+    { &QDialog::staticMetaObject, qt_meta_stringdata_DoubleJeopardy,
+      qt_meta_data_DoubleJeopardy, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &Answer::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &DoubleJeopardy::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *Answer::metaObject() const
+const QMetaObject *DoubleJeopardy::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *Answer::qt_metacast(const char *_clname)
+void *DoubleJeopardy::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_Answer))
-        return static_cast<void*>(const_cast< Answer*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_DoubleJeopardy))
+        return static_cast<void*>(const_cast< DoubleJeopardy*>(this));
     return QDialog::qt_metacast(_clname);
 }
 
-int Answer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int DoubleJeopardy::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: on_buttonCancel_clicked(); break;
-        case 1: on_buttonWrong_clicked(); break;
-        case 2: on_buttonRight_clicked(); break;
-        case 3: on_buttonEnd_clicked(); break;
+        case 0: on_button_clicked(); break;
         default: ;
         }
-        _id -= 4;
+        _id -= 1;
     }
     return _id;
 }

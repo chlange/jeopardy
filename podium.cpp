@@ -57,6 +57,12 @@ void Podium::changeEvent(QEvent *e)
     }
 }
 
+void Podium::insertPlayers(Player *players[NUMBER_PLAYERS])
+{
+    for(int i = 0; i < NUMBER_PLAYERS; i++)
+        this->players[i] = players[i];
+}
+
 void Podium::assignLabels()
 {
     this->podiumPlaceLabels[FIRST_PLAYER] = ui->first;
@@ -79,15 +85,6 @@ void Podium::showPodium()
 
         this->podiumPlaceLabels[i]->setText(text);
     }
-}
-
-QString Podium::getLabelColorString(int player)
-{
-    QString color;
-
-    color = QString("QLabel { background-color : %1; }").arg(this->players[player]->getColor());
-
-    return color;
 }
 
 void Podium::sort()
@@ -130,9 +127,12 @@ void Podium::setOrder(int first, int second, int third)
     order[FIRST_PLACE] = first;
 }
 
-/* Point to players - Sort of workaround */
-void Podium::insertPlayers(Player *players[NUMBER_PLAYERS])
+QString Podium::getLabelColorString(int player)
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
+    QString color;
+
+    color = QString("QLabel { background-color : %1; }").arg(this->players[player]->getColor());
+
+    return color;
 }
+
