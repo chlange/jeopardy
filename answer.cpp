@@ -50,7 +50,7 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     this->hideButtons();
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
-    //this->music->play();
+    this->music->play();
 }
 
 Answer::~Answer()

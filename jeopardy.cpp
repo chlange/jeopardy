@@ -66,7 +66,7 @@ void Jeopardy::initGameField(int round)
 {
     bool complete;
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    //this->music->play();
+    this->music->play();
 
     complete = this->setCategoryNr();
 
