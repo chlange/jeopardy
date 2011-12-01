@@ -23,7 +23,7 @@ Features
 * names
 * choose own key to answer
 * right click context menu including
-	* random user generator
+	* random generator to pick random user
 	* load/save game state
 	* player name and points editor
 	* early round ending option
@@ -51,8 +51,8 @@ Software used
 Install
 -------
 
-	wget --
-	tar xfv --
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e
+	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
