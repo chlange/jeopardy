@@ -92,6 +92,7 @@ void Jeopardy::initGameField(int round)
         return;
     }
 
+    this->music->stop();
     this->startRound(round);
 }
 
