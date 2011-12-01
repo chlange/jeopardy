@@ -35,9 +35,7 @@ Jeopardy::Jeopardy(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = NULL;
-
+    this->players = NULL;
     this->gameField = NULL;
 }
 
@@ -45,10 +43,8 @@ Jeopardy::~Jeopardy()
 {
     delete ui;
 
-    /* Don't delete field! "new Player(..)" gets called for every player seperately */
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        if(this->players[i] != NULL)
-            delete this->players[i];
+    if(this->players != NULL)
+        delete [] this->players;
 
     if(this->gameField != NULL)
         delete this->gameField;
@@ -66,82 +62,116 @@ void Jeopardy::changeEvent(QEvent *e)
     }
 }
 
-/* Initialize player infos */
-bool Jeopardy::initPlayers(QWidget *context)
-{
-    QString playerName;
-    QString text;
-    QString color;
-    QStringList colorListOriginal;
-    QStringList colorList;
-
-    colorListOriginal << "red" << "green" << "yellow" << "blue";
-
-    bool ok;
-    bool complete = true;
-
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-    {
-        /* reload colors */
-        if(i == 0)
-            colorList = colorListOriginal;
-
-        /* Repeat name input until cancel buton gets pressed or valid name was entered */
-        while(true)
-        {
-            playerName = QString("Player %1").arg(i+1);
-            if(i == 0)
-                playerName.append(" Key a");
-            else if(i == 1)
-                playerName.append(" Key g");
-            else
-                playerName.append(" Key k");
-
-            text = QInputDialog::getText(context, "Enter name",playerName, QLineEdit::Normal,"", &ok);
-
-            /* Check if name is valid */
-            if(ok && !text.isEmpty())
-            {
-                /* Set name and color */
-                this->players[i] = new Player(text, (i+1));
-
-                color = QInputDialog::getItem(context, "Choose color ", "Color:", colorList, 0, false);
-                this->players[i]->setColor(color);
-                colorList.removeOne(color);
-
-                break;
-            }
-            else
-            {
-                complete = false;
-                break;
-            }
-
-        }
-
-        /* break if input isn't correct */
-        if(complete == false && i < 2)
-            break;
-    }
-
-    return complete;
-}
-
 void Jeopardy::initGameField(int round)
 {
     bool complete;
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    this->music->play();
+    //this->music->play();
 
-    complete = initPlayers(this);
+    complete = this->setCategoryNr();
 
-    this->music->stop();
-
-    if(complete)
+    if(NOT == complete)
     {
-        this->gameField = new GameField(this, round, this->players);
-        this->gameField->exec();
+        this->music->stop();
+        return;
     }
+
+    complete = this->setPlayerNr();
+
+    if(NOT == complete)
+    {
+        this->music->stop();
+        return;
+    }
+
+    complete = this->initPlayers();
+
+    if(NOT == complete)
+    {
+        this->music->stop();
+        return;
+    }
+
+    this->startRound(round);
+}
+
+bool Jeopardy::setPlayerNr()
+{
+    bool ok;
+
+    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Number of players", 3, 2, NUMBER_MAX_PLAYERS, 1, &ok);
+
+    this->players = new Player[NUMBER_MAX_PLAYERS];
+
+    return ok;
+}
+
+bool Jeopardy::setCategoryNr()
+{
+    bool ok;
+
+    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Number of categories", 5, 1, 6, 1, &ok);
+
+    return ok;
+}
+
+bool Jeopardy::initPlayers()
+{
+    QString playerName;
+    QString text;
+    QString key;
+    QString color;
+    QStringList keyListOrg;
+    QStringList keyList;
+    QStringList colorList;
+    int keys[36];
+
+    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta";
+    keyList << "a" << "b" << "c" << "d"  << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
+            << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
+             << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
+    keyListOrg = keyList;
+
+    for(int i = 0; i < 26; i++)
+        keys[i] = 0x41 + i;
+    for(int i = 26; i < 36; i++)
+        keys[i] = 0x30 + (i - 26);
+
+    bool ok;
+    bool complete = true;
+
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        playerName = QString("Player %1").arg(i+1);
+
+        text = QInputDialog::getText(this, "Enter name", playerName, QLineEdit::Normal,"", &ok);
+
+        /* Check if name is valid */
+        if(ok && !text.isEmpty())
+        {
+            this->players[i].setName(text);
+            this->players[i].setId(i+1);
+
+            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false);
+            this->players[i].setKey(keys[keyListOrg.indexOf(key)]);
+            keyList.removeOne(key);
+
+            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false);
+            this->players[i].setColor(color);
+            colorList.removeOne(color);
+        }
+        else
+        {
+            complete = false;
+            break;
+        }
+    }
+    return complete;
+}
+
+void Jeopardy::startRound(int round)
+{
+    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr);
 }
 
 void Jeopardy::on_buttonRound1_clicked()

@@ -30,33 +30,46 @@
 #define DOUBLEJEOPARDY_H
 
 #include <QMessageBox>
+#include <QGridLayout>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
 #include <player.h>
 
 #define DOUBLE_JEOPARDY_MIN_POINTS 100
 
-namespace Ui {
-    class DoubleJeopardy;
-}
-
 class DoubleJeopardy : public QDialog {
     Q_OBJECT
 public:
-    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players[NUMBER_PLAYERS] = NULL);
+    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players = NULL, int playerNr = NULL);
     ~DoubleJeopardy();
+
+    void show();
+    void init();
     void setLabels();
     int getPoints();
+    int getPlayer();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::DoubleJeopardy *ui;
     int min;
     int max;
     int points;
-    Player *players[NUMBER_PLAYERS];
+    int index;
+    int playerNr;
+    Player *players;
+    QDialog *window;
+    QGridLayout *grid;
+    QComboBox *playerComboBox;
+    QLabel *minLabel;
+    QLabel *maxLabel;
+    QSpinBox *pointsSpinBox;
+    QPushButton *startButton;
 
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+    void insertLayouts();
 
 private slots:
     void on_button_clicked();

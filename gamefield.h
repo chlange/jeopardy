@@ -29,6 +29,7 @@
 #ifndef GAMEFIELD_H
 #define GAMEFIELD_H
 
+#include <stdlib.h>
 #include <QMenu>
 #include <QAction>
 #include <QLabel>
@@ -38,6 +39,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QGridLayout>
 #include <editor.h>
 #include <podium.h>
 #include <answer.h>
@@ -49,7 +51,10 @@
 #define PLAYER_TWO 1
 #define PLAYER_THREE 2
 #define NUMBER_ANSWERS 5
-#define COMPLETELY_ANSWERED 25
+#define NUMBER_MAX_PLAYERS 6
+#define NUMBER_MAX_CATEGORIES 6
+#define NUMBER_MAX_ANSWERS 30
+#define NUMBER_ANSWERS 5
 #define POINTS_FACTOR 100
 #define NO_WINNER -1
 #define COLOR_TEXT_LENGTH 33
@@ -57,19 +62,23 @@
 #define RESULT_INDICATOR 1
 #define NOT false
 
-namespace Ui {
-    class gameField;
-}
+#define GAMEFIELD_WIDTH 1000
+#define GAMEFIELD_HEIGHT 500
+#define FIRST_LABEL_ROW 7
+#define CATEGORY_LABEL_HEIGHT 30
+#define NAME_LABEL_HEIGHT 20
+#define SPLIT_FOR_TWO_LABELS 2
+#define OFFSET 1
 
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
+    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNrArr = 0);
     ~GameField();
     void init();
     void setRound(int round);
     int getRound();
-    /* Methods to check if game field is playes completely */
+
     void incAlreadyAnswered(int number);
     void setAlreadyAnswered(int number);
     int getAlreadyAnswered();
@@ -78,26 +87,34 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::gameField *ui;
     int round;
     int alreadyAnswered;
     int lastWinner;
     int lastPoints;
-    Player *players[NUMBER_PLAYERS];
-    Answer *answer;
+    int playerNr;
+    int categoryNr;
+    Player *players;
     Editor *editor;
+    Answer *answer;
     Podium *podium;
+    QWidget *window;
+    QGridLayout *mainGrid;
+    QGridLayout *categoryLabelGrid;
+    QGridLayout *buttonGrid;
+    QGridLayout *playerLabelGrid;
+    QAction *randomCtx;
     QAction *editorCtx;
     QAction *loadCtx;
     QAction *saveCtx;
     QAction *endRoundCtx;
-    QPushButton *buttons[NUMBER_CATEGORIES * NUMBER_ANSWERS];
-    QLabel *playerNameLabels[NUMBER_PLAYERS];
-    QLabel *playerPointsLabels[NUMBER_PLAYERS];
-    QLabel *categories[NUMBER_CATEGORIES];
+    QPushButton *buttons[NUMBER_MAX_ANSWERS];
+    QLabel *playerNameLabels[NUMBER_MAX_PLAYERS];
+    QLabel *playerPointsLabels[NUMBER_MAX_PLAYERS];
+    QLabel *categoryLabels[NUMBER_MAX_CATEGORIES];
     QString result;
     QString fileString;
 
+    void insertLayouts();
     void assignButtons();
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
@@ -106,9 +123,7 @@ private:
     void setLabelColor();
     void setPoints();
     void setNames();
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
 
-    void updateGameFieldValues();
     void updatePointsLabels();
     void updateNamesLabels();
     void updateLabelsAfterAnswer();
@@ -124,7 +139,10 @@ private:
     void processResult();
     void showPodium();
 
+    void random();
+
 private slots:
+    void updateGameFieldValues();
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
     void on_button_1_100_clicked();
@@ -132,26 +150,35 @@ private slots:
     void on_button_3_100_clicked();
     void on_button_4_100_clicked();
     void on_button_5_100_clicked();
+    void on_button_6_100_clicked();
+
     void on_button_1_200_clicked();
     void on_button_2_200_clicked();
     void on_button_3_200_clicked();
     void on_button_4_200_clicked();
     void on_button_5_200_clicked();
+    void on_button_6_200_clicked();
+
     void on_button_1_300_clicked();
     void on_button_2_300_clicked();
     void on_button_3_300_clicked();
     void on_button_4_300_clicked();
     void on_button_5_300_clicked();
+    void on_button_6_300_clicked();
+
     void on_button_1_400_clicked();
     void on_button_2_400_clicked();
     void on_button_3_400_clicked();
     void on_button_4_400_clicked();
     void on_button_5_400_clicked();
+    void on_button_6_400_clicked();
+
     void on_button_1_500_clicked();
     void on_button_2_500_clicked();
     void on_button_3_500_clicked();
     void on_button_4_500_clicked();
     void on_button_5_500_clicked();
+    void on_button_6_500_clicked();
 };
 
 #endif // GAMEFIELD_H

@@ -3,8 +3,8 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		29. November 2011
-* Version:	0.9.4 bleeding edge
+* Date:		01. Dezember 2011
+* Version:	0.9.4 experimental
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -17,11 +17,13 @@ Description
 Features
 --------
 
-* 3 players
+* up to 6 players
 * sound
 * colors
 * names
+* choose own key to answer
 * right click context menu including
+	* random user generator
 	* load/save game state
 	* player name and points editor
 	* early round ending option
@@ -29,16 +31,13 @@ Features
 	* backups can be found in gameStates/backups/
 	* backups ordered by unix timestamp
 * formatted text and images as answer 
-	* see answers/1.jrf for further instructions
+	* see answers/1.jrf or wiki for further instructions
 * double jeopardy questions 
-	* see answers/1.jrf for further instructions
+	* see answers/1.jrf or wiki for further instructions
 
 Todo
 ----
 
-* player can choose key
-* add fourth player for final
-* dynamic resize of layout
 * smoother design
 * ...little here and there
 
@@ -63,13 +62,10 @@ Play
 ----
 
 * Edit answers/round.jrf
-	* see answers/1.jrf for further instructions
+	* see answers/1.jrf or wiki for further instructions
 * Choose round to play
-* Enter names of players
+* Enter names, keys and colors of players
 * Select question
-* Use 	A for player 1
-	G for player 2
-	K for player 3
 
 Screenshots
 -----------

@@ -37,6 +37,7 @@
 #include <phonon/phonon>
 #include <doublejeopardy.h>
 
+#define NUMBER_MAX_CATEGORIES 6
 #define ANSWER_POINTS_INDICATOR_LENGTH 5
 #define SOME_LINE_BREAKS 10
 #define MORE_LINE_BREAKS 15
@@ -52,7 +53,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players[NUMBER_PLAYERS] = NULL);
+    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players = NULL, int playerNr = NULL);
     ~Answer();
     void setAnswer(int category, int points);
     int getPoints();
@@ -64,18 +65,17 @@ protected:
 private:
     Ui::Answer *ui;
     int round;
+    int playerNr;
     int points;
     int currentPlayerId;
     QString result;
     bool keyLock;
     QString fileString;
     bool doubleJeopardy;
-    Player *players[NUMBER_PLAYERS];
-    Player *currentPlayer;
+    Player *players;
+    Player currentPlayer;
     Phonon::MediaObject *music;
     DoubleJeopardy *dj;
-
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
 
     void keyPressEvent(QKeyEvent *event);
     void processKeypress(int player);
@@ -90,8 +90,13 @@ private:
     QFont meassureFontSize(int count);
     int getCategoryLine(int category);
 
-    void getAnswer(int category, int points, QString *answer);
+    bool getAnswer(int category, int points, QString *answer);
     void openDoubleJeopardy();
+
+    void processText(QString *answer);
+    void processImg(QString *answer);
+    void processDoubleJeopardy(QString *answer);
+    void processAlign(QString *answer);
 
 private slots:
     void on_buttonCancel_clicked();

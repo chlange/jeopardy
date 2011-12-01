@@ -29,14 +29,6 @@
 #include "answer.h"
 #include "ui_answer.h"
 
-Answer::~Answer()
-{
-    delete ui;
-    delete this->music;
-    if(this->dj != 0)
-        delete this->dj;
-}
-
 void Answer::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
@@ -49,58 +41,24 @@ void Answer::changeEvent(QEvent *e)
     }
 }
 
-Answer::Answer(QWidget *parent, QString file, int round, Player *players[NUMBER_PLAYERS]) :
-        QDialog(parent), ui(new Ui::Answer), round(round), result(""), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(NULL), dj(NULL)
+Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr) :
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(""), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
-    this->insertPlayers(players);
+
+    this->players = players;
+
     this->hideButtons();
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
-    this->music->play();
+    //this->music->play();
 }
 
-/* Read in round file and set text of label to answer */
-void Answer::setAnswer(int category, int points)
+Answer::~Answer()
 {
-    this->points = points;
-    QString answer;
-
-    this->getAnswer(category, points, &answer);
-
-    QRegExp comment("##.+##");
-    QRegExp imgTag("^[[]img[]]");
-    QRegExp alignLeftTag("[[]l[]]");
-    QRegExp doubleJeopardyTag("[[]dj[]]");
-
-    answer.remove(comment);
-
-    if(answer.contains(alignLeftTag))
-    {
-        answer.remove(alignLeftTag);
-        ui->answer->setAlignment(Qt::AlignLeft);
-    }
-
-    if(answer.contains(doubleJeopardyTag))
-    {
-        answer.remove(doubleJeopardyTag);
-        this->openDoubleJeopardy();
-    }
-
-    if(answer.contains(imgTag))
-    {
-        answer.remove(imgTag);
-
-        answer.prepend(QString("/answers/%1/").arg(this->round));
-        answer.prepend(QDir::currentPath());
-
-        ui->answer->setPixmap(answer);
-    }
-    else
-    {
-        int count = answer.count("<br>");
-        ui->answer->setFont(this->meassureFontSize(count));
-        ui->answer->setText(answer);
-    }
+    delete ui;
+    delete this->music;
+    if(this->dj != NULL)
+        delete this->dj;
 }
 
 int Answer::getPoints()
@@ -113,10 +71,64 @@ QString Answer::getResult()
     return this->result;
 }
 
-void Answer::insertPlayers(Player *players[NUMBER_PLAYERS])
+/* Read in round file and set text of label to answer */
+void Answer::setAnswer(int category, int points)
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
+    this->points = points;
+    QString answer;
+
+    if(this->getAnswer(category, points, &answer) != true)
+        done(0);
+
+    QRegExp comment("##.+##");
+    QRegExp imgTag("^[[]img[]]");
+    QRegExp alignLeftTag("[[]l[]]");
+    QRegExp doubleJeopardyTag("[[]dj[]]");
+
+    answer.remove(comment);
+
+    if(answer.contains(alignLeftTag))
+        this->processAlign(&answer);
+
+    if(answer.contains(doubleJeopardyTag))
+        this->processDoubleJeopardy(&answer);
+
+    if(answer.contains(imgTag))
+        this->processImg(&answer);
+    else
+        this->processText(&answer);
+}
+
+void Answer::processAlign(QString *answer)
+{
+    QRegExp alignLeftTag("[[]l[]]");
+    answer->remove(alignLeftTag);
+    ui->answer->setAlignment(Qt::AlignLeft);
+}
+
+void Answer::processDoubleJeopardy(QString *answer)
+{
+    QRegExp doubleJeopardyTag("[[]dj[]]");
+    answer->remove(doubleJeopardyTag);
+    this->openDoubleJeopardy();
+}
+
+void Answer::processImg(QString *answer)
+{
+    QRegExp imgTag("^[[]img[]]");
+    answer->remove(imgTag);
+
+    answer->prepend(QString("/answers/%1/").arg(this->round));
+    answer->prepend(QDir::currentPath());
+
+    ui->answer->setPixmap(*answer);
+}
+
+void Answer::processText(QString *answer)
+{
+    int count = answer->count("<br>");
+    ui->answer->setFont(this->meassureFontSize(count));
+    ui->answer->setText(*answer);
 }
 
 void Answer::keyPressEvent(QKeyEvent *event)
@@ -126,19 +138,26 @@ void Answer::keyPressEvent(QKeyEvent *event)
     if(this->keyListenerIsLocked() == true)
         return;
 
-    key= event->key();
-    if(key == Qt::Key_A)
-    {
+    key = event->key();
+
+    if(key == this->players[0].getKey())
         processKeypress(0);
-    }
-    else if(key == Qt::Key_G)
-    {
+
+    else if(this->playerNr >= 2 && key == this->players[1].getKey())
         processKeypress(1);
-    }
-    else if(key == Qt::Key_K)
-    {
+
+    else if(this->playerNr >= 3 && key == this->players[2].getKey())
         processKeypress(2);
-    }
+
+    else if(this->playerNr >= 4 && key == this->players[3].getKey())
+        processKeypress(3);
+
+    else if(this->playerNr >= 5 && key == this->players[4].getKey())
+        processKeypress(4);
+
+    else if(this->playerNr >= 6 && key == this->players[5].getKey())
+        processKeypress(5);
+
 }
 
 void Answer::processKeypress(int player)
@@ -146,7 +165,7 @@ void Answer::processKeypress(int player)
     this->lockKeyListener();
 
     this->currentPlayer = this->players[player];
-    ui->currentPlayer->setText(this->currentPlayer->getName());
+    ui->currentPlayer->setText(this->currentPlayer.getName());
 
     this->showButtons();
 }
@@ -169,7 +188,7 @@ void Answer::releaseKeyListener()
 void Answer::showButtons()
 {
     /* Show by color and name which player should ask */
-    QString color = QString("QLabel { background-color : %1; }").arg(this->currentPlayer->getColor());
+    QString color = QString("QLabel { background-color : %1; }").arg(this->currentPlayer.getColor());
     ui->currentPlayer->setStyleSheet(color);
 
     ui->buttonCancel->setVisible(true);
@@ -211,13 +230,13 @@ int Answer::getCategoryLine(int category)
 {
     int categoryLine;
 
-    categoryLine = (category == 1) ? 1 : ((category - OFFSET) * NUMBER_CATEGORIES) + category;
+    categoryLine = NUMBER_MAX_CATEGORIES * (category - 1) + 1;
 
     return categoryLine;
 }
 
 /* Open round file and get appropriate answer */
-void Answer::getAnswer(int category, int points, QString *answer)
+bool Answer::getAnswer(int category, int points, QString *answer)
 {
     int categoryFileLine;
     QString currentLine;
@@ -228,12 +247,11 @@ void Answer::getAnswer(int category, int points, QString *answer)
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(this, tr("Error"), tr("Could not open round file"));
-        return;
+        return false;
     }
 
     /* Calculate round answer line */
     categoryFileLine = this->getCategoryLine(category);
-
     QTextStream in(&file);
 
     /* Step to appropriate category section */
@@ -243,21 +261,23 @@ void Answer::getAnswer(int category, int points, QString *answer)
     /* Prepare answer and delimiter variable (Points: Answer)*/
     delimiter = QString("%1:").arg(points);
 
-    /* Step to answer */
-    while(!currentLine.startsWith(delimiter))
+    for(int i = 0; i < points / 100; i++)
         currentLine = in.readLine();
 
     /* Remove preceding points */
     *answer = currentLine;
 
     answer->remove(0, ANSWER_POINTS_INDICATOR_LENGTH);
+    
+    return true;
 }
 
 void Answer::openDoubleJeopardy()
 {
-    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players);
-    dj->setLabels();
-    this->currentPlayerId = dj->exec();
+    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players, this->playerNr);
+    dj->init();
+    dj->show();
+    this->currentPlayerId = dj->getPlayer();
     this->points = dj->getPoints();
     this->doubleJeopardy = true;
 
@@ -285,21 +305,20 @@ void Answer::on_buttonEnd_clicked()
 void Answer::on_buttonRight_clicked()
 {
     QString resultTmp;
-    resultTmp = QString("%1").arg(this->currentPlayer->getId());
+    resultTmp = QString("%1").arg(this->currentPlayer.getId());
     resultTmp.append(WON);
     this->result.append(resultTmp);
     this->releaseKeyListener();
     this->music->stop();
-    done(this->currentPlayer->getId() - OFFSET);
+    done(this->currentPlayer.getId() - OFFSET);
 }
 
 void Answer::on_buttonWrong_clicked()
 {
     QString resultTmp;
-    resultTmp = QString("%1").arg(this->currentPlayer->getId());
+    resultTmp = QString("%1").arg(this->currentPlayer.getId());
     resultTmp.append(LOST);
     this->result.append(resultTmp);
-    this->currentPlayer = NULL;
     this->hideButtons();
     this->releaseKeyListener();
     if(this->doubleJeopardy)
@@ -311,7 +330,6 @@ void Answer::on_buttonWrong_clicked()
 
 void Answer::on_buttonCancel_clicked()
 {
-    this->currentPlayer = NULL;
     this->hideButtons();
     this->releaseKeyListener();
 }

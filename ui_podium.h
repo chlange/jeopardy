@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'podium.ui'
 **
-** Created: Wed Nov 23 09:17:41 2011
+** Created: Thu Dec 1 21:55:56 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -44,7 +44,7 @@ public:
         third->setMinimumSize(QSize(331, 171));
         QFont font;
         font.setFamily(QString::fromUtf8("Andale Mono"));
-        font.setPointSize(11);
+        font.setPointSize(18);
         font.setBold(true);
         font.setWeight(75);
         third->setFont(font);
@@ -56,12 +56,7 @@ public:
         sizePolicy.setHeightForWidth(second->sizePolicy().hasHeightForWidth());
         second->setSizePolicy(sizePolicy);
         second->setMinimumSize(QSize(331, 171));
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("Andale Mono"));
-        font1.setPointSize(14);
-        font1.setBold(true);
-        font1.setWeight(75);
-        second->setFont(font1);
+        second->setFont(font);
         second->setStyleSheet(QString::fromUtf8("background-color: rgb(175, 175, 175);"));
         second->setAlignment(Qt::AlignCenter);
         first = new QLabel(Podium);
@@ -70,12 +65,12 @@ public:
         sizePolicy.setHeightForWidth(first->sizePolicy().hasHeightForWidth());
         first->setSizePolicy(sizePolicy);
         first->setMinimumSize(QSize(501, 201));
-        QFont font2;
-        font2.setFamily(QString::fromUtf8("Andale Mono"));
-        font2.setPointSize(16);
-        font2.setBold(true);
-        font2.setWeight(75);
-        first->setFont(font2);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Andale Mono"));
+        font1.setPointSize(20);
+        font1.setBold(true);
+        font1.setWeight(75);
+        first->setFont(font1);
         first->setStyleSheet(QString::fromUtf8("background-color: rgb(227, 151, 0);"));
         first->setScaledContents(false);
         first->setAlignment(Qt::AlignCenter);

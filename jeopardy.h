@@ -38,6 +38,9 @@
 #include <gamefield.h>
 #include <player.h>
 
+#define NUMBER_MAX_PLAYERS 6
+#define NOT false
+
 namespace Ui {
     class Jeopardy;
 }
@@ -47,18 +50,24 @@ class Jeopardy : public QMainWindow {
 public:
     Jeopardy(QWidget *parent = NULL);
     ~Jeopardy();
-    bool initPlayers(QWidget *context);
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::Jeopardy *ui;
-    Player *players[NUMBER_PLAYERS];
+    int lastKey;
+    int playerNr;
+    int categoryNr;
+    Player *players;
     Phonon::MediaObject *music;
     GameField *gameField;
 
     void initGameField(int round);
+    bool setCategoryNr();
+    bool setPlayerNr();
+    bool initPlayers();
+    void startRound(int round);
 
 private slots:
     void on_buttonRound1_clicked();

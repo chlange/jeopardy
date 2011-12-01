@@ -29,20 +29,14 @@
 #include "editor.h"
 #include "ui_editor.h"
 
-Editor::Editor(QWidget *parent, Player *players[NUMBER_PLAYERS]):
-    QDialog(parent),
-    ui(new Ui::Editor)
+Editor::Editor(QWidget *parent, Player *players, int playerNr):
+    QDialog(parent), playerNr(playerNr), players(players)
 {
-    ui->setupUi(this);
-    this->insertPlayers(players);
-    this->assignPlayerNamesLines();
-    this->assignPlayerPointsLines();
-    this->showValues();
 }
 
 Editor::~Editor()
 {
-    delete ui;
+    delete this->window;
 }
 
 void Editor::changeEvent(QEvent *e)
@@ -50,58 +44,94 @@ void Editor::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
         break;
     default:
         break;
     }
 }
 
-void Editor::insertPlayers(Player *players[NUMBER_PLAYERS])
+void Editor::show()
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
+    this->init();
+    this->window->exec();
 }
 
-void Editor::assignPlayerPointsLines()
+void Editor::init()
 {
-    this->playerPointsLines[0] = ui->linePlayer1;
-    this->playerPointsLines[1] = ui->linePlayer2;
-    this->playerPointsLines[2] = ui->linePlayer3;
+    this->insertLayouts();
+    this->assignPlayerNamesLines();
+    this->assignPlayerPointsLines();
+    this->assignSaveButton();
+    this->showValues();
+}
+
+void Editor::insertLayouts()
+{
+    this->window = new QDialog();
+
+    this->mainGrid = new QGridLayout();
+    this->lineGrid = new QGridLayout();
+    this->saveGrid = new QGridLayout();
+
+    this->mainGrid->addLayout(this->lineGrid, 0, 0);
+    this->mainGrid->addLayout(this->saveGrid, 1, 0);
+
+    this->window->setLayout(this->mainGrid);
 }
 
 void Editor::assignPlayerNamesLines()
 {
-    this->playerNamesLines[0] = ui->player1;
-    this->playerNamesLines[1] = ui->player2;
-    this->playerNamesLines[2] = ui->player3;
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        this->playerNamesLines[i] = new QLineEdit();
+        this->lineGrid->addWidget(this->playerNamesLines[i], i, 0);
+    }
+}
+
+void Editor::assignPlayerPointsLines()
+{
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        this->playerPointsLines[i] = new QSpinBox();
+        this->playerPointsLines[i]->setSingleStep(50);
+        this->playerPointsLines[i]->setMinimum(-50000);
+        this->playerPointsLines[i]->setMaximum(50000);
+        this->lineGrid->addWidget(this->playerPointsLines[i], i, 1);
+    }
+}
+
+void Editor::assignSaveButton()
+{
+    this->saveButton = new QPushButton();
+
+    this->saveButton->setText("Save");
+
+    this->saveGrid->addWidget(this->saveButton, 0, 0);
+
+    QObject::connect(this->saveButton, SIGNAL(clicked()), this, SLOT(end()));
 }
 
 void Editor::showValues()
 {
-    QString points;
-
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    for(int i = 0; i < this->playerNr; i++)
     {
-        points = QString("%1").arg(this->players[i]->getPoints());
-        this->playerPointsLines[i]->setText(points);
+        this->playerNamesLines[i]->setText(this->players[i].getName());
 
-        this->playerNamesLines[i]->setText(this->players[i]->getName());
+        this->playerPointsLines[i]->setValue(this->players[i].getPoints());
     }
 }
 
- void Editor::saveChanges()
- {
-     for(int i = 0; i < NUMBER_PLAYERS; i++)
-     {
-         this->players[i]->setPoints(this->playerPointsLines[i]->text().toInt());
-         this->players[i]->setName(this->playerNamesLines[i]->text());
-     }
+void Editor::saveChanges()
+{
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        this->players[i].setName(this->playerNamesLines[i]->text());
+        this->players[i].setPoints(this->playerPointsLines[i]->value());
+    }
+}
 
-     done(0);
- }
-
-void Editor::on_save_clicked()
+void Editor::end()
 {
     this->saveChanges();
+    this->window->done(0);
 }
