@@ -28,9 +28,9 @@
 
 #include "gamefield.h"
 
-GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNrArr) :
+GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNrArr, bool sound) :
     QDialog(parent), round(roundArg), alreadyAnswered(NULL), lastWinner(NO_WINNER),
-    lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), answer(NULL), podium(NULL),
+    lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), sound(sound), answer(NULL), podium(NULL),
     randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
     for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
@@ -562,7 +562,7 @@ void GameField::openEditor()
 
 void GameField::openAnswer(int category, int points)
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr);
+    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
     this->answer->setAnswer(category, points);
 
     this->lastWinner = this->answer->exec();

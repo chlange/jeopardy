@@ -59,6 +59,7 @@ private:
     int lastKey;
     int playerNr;
     int categoryNr;
+    bool sound;
     Player *players;
     Phonon::MediaObject *music;
     GameField *gameField;

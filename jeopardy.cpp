@@ -65,8 +65,22 @@ void Jeopardy::changeEvent(QEvent *e)
 void Jeopardy::initGameField(int round)
 {
     bool complete;
+
+    QMessageBox msgBox;
+    msgBox.setText("Do you need sound?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    int ret = msgBox.exec();
+
+    if(ret == QMessageBox::Yes)
+        this->sound = true;
+    else
+        this->sound = false;
+
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    this->music->play();
+
+    if(this->sound)
+        this->music->play();
 
     complete = this->setCategoryNr();
 
@@ -172,7 +186,7 @@ bool Jeopardy::initPlayers()
 
 void Jeopardy::startRound(int round)
 {
-    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr);
+    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
 }
 
 void Jeopardy::on_buttonRound1_clicked()
