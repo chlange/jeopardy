@@ -96,7 +96,10 @@ void Answer::setAnswer(int category, int points)
         this->processDoubleJeopardy(&answer);
 
     if(answer.contains(imgTag))
+    {
+        answer = answer.trimmed();
         this->processImg(&answer);
+    }
     else
         this->processText(&answer);
 }
@@ -105,7 +108,7 @@ void Answer::processAlign(QString *answer)
 {
     QRegExp alignLeftTag("[[]l[]]");
     answer->remove(alignLeftTag);
-    ui->answer->setAlignment(Qt::AlignLeft);
+    ui->answer->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void Answer::processDoubleJeopardy(QString *answer)
