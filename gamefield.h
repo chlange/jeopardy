@@ -125,6 +125,7 @@ private:
     void setPoints();
     void setNames();
 
+    void updateGameFieldValues();
     void updatePointsLabels();
     void updateNamesLabels();
     void updateLabelsAfterAnswer();
@@ -132,18 +133,16 @@ private:
 
     QString getButtonColorByLastWinner();
 
-    void openFileLoader();
-    void openFileSaver(bool automatedBackup);
-    void openEditor();
-
     void openAnswer(int category, int points);
     void processResult();
     void showPodium();
 
+    void openFileLoader();
+    void openFileSaver(bool automatedBackup);
+    void openEditor();
     void random();
 
 private slots:
-    void updateGameFieldValues();
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
     void on_button_1_100_clicked();

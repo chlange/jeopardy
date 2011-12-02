@@ -65,10 +65,12 @@ private:
     GameField *gameField;
 
     void initGameField(int round);
+    void setSound();
     bool setCategoryNr();
     bool setPlayerNr();
     bool initPlayers();
     void startRound(int round);
+
 
 private slots:
     void on_buttonRound1_clicked();

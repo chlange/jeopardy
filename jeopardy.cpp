@@ -66,16 +66,7 @@ void Jeopardy::initGameField(int round)
 {
     bool complete;
 
-    QMessageBox msgBox;
-    msgBox.setText("Do you need sound?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    int ret = msgBox.exec();
-
-    if(ret == QMessageBox::Yes)
-        this->sound = true;
-    else
-        this->sound = false;
+    this->setSound();
 
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
 
@@ -110,11 +101,26 @@ void Jeopardy::initGameField(int round)
     this->startRound(round);
 }
 
+void Jeopardy::setSound()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Do you need sound?");
+    msgBox.setWindowTitle("Sound");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    int ret = msgBox.exec();
+
+    if(ret == QMessageBox::Yes)
+        this->sound = true;
+    else
+        this->sound = false;
+}
+
 bool Jeopardy::setPlayerNr()
 {
     bool ok;
 
-    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Number of players", 3, 2, NUMBER_MAX_PLAYERS, 1, &ok);
+    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 2, NUMBER_MAX_PLAYERS, 1, &ok);
 
     this->players = new Player[NUMBER_MAX_PLAYERS];
 
@@ -125,7 +131,7 @@ bool Jeopardy::setCategoryNr()
 {
     bool ok;
 
-    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Number of categories", 5, 1, 6, 1, &ok);
+    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, 6, 1, &ok);
 
     return ok;
 }

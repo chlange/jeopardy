@@ -407,6 +407,52 @@ QString GameField::getButtonColorByLastWinner()
     return color;
 }
 
+void GameField::openAnswer(int category, int points)
+{
+    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
+    this->answer->setAnswer(category, points);
+
+    this->lastWinner = this->answer->exec();
+    this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
+
+    this->processResult();
+    this->updateAfterAnswer();
+
+    if(this->getAlreadyAnswered() < this->categoryNr * NUMBER_ANSWERS)
+    {
+        /* Do backup after each answer */
+        this->openFileSaver(true);
+    }
+    else
+    {
+        this->showPodium();
+        this->window->close();
+    }
+}
+
+void GameField::processResult()
+{
+    int playerId;
+
+    while(this->result.length() > 0)
+    {
+        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+            if(this->result.startsWith(QString::number(i+1)))
+                playerId = i;
+
+        this->result.remove(0, PLAYER_INDICATOR);
+
+        if(this->result.startsWith(WON))
+            this->players[playerId].incPoints(this->lastPoints);
+        else
+            this->players[playerId].decPoints(this->lastPoints);
+
+        this->result.remove(0, RESULT_INDICATOR);
+    }
+}
+
 void GameField::openFileLoader()
 {
     int lineNr = 0;
@@ -560,50 +606,26 @@ void GameField::openEditor()
     this->updateGameFieldValues();
 }
 
-void GameField::openAnswer(int category, int points)
+void GameField::random()
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
-    this->answer->setAnswer(category, points);
+    srand(time(NULL));
 
-    this->lastWinner = this->answer->exec();
-    this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = this->answer->getPoints();
-    this->result = answer->getResult();
+    int rn = rand() % this->playerNr;
 
-    this->processResult();
-    this->updateAfterAnswer();
+    QMessageBox *msgbox = new QMessageBox();
+    msgbox->setWindowTitle("R");
+    QString text;
 
-    if(this->getAlreadyAnswered() < this->categoryNr * NUMBER_ANSWERS)
-    {
-        /* Do backup after each answer */
-        this->openFileSaver(true);
-    }
+    if(this->players[rn].getName().endsWith("s"))
+        text = QString("%1 turn").arg(this->players[rn].getName());
     else
-    {
-        this->showPodium();
-        this->window->close();
-    }
-}
+        text = QString("%1's turn").arg(this->players[rn].getName());
 
-void GameField::processResult()
-{
-    int playerId;
+    msgbox->setText(text);
 
-    while(this->result.length() > 0)
-    {
-        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
-            if(this->result.startsWith(QString::number(i+1)))
-                playerId = i;
+    msgbox->exec();
 
-        this->result.remove(0, PLAYER_INDICATOR);
-
-        if(this->result.startsWith(WON))
-            this->players[playerId].incPoints(this->lastPoints);
-        else
-            this->players[playerId].decPoints(this->lastPoints);
-
-        this->result.remove(0, RESULT_INDICATOR);
-    }
+    delete msgbox;
 }
 
 void GameField::on_gameField_customContextMenuRequested(QPoint pos)
@@ -647,27 +669,6 @@ void GameField::showPodium()
 {
     this->podium = new Podium(this, this->players, this->playerNr);
     this->podium->exec();
-}
-
-void GameField::random()
-{
-    srand(time(NULL));
-
-    int rn = rand() % this->playerNr;
-
-    QMessageBox *msgbox = new QMessageBox();
-    QString text;
-
-    if(this->players[rn].getName().endsWith("s"))
-        text = QString("%1 turn").arg(this->players[rn].getName());
-    else
-        text = QString("%1's turn").arg(this->players[rn].getName());
-
-    msgbox->setText(text);
-
-    msgbox->exec();
-
-    delete msgbox;
 }
 
 /* 100 points buttons */
