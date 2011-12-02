@@ -115,6 +115,8 @@ private:
     QString result;
     QString fileString;
 
+    void reset();
+
     void insertLayouts();
     void assignButtons();
     void assignPlayerNameLabels();
