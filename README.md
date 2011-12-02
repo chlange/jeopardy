@@ -4,7 +4,7 @@ Jeopardy
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
 * Date:		01. Dezember 2011
-* Version:	0.9.4 experimental
+* Version:	0.9.4 experimental version 2
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -51,8 +51,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e
-	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e2
+	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e2
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
