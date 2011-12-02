@@ -33,18 +33,6 @@ GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *play
     lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), sound(sound), answer(NULL), podium(NULL),
     randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
-    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
-        this->playerNameLabels[i] = new QLabel();
- 
-    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
-        this->playerPointsLabels[i] = new QLabel();
-    
-    for(int i = 0; i < NUMBER_MAX_CATEGORIES; i++)
-        this->categoryLabels[i] = new QLabel();
-
-    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
-        this->buttons[i] = new QPushButton();
-
     this->players = players;
 
     this->init();
@@ -158,6 +146,9 @@ void GameField::assignCategoryLabels()
 {
     int width, height;
 
+    for(int i = 0; i < NUMBER_MAX_CATEGORIES; i++)
+        this->categoryLabels[i] = new QLabel();
+
     width = GAMEFIELD_WIDTH / this->categoryNr;
     height = CATEGORY_LABEL_HEIGHT;
 
@@ -175,6 +166,9 @@ void GameField::assignButtons()
 
     QFont font;
     font.setPointSize(20);
+
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+        this->buttons[i] = new QPushButton();
 
     width = GAMEFIELD_WIDTH / this->categoryNr;
     height = (GAMEFIELD_HEIGHT - CATEGORY_LABEL_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT) / NUMBER_ANSWERS;
@@ -248,6 +242,9 @@ void GameField::assignPlayerNameLabels()
 {
     int row, column, width, height;
 
+    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        this->playerNameLabels[i] = new QLabel();
+
     height = NAME_LABEL_HEIGHT;
 
     for(int i = 0; i < this->playerNr; i++)
@@ -274,6 +271,9 @@ void GameField::assignPlayerNameLabels()
 void GameField::assignPlayerPointsLabels()
 {
     int row, column, width, height;
+
+    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        this->playerPointsLabels[i] = new QLabel();
 
     height = NAME_LABEL_HEIGHT;
 
@@ -458,73 +458,87 @@ void GameField::openFileLoader()
     int lineNr = 0;
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
-    if(fileName != "")
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly))
     {
-      QFile file(fileName);
-      if (!file.open(QIODevice::ReadOnly))
-      {
         QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
         return;
-      }
-      QTextStream in(&file);
-      while(!in.atEnd())
-      {
-          QString line = in.readLine();
-
-          if(0 <= lineNr && lineNr <= NUMBER_MAX_PLAYERS-1)
-              this->players[lineNr].setName(line);
-
-          else if(NUMBER_MAX_PLAYERS <= lineNr && lineNr <= (NUMBER_MAX_PLAYERS*2-1))
-              this->players[lineNr - NUMBER_MAX_PLAYERS].setPoints(line.toInt());
-
-          else if((NUMBER_MAX_PLAYERS*2) <= lineNr && lineNr <= (NUMBER_MAX_PLAYERS*3-1))
-              this->players[lineNr - (NUMBER_MAX_PLAYERS*2)].setColor(line);
-
-          /* Already questioned answers */
-          else if((NUMBER_MAX_PLAYERS*3) <= lineNr && lineNr <= (NUMBER_MAX_PLAYERS*3-1)+NUMBER_MAX_ANSWERS)
-              this->buttons[lineNr - (NUMBER_MAX_PLAYERS*3)]->setDisabled(line.toInt());
-
-          /* Color buttons with player color */
-          else if((NUMBER_MAX_PLAYERS*3+NUMBER_MAX_ANSWERS) <= lineNr && lineNr <= (NUMBER_MAX_PLAYERS*3-1)+(2*NUMBER_MAX_ANSWERS))
-          {
-              if(line == "r")
-                  line = "red";
-              else if (line == "g")
-                  line = "green";
-              else if(line == "y")
-                  line = "yellow";
-              else if(line == "b")
-                  line = "blue";
-              else if(line == "gr")
-                  line = "gray";
-              else if(line == "m")
-                  line = "magenta";
-
-              line.prepend("QPushButton { background-color : ");
-              line.append("; }");
-              this->buttons[lineNr - (NUMBER_MAX_PLAYERS*3+NUMBER_MAX_ANSWERS)]->setStyleSheet(line);
-          }
-          else if(lineNr == (NUMBER_MAX_PLAYERS*3)+(2*NUMBER_MAX_ANSWERS))
-              this->alreadyAnswered = line.toInt();
-
-          else if(lineNr == (NUMBER_MAX_PLAYERS*3)+(2*NUMBER_MAX_ANSWERS)+1)
-          {
-              this->playerNr = line.toInt();
-          }
-
-          else if(lineNr == (NUMBER_MAX_PLAYERS*3)+(2*NUMBER_MAX_ANSWERS)+2)
-          {
-              this->categoryNr = line.toInt();
-          }
-
-          lineNr++;
-      }
-
-      this->window->close();
-      this->init();
-
-      file.close();
     }
+
+    delete this->window;
+
+    QTextStream in(&file);
+
+    QString line = in.readLine();
+
+    for(int j = 0; j < NUMBER_MAX_PLAYERS; j++)
+    {
+        this->players[j].setName(line);
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setPoints(line.toInt());
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setColor(line);
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setKey(line.toInt());
+        line = in.readLine();
+        lineNr++;
+    }
+
+    this->alreadyAnswered = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->playerNr = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->categoryNr = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->init();
+
+    /* Already questioned answers */
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        this->buttons[i]->setDisabled(line.toInt());
+        line = in.readLine();
+        lineNr++;
+    }
+
+      /* Color buttons with player color */
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        if(line == "r")
+            line = "red";
+        else if (line == "g")
+            line = "green";
+        else if(line == "y")
+            line = "yellow";
+        else if(line == "b")
+            line = "blue";
+        else if(line == "gr")
+            line = "gray";
+        else if(line == "m")
+            line = "magenta";
+
+        line.prepend("QPushButton { background-color : ");
+        line.append("; }");
+        this->buttons[i]->setStyleSheet(line);
+
+        line = in.readLine();
+        lineNr++;
+    }
+
+    this->updateGameFieldValues();
+
+    file.close();
 }
 
 void GameField::openFileSaver(bool backup)
@@ -555,13 +569,16 @@ void GameField::openFileSaver(bool backup)
         QTextStream stream(&file);
 
         for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        {
             stream << this->players[i].getName() << '\n';
-
-        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
             stream << this->players[i].getPoints() << '\n';
-
-        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
             stream << this->players[i].getColor() << '\n';
+            stream << this->players[i].getKey() << '\n';
+        }
+
+        stream << this->alreadyAnswered << '\n';
+        stream << this->playerNr << '\n';
+        stream << this->categoryNr << '\n';
 
         for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
             stream << !this->buttons[i]->isEnabled() << '\n';
@@ -583,10 +600,6 @@ void GameField::openFileSaver(bool backup)
 
             stream << stylesheet << '\n';
         }
-
-        stream << this->alreadyAnswered << '\n';
-        stream << this->playerNr << '\n';
-        stream << this->categoryNr << '\n';
 
         stream.flush();
         file.close();
