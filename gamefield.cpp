@@ -509,24 +509,20 @@ void GameField::openFileLoader()
 
           else if(lineNr == (NUMBER_MAX_PLAYERS*3)+(2*NUMBER_MAX_ANSWERS)+1)
           {
-              if(this->playerNr != line.toInt())
-                  QMessageBox::critical(this, tr("Error"), QString("PlayerNr of current round (%1) and saved game state PlayerNr (%2) aren't equal! This could lead to problems!").arg(this->playerNr).arg(line.toInt()));
-
               this->playerNr = line.toInt();
           }
 
           else if(lineNr == (NUMBER_MAX_PLAYERS*3)+(2*NUMBER_MAX_ANSWERS)+2)
           {
-              if(this->categoryNr != line.toInt())
-                  QMessageBox::critical(this, tr("Error"), QString("CategoryNr of current round (%1) and saved game state CategoryNr (%2) aren't equal! This could lead to problems!").arg(this->categoryNr).arg(line.toInt()));
-
               this->categoryNr = line.toInt();
           }
 
           lineNr++;
       }
 
-      this->updateGameFieldValues();
+      this->window->close();
+      this->init();
+
       file.close();
     }
 }
