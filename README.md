@@ -47,6 +47,7 @@ Software used
 * Ubuntu 10.04
 * gcc
 * Qt 4.6.2
+* phonon
 
 Install
 -------
