@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
-#include <phonon/phonon>
+#include <phonon/mediaobject.h>
 #include <doublejeopardy.h>
 
 #define NUMBER_MAX_PLAYERS 8
