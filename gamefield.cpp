@@ -29,8 +29,8 @@
 #include "gamefield.h"
 
 GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNrArr, bool sound) :
-    QDialog(parent), round(roundArg), alreadyAnswered(NULL), lastWinner(NO_WINNER),
-    lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), sound(sound), answer(NULL), podium(NULL),
+    QDialog(parent), round(roundArg), alreadyAnswered(0), lastWinner(NO_WINNER),
+    lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), sound(sound), answer(), podium(NULL),
     randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
     this->players = players;
@@ -54,6 +54,11 @@ GameField::~GameField()
         delete this->endRoundCtx;
     if(this->podium != NULL)
         delete this->podium;
+
+    delete this->categoryLabelGrid;
+    delete this->buttonGrid;
+    delete this->playerLabelGrid;
+    delete this->mainGrid;
 
     delete this->window;
 }
@@ -162,16 +167,11 @@ void GameField::assignCategoryLabels()
 
 void GameField::assignButtons()
 {
-    int width, height;
-
     QFont font;
     font.setPointSize(20);
 
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
         this->buttons[i] = new QPushButton();
-
-    width = GAMEFIELD_WIDTH / this->categoryNr;
-    height = (GAMEFIELD_HEIGHT - CATEGORY_LABEL_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT) / NUMBER_ANSWERS;
 
     for(int j = 0; j < this->categoryNr; j++)
     {
@@ -400,9 +400,9 @@ QString GameField::getButtonColorByLastWinner()
     QString color = "";
 
     if(this->lastWinner == NO_WINNER)
-        return color;
-
-    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
+        color = QString("QPushButton { background-color : lightGray; }");
+    else
+        color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
 
     return color;
 }

@@ -38,7 +38,7 @@
 #include <gamefield.h>
 #include <player.h>
 
-#define NUMBER_MAX_PLAYERS 8
+#define NUMBER_MAX_PLAYERS 6
 #define NOT false
 
 namespace Ui {

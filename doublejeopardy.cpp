@@ -37,13 +37,13 @@ DoubleJeopardy::DoubleJeopardy(QWidget *parent, int min, int max, Player *player
 
 DoubleJeopardy::~DoubleJeopardy()
 {
-    delete this->grid;
     delete this->playerComboBox;
     delete this->minLabel;
     delete this->pointsSpinBox;
     delete this->maxLabel;
     delete this->startButton;
 
+    delete this->grid;
     delete this->window;
 }
 

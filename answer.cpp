@@ -42,7 +42,7 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound) :
-        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(""), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
 
