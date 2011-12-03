@@ -42,7 +42,7 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound) :
-        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(""), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
 
@@ -73,7 +73,6 @@ QString Answer::getResult()
     return this->result;
 }
 
-/* Read in round file and set text of label to answer */
 void Answer::setAnswer(int category, int points)
 {
     this->points = points;
@@ -145,24 +144,11 @@ void Answer::keyPressEvent(QKeyEvent *event)
 
     key = event->key();
 
-    if(key == this->players[0].getKey())
-        processKeypress(0);
-
-    else if(this->playerNr >= 2 && key == this->players[1].getKey())
-        processKeypress(1);
-
-    else if(this->playerNr >= 3 && key == this->players[2].getKey())
-        processKeypress(2);
-
-    else if(this->playerNr >= 4 && key == this->players[3].getKey())
-        processKeypress(3);
-
-    else if(this->playerNr >= 5 && key == this->players[4].getKey())
-        processKeypress(4);
-
-    else if(this->playerNr >= 6 && key == this->players[5].getKey())
-        processKeypress(5);
-
+    for(int i = 0; i <  NUMBER_MAX_PLAYERS; i++)
+    {
+        if(key == this->players[i].getKey() && this->playerNr >= i + 1)
+            this->processKeypress(i);
+    }
 }
 
 void Answer::processKeypress(int player)
@@ -240,7 +226,6 @@ int Answer::getCategoryLine(int category)
     return categoryLine;
 }
 
-/* Open round file and get appropriate answer */
 bool Answer::getAnswer(int category, int points, QString *answer)
 {
     int categoryFileLine;
@@ -306,7 +291,6 @@ void Answer::on_buttonEnd_clicked()
     }
 }
 
-/* Stop music and return winner */
 void Answer::on_buttonRight_clicked()
 {
     QString resultTmp;

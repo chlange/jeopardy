@@ -148,11 +148,17 @@ bool Jeopardy::initPlayers()
     int keys[36];
 
     colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta";
+
+    /* TODO
+     * Key list with saved int values - enum is not the right option cause you need the string for the key, too,
+     * to display them in the combobox and remove them if one player already chose the key.
+     */
     keyList << "a" << "b" << "c" << "d"  << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
             << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
              << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
     keyListOrg = keyList;
 
+    /* Key to appropriate int value */
     for(int i = 0; i < 26; i++)
         keys[i] = 0x41 + i;
     for(int i = 26; i < 36; i++)

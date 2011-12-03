@@ -32,9 +32,6 @@
 #include <QGridLayout>
 #include <player.h>
 
-#define FIRST_PLACE_PODIUM 0
-#define FIRST_PLACE 2
-#define SECOND_PLACE 1
 #define THIRD_PLACE 0
 #define FIRST_PLAYER 0
 #define SECOND_PLAYER 1

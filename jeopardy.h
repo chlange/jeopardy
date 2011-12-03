@@ -34,7 +34,7 @@
 #include <QRegExp>
 #include <QKeyEvent>
 #include <QWidget>
-#include <phonon/phonon>
+#include <phonon/mediaobject.h>
 #include <gamefield.h>
 #include <player.h>
 
