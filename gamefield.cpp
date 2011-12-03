@@ -258,7 +258,7 @@ void GameField::assignPlayerNameLabels()
         else
         {
             row = FIRST_LABEL_ROW + 1;
-            column = (i - 3) * 2;
+            column = (i - NUMBER_MAX_PLAYERS / 2) * 2;
             width = GAMEFIELD_WIDTH / (NUMBER_MAX_PLAYERS / 2) / SPLIT_FOR_TWO_LABELS;
         }
 
@@ -288,7 +288,7 @@ void GameField::assignPlayerPointsLabels()
         else
         {
             row = FIRST_LABEL_ROW + 1;
-            column = 2 * (i - 3) + 1;
+            column = 2 * (i - NUMBER_MAX_PLAYERS / 2) + 1;
             width = GAMEFIELD_WIDTH / (NUMBER_MAX_PLAYERS / 2) / SPLIT_FOR_TWO_LABELS;
         }
 
@@ -413,6 +413,8 @@ void GameField::openAnswer(int category, int points)
     this->answer->setAnswer(category, points);
 
     this->lastWinner = this->answer->exec();
+
+    /* Doing some calculation to get appropriate button */
     this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
     this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();

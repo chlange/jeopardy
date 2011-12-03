@@ -34,11 +34,11 @@
 #include <QRegExp>
 #include <QKeyEvent>
 #include <QWidget>
-#include <phonon/phonon>
+#include <phonon/mediaobject.h>
 #include <gamefield.h>
 #include <player.h>
 
-#define NUMBER_MAX_PLAYERS 6
+#define NUMBER_MAX_PLAYERS 8
 #define NOT false
 
 namespace Ui {

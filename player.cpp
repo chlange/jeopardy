@@ -29,7 +29,7 @@
 #include "player.h"
 
 Player::Player() :
-        name(NULL), points(NULL), id(NULL), key(-1)
+        name(""), points(NULL), id(NULL), key(-1)
 {
 
 }

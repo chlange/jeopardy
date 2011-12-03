@@ -36,6 +36,9 @@ Editor::Editor(QWidget *parent, Player *players, int playerNr):
 
 Editor::~Editor()
 {
+    delete this->mainGrid;
+    delete this->lineGrid;
+    delete this->saveGrid;
     delete this->window;
 }
 

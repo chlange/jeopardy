@@ -37,7 +37,7 @@
 #include <QDebug>
 #include <player.h>
 
-#define MAX_PLAYERS 6
+#define NUMBER_MAX_PLAYERS 8
 
 class Editor : public QDialog {
     Q_OBJECT
@@ -56,8 +56,8 @@ private:
     QGridLayout *mainGrid;
     QGridLayout *lineGrid;
     QGridLayout *saveGrid;
-    QLineEdit *playerNamesLines[MAX_PLAYERS];
-    QSpinBox *playerPointsLines[MAX_PLAYERS];
+    QLineEdit *playerNamesLines[NUMBER_MAX_PLAYERS];
+    QSpinBox *playerPointsLines[NUMBER_MAX_PLAYERS];
     QPushButton *saveButton;
 
     void init();
