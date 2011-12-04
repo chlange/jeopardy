@@ -55,7 +55,6 @@
 #define NUMBER_MAX_ANSWERS 30
 #define NUMBER_ANSWERS 5
 #define POINTS_FACTOR 100
-#define NO_WINNER -1
 #define COLOR_TEXT_LENGTH 33
 #define PLAYER_INDICATOR 1
 #define RESULT_INDICATOR 1
@@ -75,12 +74,6 @@ public:
     GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNrArr = 0, bool sound = true);
     ~GameField();
     void init();
-    void setRound(int round);
-    int getRound();
-
-    void incAlreadyAnswered(int number);
-    void setAlreadyAnswered(int number);
-    int getAlreadyAnswered();
 
 protected:
     void changeEvent(QEvent *e);
@@ -115,6 +108,12 @@ private:
     QString fileString;
 
     void reset();
+
+    void setRound(int round);
+    int getRound();
+    void incAlreadyAnswered(int number);
+    void setAlreadyAnswered(int number);
+    int getAlreadyAnswered();
 
     void insertLayouts();
     void assignButtons();

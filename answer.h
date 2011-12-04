@@ -59,6 +59,7 @@ public:
     void setAnswer(int category, int points);
     int getPoints();
     QString getResult();
+    int getWinner();
 
 protected:
     void changeEvent(QEvent *e);
@@ -69,6 +70,7 @@ private:
     int playerNr;
     int points;
     int currentPlayerId;
+    int winner;
     bool keyLock;
     bool sound;
     bool doubleJeopardy;

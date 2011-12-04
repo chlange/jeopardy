@@ -28,14 +28,11 @@
 
 #include "gamefield.h"
 
-GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNrArr, bool sound) :
+GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNr, bool sound) :
     QDialog(parent), round(roundArg), alreadyAnswered(0), lastWinner(NO_WINNER),
-    lastPoints(0), playerNr(playerNrArr), categoryNr(categoryNr), sound(sound), answer(), podium(NULL),
+    lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
     randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
-    this->players = players;
-
-    this->init();
 }
 
 GameField::~GameField()
@@ -397,12 +394,9 @@ void GameField::updateAfterAnswer()
 
 QString GameField::getButtonColorByLastWinner()
 {
-    QString color = "";
+    QString color = QString("QPushButton { background-color : lightGray; }");
 
-    if(this->lastWinner == NO_WINNER)
-        color = QString("QPushButton { background-color : lightGray; }");
-
-    else
+    if(this->lastWinner != NO_WINNER)
         color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
 
     return color;
@@ -413,7 +407,9 @@ void GameField::openAnswer(int category, int points)
     this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
     this->answer->setAnswer(category, points);
 
-    this->lastWinner = this->answer->exec();
+    this->answer->exec();
+
+    this->lastWinner = this->answer->getWinner();
 
     /* Doing some calculation to get appropriate button */
     this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());

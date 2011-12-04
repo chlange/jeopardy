@@ -209,6 +209,7 @@ bool Jeopardy::initPlayers()
 void Jeopardy::startRound(int round)
 {
     this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
+    this->gameField->init();
 }
 
 void Jeopardy::on_buttonRound1_clicked()
