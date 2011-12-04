@@ -401,6 +401,7 @@ QString GameField::getButtonColorByLastWinner()
 
     if(this->lastWinner == NO_WINNER)
         color = QString("QPushButton { background-color : lightGray; }");
+
     else
         color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
 

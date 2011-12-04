@@ -69,10 +69,11 @@ private:
     int playerNr;
     int points;
     int currentPlayerId;
-    QString result;
     bool keyLock;
-    QString fileString;
+    bool sound;
     bool doubleJeopardy;
+    QString result;
+    QString fileString;
     Player *players;
     Player currentPlayer;
     Phonon::MediaObject *music;

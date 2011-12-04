@@ -42,7 +42,7 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound) :
-        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), keyLock(false), sound(sound), doubleJeopardy(false), result(), fileString(file), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
 
@@ -50,9 +50,6 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     this->hideButtons();
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
-
-    if(sound == true)
-        this->music->play();
 }
 
 Answer::~Answer()
@@ -93,6 +90,9 @@ void Answer::setAnswer(int category, int points)
 
     if(answer.contains(doubleJeopardyTag))
         this->processDoubleJeopardy(&answer);
+
+    if(this->sound == true)
+        this->music->play();
 
     if(answer.contains(imgTag))
     {
