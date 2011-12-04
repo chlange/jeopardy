@@ -461,6 +461,9 @@ void GameField::openFileLoader()
     int lineNr = 0;
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
+    if(fileName == "")
+        return;
+
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -530,6 +533,8 @@ void GameField::openFileLoader()
             line = "gray";
         else if(line == "m")
             line = "magenta";
+        else if(line == "l")
+            line = "lightGray";
 
         line.prepend("QPushButton { background-color : ");
         line.append("; }");
