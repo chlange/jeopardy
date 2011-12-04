@@ -35,7 +35,7 @@ Jeopardy::Jeopardy(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->players = NULL;
+    this->players = new Player[NUMBER_MAX_PLAYERS];
     this->gameField = NULL;
 }
 
@@ -89,6 +89,9 @@ void Jeopardy::initGameField(int round)
         return;
     }
 
+    if(this->sound)
+        this->music->play();
+
     complete = this->initPlayers();
 
     if(NOT == complete)
@@ -108,12 +111,11 @@ void Jeopardy::setSound()
     msgBox.setWindowTitle("Sound");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::Yes);
-    int ret = msgBox.exec();
 
-    if(ret == QMessageBox::Yes)
+    if(msgBox.exec() == QMessageBox::Yes)
         this->sound = true;
     else
-        this->sound = false;
+        this->sound = false;;
 }
 
 bool Jeopardy::setPlayerNr()
@@ -121,8 +123,6 @@ bool Jeopardy::setPlayerNr()
     bool ok;
 
     this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 2, NUMBER_MAX_PLAYERS, 1, &ok);
-
-    this->players = new Player[NUMBER_MAX_PLAYERS];
 
     return ok;
 }
@@ -179,11 +179,21 @@ bool Jeopardy::initPlayers()
             this->players[i].setName(text);
             this->players[i].setId(i+1);
 
-            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false);
+            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
+            if(!ok)
+            {
+                complete = false;
+                break;
+            }
             this->players[i].setKey(keys[keyListOrg.indexOf(key)]);
             keyList.removeOne(key);
 
-            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false);
+            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
+            if(!ok)
+            {
+                complete = false;
+                break;
+            }
             this->players[i].setColor(color);
             colorList.removeOne(color);
         }
@@ -199,6 +209,7 @@ bool Jeopardy::initPlayers()
 void Jeopardy::startRound(int round)
 {
     this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
+    this->gameField->init();
 }
 
 void Jeopardy::on_buttonRound1_clicked()

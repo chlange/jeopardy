@@ -37,7 +37,7 @@
 #include <QDebug>
 #include <player.h>
 
-#define NUMBER_MAX_PLAYERS 8
+#define NUMBER_MAX_PLAYERS 6
 
 class Editor : public QDialog {
     Q_OBJECT

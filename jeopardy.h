@@ -39,6 +39,8 @@
 #include <player.h>
 
 #define NUMBER_MAX_PLAYERS 6
+#define PLAYER_OFFER 3
+#define CATEGORIE_OFFER 5
 #define NOT false
 
 namespace Ui {
@@ -60,10 +62,12 @@ private:
     int playerNr;
     int categoryNr;
     bool sound;
+    bool defaultSetttings;
     Player *players;
     Phonon::MediaObject *music;
     GameField *gameField;
 
+    bool setDefault();
     void initGameField(int round);
     void setSound();
     bool setCategoryNr();

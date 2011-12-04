@@ -59,6 +59,7 @@ public:
     void setAnswer(int category, int points);
     int getPoints();
     QString getResult();
+    int getWinner();
 
 protected:
     void changeEvent(QEvent *e);
@@ -69,10 +70,12 @@ private:
     int playerNr;
     int points;
     int currentPlayerId;
-    QString result;
+    int winner;
     bool keyLock;
-    QString fileString;
+    bool sound;
     bool doubleJeopardy;
+    QString result;
+    QString fileString;
     Player *players;
     Player currentPlayer;
     Phonon::MediaObject *music;

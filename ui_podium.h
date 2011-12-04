@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'podium.ui'
 **
-** Created: Thu Dec 1 21:55:56 2011
+** Created: Sun Dec 4 01:33:44 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -49,6 +49,7 @@ public:
         font.setWeight(75);
         third->setFont(font);
         third->setStyleSheet(QString::fromUtf8("background-color: rgb(170, 85, 0);"));
+        third->setTextFormat(Qt::RichText);
         third->setAlignment(Qt::AlignCenter);
         second = new QLabel(Podium);
         second->setObjectName(QString::fromUtf8("second"));
@@ -58,6 +59,7 @@ public:
         second->setMinimumSize(QSize(331, 171));
         second->setFont(font);
         second->setStyleSheet(QString::fromUtf8("background-color: rgb(175, 175, 175);"));
+        second->setTextFormat(Qt::RichText);
         second->setAlignment(Qt::AlignCenter);
         first = new QLabel(Podium);
         first->setObjectName(QString::fromUtf8("first"));
@@ -72,6 +74,7 @@ public:
         font1.setWeight(75);
         first->setFont(font1);
         first->setStyleSheet(QString::fromUtf8("background-color: rgb(227, 151, 0);"));
+        first->setTextFormat(Qt::RichText);
         first->setScaledContents(false);
         first->setAlignment(Qt::AlignCenter);
 

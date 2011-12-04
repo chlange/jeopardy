@@ -60,15 +60,15 @@ void Podium::showPodium()
     this->sort();
 
     ui->first->setStyleSheet(this->getLabelColorString(0));
-    ui->first->setText(QString("** %1 **").arg(this->players[0].getName()));
+    ui->first->setText(QString("** %1 **<br>%2").arg(this->players[0].getName()).arg(this->players[0].getPoints()));
 
     ui->second->setStyleSheet(this->getLabelColorString(1));
-    ui->second->setText(QString("2. %1").arg(this->players[1].getName()));
+    ui->second->setText(QString("2. %1<br>%2").arg(this->players[1].getName()).arg(this->players[0].getPoints()));
 
     if(this->playerNr > 2)
     {
         ui->third->setStyleSheet(this->getLabelColorString(2));
-        ui->third->setText(QString("3. %1").arg(this->players[2].getName()));
+        ui->third->setText(QString("3. %1<br>%2").arg(this->players[2].getName()).arg(this->players[0].getPoints()));
     }
     else
     {

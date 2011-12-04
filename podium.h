@@ -36,7 +36,6 @@
 #define FIRST_PLAYER 0
 #define SECOND_PLAYER 1
 #define THIRD_PLAYER 2
-#define NUMBER_MAX_PLAYERS 6
 
 namespace Ui {
     class Podium;

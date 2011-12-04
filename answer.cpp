@@ -42,17 +42,13 @@ void Answer::changeEvent(QEvent *e)
 }
 
 Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound) :
-        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr), result(), keyLock(false), fileString(file), doubleJeopardy(false), currentPlayer(), dj(NULL)
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr),points(0), currentPlayerId(0),
+        winner(NO_WINNER), keyLock(false), sound(sound), doubleJeopardy(false), result(), fileString(file), players(players), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
 
-    this->players = players;
-
     this->hideButtons();
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
-
-    if(sound == true)
-        this->music->play();
 }
 
 Answer::~Answer()
@@ -61,6 +57,11 @@ Answer::~Answer()
     delete this->music;
     if(this->dj != NULL)
         delete this->dj;
+}
+
+int Answer::getWinner()
+{
+    return this->winner;
 }
 
 int Answer::getPoints()
@@ -79,7 +80,10 @@ void Answer::setAnswer(int category, int points)
     QString answer;
 
     if(this->getAnswer(category, points, &answer) != true)
+    {
+        this->winner = NO_WINNER;
         done(0);
+    }
 
     QRegExp comment("##.+##");
     QRegExp imgTag("^[[]img[]]");
@@ -93,6 +97,9 @@ void Answer::setAnswer(int category, int points)
 
     if(answer.contains(doubleJeopardyTag))
         this->processDoubleJeopardy(&answer);
+
+    if(this->sound == true)
+        this->music->play();
 
     if(answer.contains(imgTag))
     {
@@ -287,7 +294,8 @@ void Answer::on_buttonEnd_clicked()
     if(ret == QMessageBox::Yes)
     {
         this->music->stop();
-        done(NO_WINNER);
+        this->winner = NO_WINNER;
+        done(0);
     }
 }
 
@@ -299,7 +307,8 @@ void Answer::on_buttonRight_clicked()
     this->result.append(resultTmp);
     this->releaseKeyListener();
     this->music->stop();
-    done(this->currentPlayer.getId() - OFFSET);
+    this->winner = this->currentPlayer.getId() - OFFSET;
+    done(0);
 }
 
 void Answer::on_buttonWrong_clicked()
@@ -313,7 +322,8 @@ void Answer::on_buttonWrong_clicked()
     if(this->doubleJeopardy)
     {
         this->music->stop();
-        done(NO_WINNER);
+        this->winner = NO_WINNER;
+        done(0);
     }
 }
 
