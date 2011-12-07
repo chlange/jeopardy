@@ -122,7 +122,7 @@ bool Jeopardy::setPlayerNr()
 {
     bool ok;
 
-    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 2, NUMBER_MAX_PLAYERS, 1, &ok);
+    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 1, NUMBER_MAX_PLAYERS, 1, &ok);
 
     return ok;
 }
@@ -147,7 +147,7 @@ bool Jeopardy::initPlayers()
     QStringList colorList;
     int keys[36];
 
-    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta";
+    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkGreen" << "cyan";
 
     /* TODO
      * Key list with saved int values - enum is not the right option cause you need the string for the key, too,
@@ -196,6 +196,7 @@ bool Jeopardy::initPlayers()
             }
             this->players[i].setColor(color);
             colorList.removeOne(color);
+            this->players[i].setPoints(0);
         }
         else
         {

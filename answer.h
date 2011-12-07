@@ -34,10 +34,12 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QPixmap>
+#include <QGraphicsScene>
 #include <phonon/mediaobject.h>
 #include <doublejeopardy.h>
 
-#define NUMBER_MAX_PLAYERS 6
+#define NUMBER_MAX_PLAYERS 8
 #define NUMBER_MAX_CATEGORIES 6
 #define ANSWER_POINTS_INDICATOR_LENGTH 5
 #define SOME_LINE_BREAKS 10

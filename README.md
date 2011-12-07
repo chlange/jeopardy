@@ -17,7 +17,7 @@ Description
 Features
 --------
 
-* up to 6 players
+* up to 8 players
 * sound
 * colors
 * names

@@ -100,6 +100,7 @@ private:
     QAction *loadCtx;
     QAction *saveCtx;
     QAction *endRoundCtx;
+    QAction *resetRoundCtx;
     QPushButton *buttons[NUMBER_MAX_ANSWERS];
     QLabel *playerNameLabels[NUMBER_MAX_PLAYERS];
     QLabel *playerPointsLabels[NUMBER_MAX_PLAYERS];
@@ -141,6 +142,7 @@ private:
     void openFileSaver(bool automatedBackup);
     void openEditor();
     void random();
+    void resetRound();
 
 private slots:
     /* Context Menu */

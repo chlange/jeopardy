@@ -48,6 +48,7 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
     ui->setupUi(this);
 
     this->hideButtons();
+    ui->graphicsView->setVisible(false);
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
 }
 
@@ -132,7 +133,20 @@ void Answer::processImg(QString *answer)
     answer->prepend(QString("/answers/%1/").arg(this->round));
     answer->prepend(QDir::currentPath());
 
-    ui->answer->setPixmap(*answer);
+    ui->graphicsView->setVisible(true);
+
+    QGraphicsScene *scene = new QGraphicsScene(ui->graphicsView);
+    QPixmap pic(*answer);
+
+    if(pic.height() > ui->graphicsView->height())
+        pic = pic.scaledToHeight(ui->graphicsView->height() - 10);
+
+    if(pic.width() > ui->graphicsView->width())
+        pic = pic.scaledToWidth(ui->graphicsView->width() - 10);
+
+    scene->addPixmap(pic);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->show();
 }
 
 void Answer::processText(QString *answer)
