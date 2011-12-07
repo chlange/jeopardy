@@ -196,6 +196,7 @@ bool Jeopardy::initPlayers()
             }
             this->players[i].setColor(color);
             colorList.removeOne(color);
+            this->players[i].setPoints(0);
         }
         else
         {
