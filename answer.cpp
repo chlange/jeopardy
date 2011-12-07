@@ -136,7 +136,15 @@ void Answer::processImg(QString *answer)
     ui->graphicsView->setVisible(true);
 
     QGraphicsScene *scene = new QGraphicsScene(ui->graphicsView);
-    scene->addPixmap(*answer);
+    QPixmap pic(*answer);
+
+    if(pic.height() > ui->graphicsView->height())
+        pic = pic.scaledToHeight(ui->graphicsView->height() - 10);
+
+    if(pic.width() > ui->graphicsView->width())
+        pic = pic.scaledToWidth(ui->graphicsView->width() - 10);
+
+    scene->addPixmap(pic);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->show();
 }

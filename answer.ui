@@ -11,12 +11,18 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
+   <size>
+    <width>998</width>
+    <height>615</height>
+   </size>
+  </property>
+  <property name="maximumSize">
    <size>
     <width>998</width>
     <height>615</height>
@@ -35,7 +41,7 @@
   <widget class="QPushButton" name="buttonRight">
    <property name="geometry">
     <rect>
-     <x>700</x>
+     <x>690</x>
      <y>570</y>
      <width>85</width>
      <height>32</height>
@@ -156,7 +162,7 @@
    <property name="geometry">
     <rect>
      <x>740</x>
-     <y>520</y>
+     <y>530</y>
      <width>208</width>
      <height>31</height>
     </rect>
@@ -177,7 +183,7 @@
   <widget class="QPushButton" name="buttonCancel">
    <property name="geometry">
     <rect>
-     <x>900</x>
+     <x>910</x>
      <y>570</y>
      <width>85</width>
      <height>32</height>
@@ -204,10 +210,10 @@
   <widget class="QGraphicsView" name="graphicsView">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1001</width>
-     <height>521</height>
+     <x>1</x>
+     <y>1</y>
+     <width>997</width>
+     <height>531</height>
     </rect>
    </property>
   </widget>
