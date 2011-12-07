@@ -641,6 +641,21 @@ void GameField::random()
     delete msgbox;
 }
 
+void GameField::resetRound()
+{
+    this->setAlreadyAnswered(0);
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        this->players[i].setPoints(0);
+    }
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        this->buttons[i]->setEnabled(true);
+        this->buttons[i]->setStyleSheet("");
+    }
+    this->updatePointsLabels();
+}
+
 void GameField::on_gameField_customContextMenuRequested(QPoint pos)
 {
     QPoint globalPos = this->window->mapToGlobal(pos);
@@ -651,6 +666,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     this->loadCtx = new QAction("Load",this);
     this->saveCtx = new QAction("Save",this);
     this->endRoundCtx = new QAction("End Round", this);
+    this->resetRoundCtx = new QAction("Reset Round", this);
 
     menu.addAction(this->randomCtx);
     menu.addSeparator();
@@ -660,6 +676,8 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     menu.addAction(this->saveCtx);
     menu.addSeparator();
     menu.addAction(this->endRoundCtx);
+    menu.addSeparator();
+    menu.addAction(this->resetRoundCtx);
 
     QAction *selectedItem = menu.exec(globalPos);
 
@@ -676,6 +694,8 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
         this->showPodium();
         this->window->close();
     }
+    else if(selectedItem == this->resetRoundCtx)
+        this->resetRound();
 }
 
 void GameField::showPodium()
