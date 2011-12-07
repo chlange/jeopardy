@@ -30,7 +30,7 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by unix timestamp
-* formatted text and images as answer 
+* formatted text and (if too big) resized images as answer 
 	* see answers/1.jrf or wiki for further instructions
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
