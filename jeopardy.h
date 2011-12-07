@@ -38,7 +38,7 @@
 #include <gamefield.h>
 #include <player.h>
 
-#define NUMBER_MAX_PLAYERS 6
+#define NUMBER_MAX_PLAYERS 8
 #define PLAYER_OFFER 3
 #define CATEGORIE_OFFER 5
 #define NOT false

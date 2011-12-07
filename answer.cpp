@@ -133,6 +133,12 @@ void Answer::processImg(QString *answer)
     answer->prepend(QDir::currentPath());
 
     ui->answer->setPixmap(*answer);
+
+    QGraphicsScene scene;
+
+    scene.addPixmap(*answer);
+    ui->graphicsView->setScene(&scene);
+    ui->graphicsView->show();
 }
 
 void Answer::processText(QString *answer)

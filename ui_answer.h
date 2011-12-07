@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'answer.ui'
 **
-** Created: Wed Nov 23 03:23:13 2011
+** Created: Wed Dec 7 21:42:48 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -15,6 +15,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDialog>
+#include <QtGui/QGraphicsView>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
@@ -30,6 +31,7 @@ public:
     QLabel *answer;
     QLabel *currentPlayer;
     QPushButton *buttonCancel;
+    QGraphicsView *graphicsView;
 
     void setupUi(QDialog *Answer)
     {
@@ -98,6 +100,9 @@ public:
         sizePolicy.setHeightForWidth(buttonCancel->sizePolicy().hasHeightForWidth());
         buttonCancel->setSizePolicy(sizePolicy);
         buttonCancel->setFont(font);
+        graphicsView = new QGraphicsView(Answer);
+        graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
+        graphicsView->setGeometry(QRect(50, 210, 521, 301));
 
         retranslateUi(Answer);
 
