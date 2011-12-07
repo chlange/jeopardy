@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'answer.ui'
 **
-** Created: Wed Dec 7 21:42:48 2011
+** Created: Wed Dec 7 22:25:31 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -102,7 +102,7 @@ public:
         buttonCancel->setFont(font);
         graphicsView = new QGraphicsView(Answer);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(50, 210, 521, 301));
+        graphicsView->setGeometry(QRect(0, 0, 1001, 521));
 
         retranslateUi(Answer);
 
