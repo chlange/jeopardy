@@ -61,7 +61,7 @@ void Podium::showPodium()
 
     ui->first->setStyleSheet(this->getLabelColorString(0));
     if(this->playerNr == 1)
-        ui->first->setText(QString("Guess who... :)"));
+        ui->first->setText(QString("Guess who won... :)"));
     else
         ui->first->setText(QString("** %1 **<br>%2").arg(this->players[0].getName()).arg(this->players[0].getPoints()));
 

@@ -147,7 +147,7 @@ bool Jeopardy::initPlayers()
     QStringList colorList;
     int keys[36];
 
-    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkGreen" << "cyan";
+    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
 
     /* TODO
      * Key list with saved int values - enum is not the right option cause you need the string for the key, too,

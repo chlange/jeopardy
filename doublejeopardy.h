@@ -37,7 +37,7 @@
 #include <QSpinBox>
 #include <player.h>
 
-#define DOUBLE_JEOPARDY_MIN_POINTS 100
+#define DOUBLE_JEOPARDY_MIN_POINTS 50
 
 class DoubleJeopardy : public QDialog {
     Q_OBJECT
