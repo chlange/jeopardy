@@ -27,30 +27,20 @@
  */
 
 #include "gamefield.h"
-#include "ui_gamefield.h"
 
-GameField::GameField(QWidget *parent, int roundArg, Player *players[NUMBER_PLAYERS]) :
-    QDialog(parent), ui(new Ui::gameField), round(roundArg), alreadyAnswered(NULL),
-    lastWinner(NO_WINNER), answer(NULL), editor(NULL), podium(NULL),
-    editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
+GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNr, bool sound) :
+    QDialog(parent), round(roundArg), alreadyAnswered(0), lastWinner(NO_WINNER),
+    lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
+    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
-    ui->setupUi(this);
-
-    /* Declare new context menu and connect it with the right mouse button */
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
-
-    this->insertPlayers(players);
-    this->init();
 }
 
 GameField::~GameField()
 {
-    delete ui;
     if(this->answer != NULL)
         delete this->answer;
-    if(this->editor != NULL)
-        delete this->editor;
+    if(this->randomCtx != NULL)
+        delete this->randomCtx;
     if(this->editorCtx != NULL)
         delete this->editorCtx;
     if(this->loadCtx != NULL)
@@ -61,6 +51,13 @@ GameField::~GameField()
         delete this->endRoundCtx;
     if(this->podium != NULL)
         delete this->podium;
+
+    delete this->categoryLabelGrid;
+    delete this->buttonGrid;
+    delete this->playerLabelGrid;
+    delete this->mainGrid;
+
+    delete this->window;
 }
 
 void GameField::changeEvent(QEvent *e)
@@ -68,7 +65,6 @@ void GameField::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
         break;
     default:
         break;
@@ -77,6 +73,7 @@ void GameField::changeEvent(QEvent *e)
 
 void GameField::init()
 {
+    this->insertLayouts();
     this->assignButtons();
     this->assignPlayerNameLabels();
     this->assignPlayerPointsLabels();
@@ -85,6 +82,12 @@ void GameField::init()
     this->setNames();
     this->setPoints();
     this->setLabelColor();
+
+    /* Declare new context menu and connect it with the right mouse button */
+    this->window->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
+
+    this->window->show();
 }
 
 void GameField::setRound(int round)
@@ -112,70 +115,196 @@ int GameField::getAlreadyAnswered()
     return this->alreadyAnswered;
 }
 
-void GameField::assignButtons()
+void GameField::insertLayouts()
 {
-    this->buttons[0] = ui->button_1_100;
-    this->buttons[1] = ui->button_2_100;
-    this->buttons[2] = ui->button_3_100;
-    this->buttons[3] = ui->button_4_100;
-    this->buttons[4] = ui->button_5_100;
+    this->window = new QWidget();
+    this->window->setGeometry(0, 0, GAMEFIELD_WIDTH, GAMEFIELD_HEIGHT);
 
-    this->buttons[5] = ui->button_1_200;
-    this->buttons[6] = ui->button_2_200;
-    this->buttons[7] = ui->button_3_200;
-    this->buttons[8] = ui->button_4_200;
-    this->buttons[9] = ui->button_5_200;
+    this->mainGrid = new QGridLayout();
+    this->mainGrid->setSpacing(0);
 
-    this->buttons[10] = ui->button_1_300;
-    this->buttons[11] = ui->button_2_300;
-    this->buttons[12] = ui->button_3_300;
-    this->buttons[13] = ui->button_4_300;
-    this->buttons[14] = ui->button_5_300;
+    this->categoryLabelGrid = new QGridLayout();
+    this->categoryLabelGrid->setSpacing(0);
 
-    this->buttons[15] = ui->button_1_400;
-    this->buttons[16] = ui->button_2_400;
-    this->buttons[17] = ui->button_3_400;
-    this->buttons[18] = ui->button_4_400;
-    this->buttons[19] = ui->button_5_400;
+    this->buttonGrid = new QGridLayout();
+    this->buttonGrid->setSpacing(0);
 
-    this->buttons[20] = ui->button_1_500;
-    this->buttons[21] = ui->button_2_500;
-    this->buttons[22] = ui->button_3_500;
-    this->buttons[23] = ui->button_4_500;
-    this->buttons[24] = ui->button_5_500;
-}
+    this->playerLabelGrid = new QGridLayout();
+    this->playerLabelGrid->setSpacing(0);
 
-void GameField::assignPlayerNameLabels()
-{
-    this->playerNameLabels[0] = ui->player1Name;
-    this->playerNameLabels[1] = ui->player2Name;
-    this->playerNameLabels[2] = ui->player3Name;
-}
+    this->mainGrid->addLayout(this->categoryLabelGrid, 0, 0);
+    this->mainGrid->addLayout(this->buttonGrid, 1, 0);
+    this->mainGrid->addLayout(this->playerLabelGrid, 2, 0);
 
-void GameField::assignPlayerPointsLabels()
-{
-    this->playerPointsLabels[0] = ui->player1Points;
-    this->playerPointsLabels[1] = ui->player2Points;
-    this->playerPointsLabels[2] = ui->player3Points;
+    this->mainGrid->setGeometry(QRect(0, 0, GAMEFIELD_WIDTH, GAMEFIELD_HEIGHT));
+    this->categoryLabelGrid->setGeometry(QRect(0, 0, GAMEFIELD_WIDTH, CATEGORY_LABEL_HEIGHT));
+    this->buttonGrid->setGeometry(QRect(0, CATEGORY_LABEL_HEIGHT, GAMEFIELD_WIDTH, GAMEFIELD_HEIGHT - CATEGORY_LABEL_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT));
+    this->playerLabelGrid->setGeometry(QRect(0, GAMEFIELD_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT, GAMEFIELD_WIDTH, NAME_LABEL_HEIGHT + NAME_LABEL_HEIGHT));
+
+    this->window->setLayout(this->mainGrid);
 }
 
 void GameField::assignCategoryLabels()
 {
-    this->categories[0] = ui->category1;
-    this->categories[1] = ui->category2;
-    this->categories[2] = ui->category3;
-    this->categories[3] = ui->category4;
-    this->categories[4] = ui->category5;
+    int width, height;
+
+    for(int i = 0; i < NUMBER_MAX_CATEGORIES; i++)
+        this->categoryLabels[i] = new QLabel();
+
+    width = GAMEFIELD_WIDTH / this->categoryNr;
+    height = CATEGORY_LABEL_HEIGHT;
+
+    for(int i = 0; i < this->categoryNr; i++)
+    {
+        this->categoryLabels[i]->setGeometry(0, 0, width, height);
+        this->categoryLabels[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        this->categoryLabelGrid->addWidget(this->categoryLabels[i], 0, i);
+    }
+}
+
+void GameField::assignButtons()
+{
+    QFont font;
+    font.setPointSize(20);
+
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+        this->buttons[i] = new QPushButton();
+
+    for(int j = 0; j < this->categoryNr; j++)
+    {
+        for(int i = 0; i < NUMBER_ANSWERS; i++)
+        {
+            int currentButton = (NUMBER_MAX_CATEGORIES * i) + j;
+
+            this->buttons[currentButton]->setFont(font);
+            this->buttons[currentButton]->setText(QString("%1").arg((i + 1) * POINTS_FACTOR));
+            this->buttons[currentButton]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            this->categoryLabelGrid->addWidget(this->buttons[currentButton], i+1, j);
+        }
+    }
+
+        connect(this->buttons[0], SIGNAL(clicked()), this, SLOT(on_button_1_100_clicked()));
+        connect(this->buttons[6], SIGNAL(clicked()), this, SLOT(on_button_1_200_clicked()));
+        connect(this->buttons[12], SIGNAL(clicked()), this, SLOT(on_button_1_300_clicked()));
+        connect(this->buttons[18], SIGNAL(clicked()), this, SLOT(on_button_1_400_clicked()));
+        connect(this->buttons[24], SIGNAL(clicked()), this, SLOT(on_button_1_500_clicked()));
+
+    if(this->categoryNr >= 2)
+    {
+        connect(this->buttons[1], SIGNAL(clicked()), this, SLOT(on_button_2_100_clicked()));
+        connect(this->buttons[7], SIGNAL(clicked()), this, SLOT(on_button_2_200_clicked()));
+        connect(this->buttons[13], SIGNAL(clicked()), this, SLOT(on_button_2_300_clicked()));
+        connect(this->buttons[19], SIGNAL(clicked()), this, SLOT(on_button_2_400_clicked()));
+        connect(this->buttons[25], SIGNAL(clicked()), this, SLOT(on_button_2_500_clicked()));
+    }
+
+    if(this->categoryNr >= 3)
+    {
+        connect(this->buttons[2], SIGNAL(clicked()), this, SLOT(on_button_3_100_clicked()));
+        connect(this->buttons[8], SIGNAL(clicked()), this, SLOT(on_button_3_200_clicked()));
+        connect(this->buttons[14], SIGNAL(clicked()), this, SLOT(on_button_3_300_clicked()));
+        connect(this->buttons[20], SIGNAL(clicked()), this, SLOT(on_button_3_400_clicked()));
+        connect(this->buttons[26], SIGNAL(clicked()), this, SLOT(on_button_3_500_clicked()));
+    }
+
+    if(this->categoryNr >= 4)
+    {
+        connect(this->buttons[3], SIGNAL(clicked()), this, SLOT(on_button_4_100_clicked()));
+        connect(this->buttons[9], SIGNAL(clicked()), this, SLOT(on_button_4_200_clicked()));
+        connect(this->buttons[15], SIGNAL(clicked()), this, SLOT(on_button_4_300_clicked()));
+        connect(this->buttons[21], SIGNAL(clicked()), this, SLOT(on_button_4_400_clicked()));
+        connect(this->buttons[27], SIGNAL(clicked()), this, SLOT(on_button_4_500_clicked()));
+    }
+
+    if(this->categoryNr >= 5)
+    {
+        connect(this->buttons[4], SIGNAL(clicked()), this, SLOT(on_button_5_100_clicked()));
+        connect(this->buttons[10], SIGNAL(clicked()), this, SLOT(on_button_5_200_clicked()));
+        connect(this->buttons[16], SIGNAL(clicked()), this, SLOT(on_button_5_300_clicked()));
+        connect(this->buttons[22], SIGNAL(clicked()), this, SLOT(on_button_5_400_clicked()));
+        connect(this->buttons[28], SIGNAL(clicked()), this, SLOT(on_button_5_500_clicked()));
+    }
+
+    if(this->categoryNr >= 6)
+    {
+        connect(this->buttons[5], SIGNAL(clicked()), this, SLOT(on_button_6_100_clicked()));
+        connect(this->buttons[11], SIGNAL(clicked()), this, SLOT(on_button_6_200_clicked()));
+        connect(this->buttons[17], SIGNAL(clicked()), this, SLOT(on_button_6_300_clicked()));
+        connect(this->buttons[23], SIGNAL(clicked()), this, SLOT(on_button_6_400_clicked()));
+        connect(this->buttons[29], SIGNAL(clicked()), this, SLOT(on_button_6_500_clicked()));
+    }
+}
+
+void GameField::assignPlayerNameLabels()
+{
+    int row, column, width, height;
+
+    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        this->playerNameLabels[i] = new QLabel();
+
+    height = NAME_LABEL_HEIGHT;
+
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        if((i + 1) <= NUMBER_MAX_PLAYERS / 2)
+        {
+            row = FIRST_LABEL_ROW;
+            column = i * 2;
+            width = GAMEFIELD_WIDTH / this->playerNr / SPLIT_FOR_TWO_LABELS;
+        }
+        else
+        {
+            row = FIRST_LABEL_ROW + 1;
+            column = (i - NUMBER_MAX_PLAYERS / 2) * 2;
+            width = GAMEFIELD_WIDTH / (NUMBER_MAX_PLAYERS / 2) / SPLIT_FOR_TWO_LABELS;
+        }
+
+        this->playerNameLabels[i]->setGeometry(0, 0, width, height);
+        this->playerNameLabels[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        this->playerLabelGrid->addWidget(this->playerNameLabels[i], row, column);
+    }
+}
+
+void GameField::assignPlayerPointsLabels()
+{
+    int row, column, width, height;
+
+    for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        this->playerPointsLabels[i] = new QLabel();
+
+    height = NAME_LABEL_HEIGHT;
+
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        if((i + 1) <= NUMBER_MAX_PLAYERS / 2)
+        {
+            row = FIRST_LABEL_ROW;
+            column = 2 * i + 1;
+            width = GAMEFIELD_WIDTH / this->playerNr / SPLIT_FOR_TWO_LABELS;
+        }
+        else
+        {
+            row = FIRST_LABEL_ROW + 1;
+            column = 2 * (i - NUMBER_MAX_PLAYERS / 2) + 1;
+            width = GAMEFIELD_WIDTH / (NUMBER_MAX_PLAYERS / 2) / SPLIT_FOR_TWO_LABELS;
+        }
+
+        this->playerPointsLabels[i]->setGeometry(0, 0, width, height);
+        this->playerPointsLabels[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        this->playerLabelGrid->addWidget(this->playerPointsLabels[i], row, column);
+    }
 }
 
 /* Todo: refactor */
 void GameField::setCategoryNames()
 {
     int categoryLine;
+    QFont font;
     QString categoryName;
 
     this->fileString = QString("answers/%1.jrf").arg(this->round);
     QFile file(this->fileString);
+    font.setBold(true);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -184,7 +313,7 @@ void GameField::setCategoryNames()
         this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
     }
 
-    for(int i = 1; i < NUMBER_CATEGORIES + OFFSET; i++)
+    for(int i = 0; i < this->categoryNr; i++)
     {
         QFile file(this->fileString);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -195,16 +324,17 @@ void GameField::setCategoryNames()
 
         QTextStream in(&file);
 
-        int CATEGORY = i;
-
         /* Calculate on which line the categories in the file start */
-        categoryLine = (CATEGORY == 1) ? 1 : ((CATEGORY - OFFSET) * NUMBER_CATEGORIES) + CATEGORY;
+        categoryLine = NUMBER_MAX_CATEGORIES * i + 1;
 
         /* Step to appropriate category section */
         for(int lineNr = 0; lineNr != categoryLine; lineNr++)
             categoryName = in.readLine();
 
-        this->categories[CATEGORY - OFFSET]->setText(categoryName);
+        this->categoryLabels[i]->setFont(font);
+        this->categoryLabels[i]->setGeometry(0, 0, GAMEFIELD_WIDTH / this->categoryNr, CATEGORY_LABEL_HEIGHT);
+        this->categoryLabels[i]->setAlignment(Qt::AlignHCenter);
+        this->categoryLabels[i]->setText(categoryName);
     }
 }
 
@@ -212,29 +342,23 @@ void GameField::setLabelColor()
 {
     QString color;
 
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    for(int i = 0; i < this->playerNr; i++)
     {
-        color = QString("QLabel { background-color : %1; }").arg(this->players[i]->getColor());
+        color = QString("QLabel { background-color : %1; }").arg(this->players[i].getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
     }
 }
 
 void GameField::setPoints()
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    for(int i = 0; i < this->playerNr; i++)
         this->playerPointsLabels[i]->setText("0");
 }
 
 void GameField::setNames()
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerNameLabels[i]->setText(this->players[i]->getName());
-}
-
-void GameField::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
+    for(int i = 0; i < this->playerNr; i++)
+        this->playerNameLabels[i]->setText(this->players[i].getName());
 }
 
 void GameField::updateGameFieldValues()
@@ -246,19 +370,14 @@ void GameField::updateGameFieldValues()
 
 void GameField::updatePointsLabels()
 {
-    QString points;
-
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-    {
-        points = QString("%1").arg(this->players[i]->getPoints());
-        this->playerPointsLabels[i]->setText(points);
-    }
+    for(int i = 0; i < this->playerNr; i++)
+        this->playerPointsLabels[i]->setText(QString::number(this->players[i].getPoints()));
 }
 
 void GameField::updateNamesLabels()
 {
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->playerNameLabels[i]->setText(this->players[i]->getName());
+    for(int i = 0; i < this->playerNr; i++)
+        this->playerNameLabels[i]->setText(this->players[i].getName());
 }
 
 void GameField::updateLabelsAfterAnswer()
@@ -275,14 +394,62 @@ void GameField::updateAfterAnswer()
 
 QString GameField::getButtonColorByLastWinner()
 {
-    QString color = "";
+    QString color = QString("QPushButton { background-color : lightGray; }");
 
-    if(this->lastWinner == NO_WINNER)
-        return color;
-
-    color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner]->getColor());
+    if(this->lastWinner != NO_WINNER)
+        color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
 
     return color;
+}
+
+void GameField::openAnswer(int category, int points)
+{
+    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
+    this->answer->setAnswer(category, points);
+
+    this->answer->exec();
+
+    this->lastWinner = this->answer->getWinner();
+
+    /* Doing some calculation to get appropriate button */
+    this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
+
+    this->processResult();
+    this->updateAfterAnswer();
+
+    if(this->getAlreadyAnswered() < this->categoryNr * NUMBER_ANSWERS)
+    {
+        /* Do backup after each answer */
+        this->openFileSaver(true);
+    }
+    else
+    {
+        this->showPodium();
+        this->window->close();
+    }
+}
+
+void GameField::processResult()
+{
+    int playerId;
+
+    while(this->result.length() > 0)
+    {
+        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+            if(this->result.startsWith(QString::number(i+1)))
+                playerId = i;
+
+        this->result.remove(0, PLAYER_INDICATOR);
+
+        if(this->result.startsWith(WON))
+            this->players[playerId].incPoints(this->lastPoints);
+        else
+            this->players[playerId].decPoints(this->lastPoints);
+
+        this->result.remove(0, RESULT_INDICATOR);
+    }
 }
 
 void GameField::openFileLoader()
@@ -290,66 +457,100 @@ void GameField::openFileLoader()
     int lineNr = 0;
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
-    if (fileName != "")
+    if(fileName == "")
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly))
     {
-      QFile file(fileName);
-      if (!file.open(QIODevice::ReadOnly))
-      {
         QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
         return;
-      }
-      QTextStream in(&file);
-      while (!in.atEnd())
-      {
-          QString line = in.readLine();
-          switch(lineNr)
-          {
-          case 0:
-          case 1:
-          case 2:
-              this->players[lineNr]->setName(line);
-              break;
-          case 3:
-          case 4:
-          case 5:
-              this->players[lineNr - 3]->setPoints(line.toInt());
-              break;
-          case 6:
-          case 7:
-          case 8:
-              this->players[lineNr - 6]->setColor(line);
-              break;
-          case 59:
-              this->alreadyAnswered = line.toInt();
-              break;
-          default:
-              /* Already questioned answers */
-              if(9 <= lineNr && lineNr <= 33)
-                  this->buttons[lineNr - 9]->setDisabled(line.toInt());
-              /* Color buttons with player color */
-              else if(34 <= lineNr && lineNr <= 58)
-              {
-                  if(line == "r")
-                      line = "red";
-                  else if (line == "g")
-                      line = "green";
-                  else if(line == "y")
-                      line = "yellow";
-                  else if(line == "b")
-                      line = "blue";
-
-                  line.prepend("QPushButton { background-color : ");
-                  line.append("; }");
-                  this->buttons[lineNr - 34]->setStyleSheet(line);
-              }
-              break;
-          }
-          lineNr++;
-      }
-
-      this->updateGameFieldValues();
-      file.close();
     }
+
+    delete this->window;
+
+    QTextStream in(&file);
+
+    QString line = in.readLine();
+
+    for(int j = 0; j < NUMBER_MAX_PLAYERS; j++)
+    {
+        this->players[j].setName(line);
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setPoints(line.toInt());
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setColor(line);
+        line = in.readLine();
+        lineNr++;
+
+        this->players[j].setKey(line.toInt());
+        line = in.readLine();
+        lineNr++;
+    }
+
+    this->alreadyAnswered = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->playerNr = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->categoryNr = line.toInt();
+    line = in.readLine();
+    lineNr++;
+
+    this->init();
+
+    /* Already questioned answers */
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        this->buttons[i]->setDisabled(line.toInt());
+        line = in.readLine();
+        lineNr++;
+    }
+
+      /* Color buttons with player color */
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        if(line == "r")
+            line = "red";
+        else if (line == "g")
+            line = "green";
+        else if(line == "y")
+            line = "yellow";
+        else if(line == "b")
+            line = "blue";
+        else if(line == "gr")
+            line = "gray";
+        else if(line == "m")
+            line = "magenta";
+        else if(line == "l")
+            line = "lightGray";
+        else if(line == "c")
+            line = "cyan";
+        else if(line == "d")
+            line = "darkRed";
+        else if(line == "w")
+            line = "white";
+        else if(line == "dM")
+            line = "darkMagenta";
+
+        line.prepend("QPushButton { background-color : ");
+        line.append("; }");
+        this->buttons[i]->setStyleSheet(line);
+
+        line = in.readLine();
+        lineNr++;
+    }
+
+    this->updateGameFieldValues();
+
+    file.close();
 }
 
 void GameField::openFileSaver(bool backup)
@@ -379,113 +580,120 @@ void GameField::openFileSaver(bool backup)
       {
         QTextStream stream(&file);
 
-        for(int i = 0; i < NUMBER_PLAYERS; i++)
-            stream << this->players[i]->getName() << '\n';
+        for(int i = 0; i < NUMBER_MAX_PLAYERS; i++)
+        {
+            stream << this->players[i].getName() << '\n';
+            stream << this->players[i].getPoints() << '\n';
+            stream << this->players[i].getColor() << '\n';
+            stream << this->players[i].getKey() << '\n';
+        }
 
-        for(int i = 0; i < NUMBER_PLAYERS; i++)
-            stream << this->players[i]->getPoints() << '\n';
+        stream << this->alreadyAnswered << '\n';
+        stream << this->playerNr << '\n';
+        stream << this->categoryNr << '\n';
 
-        for(int i = 0; i < NUMBER_PLAYERS; i++)
-            stream << this->players[i]->getColor() << '\n';
-
-        for(int i = 0; i < NUMBER_CATEGORIES * NUMBER_ANSWERS; i++)
+        for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
             stream << !this->buttons[i]->isEnabled() << '\n';
 
-        for(int i = 0; i < NUMBER_CATEGORIES * NUMBER_ANSWERS; i++)
+        for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
         {
             /* Just save first character of color */
             QString stylesheet = this->buttons[i]->styleSheet();
             stylesheet.remove(0,COLOR_TEXT_LENGTH);
-            int len = stylesheet.length();
-            stylesheet.chop(--len);
+
+            if(stylesheet.startsWith("gray"))
+                stylesheet = "gr";
+            else if(stylesheet.startsWith("darkMagenta"))
+                stylesheet = "dM";
+            else
+            {
+                int len = stylesheet.length();
+                stylesheet.chop(--len);
+            }
 
             stream << stylesheet << '\n';
         }
 
-        stream << this->alreadyAnswered << '\n';
-
         stream.flush();
         file.close();
-      }
+        }
     }
 }
 
 void GameField::openEditor()
 {
-    this->editor = new Editor(this, this->players);
-    this->editor->exec();
+    this->editor = new Editor(this, this->players, this->playerNr);
+    editor->show();
+
+    this->openFileSaver(true);
     this->updateGameFieldValues();
 }
 
-void GameField::openAnswer(int category, int points)
+void GameField::random()
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players);
-    this->answer->setAnswer(category, points);
+    srand(time(NULL));
 
-    this->lastWinner = this->answer->exec();
-    this->buttons[( points / POINTS_FACTOR - OFFSET) * NUMBER_CATEGORIES + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = this->answer->getPoints();
-    this->result = answer->getResult();
+    int rn = rand() % this->playerNr;
 
-    this->processResult();
-    this->updateAfterAnswer();
+    QMessageBox *msgbox = new QMessageBox();
+    msgbox->setWindowTitle("R");
+    QString text;
 
-    if(this->getAlreadyAnswered() < COMPLETELY_ANSWERED)
-    {
-        /* Do backup after each answer */
-        this->openFileSaver(true);
-    }
+    if(this->players[rn].getName().endsWith("s"))
+        text = QString("%1 turn").arg(this->players[rn].getName());
     else
-    {
-        this->showPodium();
-        done(0);
-    }
+        text = QString("%1's turn").arg(this->players[rn].getName());
+
+    msgbox->setText(text);
+
+    msgbox->exec();
+
+    delete msgbox;
 }
 
-void GameField::processResult()
+void GameField::resetRound()
 {
-    int playerId;
-
-    while(this->result.length() > 0)
+    this->setAlreadyAnswered(0);
+    for(int i = 0; i < this->playerNr; i++)
     {
-        if(this->result.startsWith(PLAYER_ONE_STRING))
-            playerId = PLAYER_ONE;
-        else if(this->result.startsWith(PLAYER_TWO_STRING))
-            playerId = PLAYER_TWO;
-        else
-            playerId = PLAYER_THREE;
-
-        this->result.remove(0, PLAYER_INDICATOR);
-
-        if(this->result.startsWith(WON))
-            this->players[playerId]->incPoints(this->lastPoints);
-        else
-            this->players[playerId]->decPoints(this->lastPoints);
-
-        this->result.remove(0, RESULT_INDICATOR);
+        this->players[i].setPoints(0);
     }
+    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
+        this->buttons[i]->setEnabled(true);
+        this->buttons[i]->setStyleSheet("");
+    }
+    this->updatePointsLabels();
 }
 
 void GameField::on_gameField_customContextMenuRequested(QPoint pos)
 {
-    QPoint globalPos = this->mapToGlobal(pos);
+    QPoint globalPos = this->window->mapToGlobal(pos);
 
     QMenu menu;
+    this->randomCtx = new QAction("Random Generator", this);
     this->editorCtx = new QAction("Editor",this);
     this->loadCtx = new QAction("Load",this);
     this->saveCtx = new QAction("Save",this);
     this->endRoundCtx = new QAction("End Round", this);
+    this->resetRoundCtx = new QAction("Reset Round", this);
 
+    menu.addAction(this->randomCtx);
+    menu.addSeparator();
     menu.addAction(this->editorCtx);
     menu.addSeparator();
     menu.addAction(this->loadCtx);
     menu.addAction(this->saveCtx);
     menu.addSeparator();
     menu.addAction(this->endRoundCtx);
+    menu.addSeparator();
+    menu.addAction(this->resetRoundCtx);
 
     QAction *selectedItem = menu.exec(globalPos);
 
-    if(selectedItem == this->editorCtx)
+    if(selectedItem == this->randomCtx)
+        this->random();
+    else if(selectedItem == this->editorCtx)
         this->openEditor();
     else if(selectedItem == this->saveCtx)
         this->openFileSaver(false);
@@ -494,13 +702,15 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     else if(selectedItem == this->endRoundCtx)
     {
         this->showPodium();
-        done(0);
+        this->window->close();
     }
+    else if(selectedItem == this->resetRoundCtx)
+        this->resetRound();
 }
 
 void GameField::showPodium()
 {
-    this->podium = new Podium(this, this->players);
+    this->podium = new Podium(this, this->players, this->playerNr);
     this->podium->exec();
 }
 
@@ -530,107 +740,132 @@ void GameField::on_button_5_100_clicked()
     this->buttons[4]->setDisabled(true);
     this->openAnswer(5, 100);
 }
+void GameField::on_button_6_100_clicked()
+{
+    this->buttons[5]->setDisabled(true);
+    this->openAnswer(6, 100);
+}
 /* 200 points buttons */
 void GameField::on_button_1_200_clicked()
 {
-    this->buttons[5]->setDisabled(true);
+    this->buttons[6]->setDisabled(true);
     this->openAnswer(1, 200);
 }
 void GameField::on_button_2_200_clicked()
 {
-    this->buttons[6]->setDisabled(true);
+    this->buttons[7]->setDisabled(true);
     this->openAnswer(2, 200);
 }
 void GameField::on_button_3_200_clicked()
 {
-    this->buttons[7]->setDisabled(true);
+    this->buttons[8]->setDisabled(true);
     this->openAnswer(3, 200);
 }
 void GameField::on_button_4_200_clicked()
 {
-    this->buttons[8]->setDisabled(true);
+    this->buttons[9]->setDisabled(true);
     this->openAnswer(4, 200);
 }
 void GameField::on_button_5_200_clicked()
 {
-    this->buttons[9]->setDisabled(true);
+    this->buttons[10]->setDisabled(true);
     this->openAnswer(5, 200);
+}
+void GameField::on_button_6_200_clicked()
+{
+    this->buttons[11]->setDisabled(true);
+    this->openAnswer(6, 200);
 }
 /* 300 points buttons */
 void GameField::on_button_1_300_clicked()
 {
-    this->buttons[10]->setDisabled(true);
+    this->buttons[12]->setDisabled(true);
     this->openAnswer(1, 300);
 }
 void GameField::on_button_2_300_clicked()
 {
-    this->buttons[11]->setDisabled(true);
+    this->buttons[13]->setDisabled(true);
     this->openAnswer(2, 300);
 }
 void GameField::on_button_3_300_clicked()
 {
-    this->buttons[12]->setDisabled(true);
+    this->buttons[14]->setDisabled(true);
     this->openAnswer(3, 300);
 }
 void GameField::on_button_4_300_clicked()
 {
-    this->buttons[13]->setDisabled(true);
+    this->buttons[15]->setDisabled(true);
     this->openAnswer(4, 300);
 }
 void GameField::on_button_5_300_clicked()
 {
-    this->buttons[14]->setDisabled(true);
+    this->buttons[16]->setDisabled(true);
     this->openAnswer(5, 300);
+}
+void GameField::on_button_6_300_clicked()
+{
+    this->buttons[17]->setDisabled(true);
+    this->openAnswer(6, 300);
 }
 /* 400 points buttons */
 void GameField::on_button_1_400_clicked()
 {
-    this->buttons[15]->setDisabled(true);
+    this->buttons[18]->setDisabled(true);
     this->openAnswer(1, 400);
 }
 void GameField::on_button_2_400_clicked()
 {
-    this->buttons[16]->setDisabled(true);
+    this->buttons[19]->setDisabled(true);
     this->openAnswer(2, 400);
 }
 void GameField::on_button_3_400_clicked()
 {
-    this->buttons[17]->setDisabled(true);
+    this->buttons[20]->setDisabled(true);
     this->openAnswer(3, 400);
 }
 void GameField::on_button_4_400_clicked()
 {
-    this->buttons[18]->setDisabled(true);
+    this->buttons[21]->setDisabled(true);
     this->openAnswer(4, 400);
 }
 void GameField::on_button_5_400_clicked()
 {
-    this->buttons[19]->setDisabled(true);
+    this->buttons[22]->setDisabled(true);
     this->openAnswer(5, 400);
+}
+void GameField::on_button_6_400_clicked()
+{
+    this->buttons[23]->setDisabled(true);
+    this->openAnswer(6, 400);
 }
 /* 500 points buttons */
 void GameField::on_button_1_500_clicked()
 {
-    this->buttons[20]->setDisabled(true);
+    this->buttons[24]->setDisabled(true);
     this->openAnswer(1, 500);
 }
 void GameField::on_button_2_500_clicked()
 {
-    this->buttons[21]->setDisabled(true);
+    this->buttons[25]->setDisabled(true);
     this->openAnswer(2, 500);
 }
 void GameField::on_button_3_500_clicked()
 {
-    this->buttons[22]->setDisabled(true);
+    this->buttons[26]->setDisabled(true);
     this->openAnswer(3, 500);
 }
 void GameField::on_button_4_500_clicked()
 {
-    this->buttons[23]->setDisabled(true);
+    this->buttons[27]->setDisabled(true);
     this->openAnswer(4, 500);
 }
 void GameField::on_button_5_500_clicked()
 {
-    this->buttons[24]->setDisabled(true);
+    this->buttons[28]->setDisabled(true);
     this->openAnswer(5, 500);
+}
+void GameField::on_button_6_500_clicked()
+{
+    this->buttons[29]->setDisabled(true);
+    this->openAnswer(6, 500);
 }

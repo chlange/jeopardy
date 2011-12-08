@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'doublejeopardy.ui'
 **
-** Created: Sat Nov 26 20:15:55 2011
+** Created: Thu Dec 1 09:53:22 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,30 +18,25 @@
 #include <QtGui/QDialog>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
+#include <QtGui/QSpinBox>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_DoubleJeopardy
 {
 public:
-    QLineEdit *points;
     QLabel *min;
     QLabel *max;
     QPushButton *button;
     QComboBox *comboBox;
+    QSpinBox *points;
 
     void setupUi(QDialog *DoubleJeopardy)
     {
         if (DoubleJeopardy->objectName().isEmpty())
             DoubleJeopardy->setObjectName(QString::fromUtf8("DoubleJeopardy"));
-        DoubleJeopardy->resize(242, 186);
-        points = new QLineEdit(DoubleJeopardy);
-        points->setObjectName(QString::fromUtf8("points"));
-        points->setGeometry(QRect(20, 80, 201, 27));
-        points->setInputMethodHints(Qt::ImhDigitsOnly);
-        points->setMaxLength(4);
+        DoubleJeopardy->resize(161, 186);
         min = new QLabel(DoubleJeopardy);
         min->setObjectName(QString::fromUtf8("min"));
         min->setGeometry(QRect(20, 50, 201, 17));
@@ -50,10 +45,13 @@ public:
         max->setGeometry(QRect(20, 120, 201, 17));
         button = new QPushButton(DoubleJeopardy);
         button->setObjectName(QString::fromUtf8("button"));
-        button->setGeometry(QRect(20, 150, 201, 27));
+        button->setGeometry(QRect(10, 150, 141, 27));
         comboBox = new QComboBox(DoubleJeopardy);
         comboBox->setObjectName(QString::fromUtf8("comboBox"));
-        comboBox->setGeometry(QRect(10, 10, 221, 31));
+        comboBox->setGeometry(QRect(10, 10, 141, 31));
+        points = new QSpinBox(DoubleJeopardy);
+        points->setObjectName(QString::fromUtf8("points"));
+        points->setGeometry(QRect(14, 80, 131, 27));
 
         retranslateUi(DoubleJeopardy);
 

@@ -35,9 +35,7 @@ Jeopardy::Jeopardy(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = NULL;
-
+    this->players = new Player[NUMBER_MAX_PLAYERS];
     this->gameField = NULL;
 }
 
@@ -45,10 +43,8 @@ Jeopardy::~Jeopardy()
 {
     delete ui;
 
-    /* Don't delete field! "new Player(..)" gets called for every player seperately */
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        if(this->players[i] != NULL)
-            delete this->players[i];
+    if(this->players != NULL)
+        delete [] this->players;
 
     if(this->gameField != NULL)
         delete this->gameField;
@@ -66,82 +62,155 @@ void Jeopardy::changeEvent(QEvent *e)
     }
 }
 
-/* Initialize player infos */
-bool Jeopardy::initPlayers(QWidget *context)
+void Jeopardy::initGameField(int round)
+{
+    bool complete;
+
+    this->setSound();
+
+    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
+
+    if(this->sound)
+        this->music->play();
+
+    complete = this->setCategoryNr();
+
+    if(NOT == complete)
+    {
+        this->music->stop();
+        return;
+    }
+
+    complete = this->setPlayerNr();
+
+    if(NOT == complete)
+    {
+        this->music->stop();
+        return;
+    }
+
+    if(this->sound)
+        this->music->play();
+
+    complete = this->initPlayers();
+
+    if(NOT == complete)
+    {
+        this->music->stop();
+        return;
+    }
+
+    this->music->stop();
+    this->startRound(round);
+}
+
+void Jeopardy::setSound()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Do you need sound?");
+    msgBox.setWindowTitle("Sound");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+
+    if(msgBox.exec() == QMessageBox::Yes)
+        this->sound = true;
+    else
+        this->sound = false;;
+}
+
+bool Jeopardy::setPlayerNr()
+{
+    bool ok;
+
+    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 1, NUMBER_MAX_PLAYERS, 1, &ok);
+
+    return ok;
+}
+
+bool Jeopardy::setCategoryNr()
+{
+    bool ok;
+
+    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, 6, 1, &ok);
+
+    return ok;
+}
+
+bool Jeopardy::initPlayers()
 {
     QString playerName;
     QString text;
+    QString key;
     QString color;
-    QStringList colorListOriginal;
+    QStringList keyListOrg;
+    QStringList keyList;
     QStringList colorList;
+    int keys[36];
 
-    colorListOriginal << "red" << "green" << "yellow" << "blue";
+    colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
+
+    /* TODO
+     * Key list with saved int values - enum is not the right option cause you need the string for the key, too,
+     * to display them in the combobox and remove them if one player already chose the key.
+     */
+    keyList << "a" << "b" << "c" << "d"  << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
+            << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
+             << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
+    keyListOrg = keyList;
+
+    /* Key to appropriate int value */
+    for(int i = 0; i < 26; i++)
+        keys[i] = 0x41 + i;
+    for(int i = 26; i < 36; i++)
+        keys[i] = 0x30 + (i - 26);
 
     bool ok;
     bool complete = true;
 
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    for(int i = 0; i < this->playerNr; i++)
     {
-        /* reload colors */
-        if(i == 0)
-            colorList = colorListOriginal;
+        playerName = QString("Player %1").arg(i+1);
 
-        /* Repeat name input until cancel buton gets pressed or valid name was entered */
-        while(true)
+        text = QInputDialog::getText(this, "Enter name", playerName, QLineEdit::Normal,"", &ok);
+
+        /* Check if name is valid */
+        if(ok && !text.isEmpty())
         {
-            playerName = QString("Player %1").arg(i+1);
-            if(i == 0)
-                playerName.append(" Key a");
-            else if(i == 1)
-                playerName.append(" Key g");
-            else
-                playerName.append(" Key k");
+            this->players[i].setName(text);
+            this->players[i].setId(i+1);
 
-            text = QInputDialog::getText(context, "Enter name",playerName, QLineEdit::Normal,"", &ok);
-
-            /* Check if name is valid */
-            if(ok && !text.isEmpty())
-            {
-                /* Set name and color */
-                this->players[i] = new Player(text, (i+1));
-
-                color = QInputDialog::getItem(context, "Choose color ", "Color:", colorList, 0, false);
-                this->players[i]->setColor(color);
-                colorList.removeOne(color);
-
-                break;
-            }
-            else
+            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
+            if(!ok)
             {
                 complete = false;
                 break;
             }
+            this->players[i].setKey(keys[keyListOrg.indexOf(key)]);
+            keyList.removeOne(key);
 
+            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
+            if(!ok)
+            {
+                complete = false;
+                break;
+            }
+            this->players[i].setColor(color);
+            colorList.removeOne(color);
+            this->players[i].setPoints(0);
         }
-
-        /* break if input isn't correct */
-        if(complete == false && i < 2)
+        else
+        {
+            complete = false;
             break;
+        }
     }
-
     return complete;
 }
 
-void Jeopardy::initGameField(int round)
+void Jeopardy::startRound(int round)
 {
-    bool complete;
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-    this->music->play();
-
-    complete = initPlayers(this);
-
-    this->music->stop();
-
-    if(complete)
-    {
-        this->gameField = new GameField(this, round, this->players);
-        this->gameField->exec();
-    }
+    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
+    this->gameField->init();
 }
 
 void Jeopardy::on_buttonRound1_clicked()

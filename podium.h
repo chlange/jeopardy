@@ -29,16 +29,8 @@
 #ifndef PODIUM_H
 #define PODIUM_H
 
+#include <QGridLayout>
 #include <player.h>
-
-#define FIRST_PLACE_PODIUM 0
-#define FIRST_PLACE 2
-#define SECOND_PLACE 1
-#define THIRD_PLACE 0
-#define FIRST_PLAYER 0
-#define SECOND_PLAYER 1
-#define THIRD_PLAYER 2
-#define NUMBER_PLAYERS 3
 
 namespace Ui {
     class Podium;
@@ -47,7 +39,7 @@ namespace Ui {
 class Podium : public QDialog {
     Q_OBJECT
 public:
-    Podium(QWidget *parent = NULL, Player *players[NUMBER_PLAYERS] = NULL);
+    Podium(QWidget *parent = NULL, Player *players = NULL, int playerNr = NULL);
     ~Podium();
 
 protected:
@@ -55,11 +47,14 @@ protected:
 
 private:
     Ui::Podium *ui;
-    Player *players[NUMBER_PLAYERS];
-    int order[NUMBER_PLAYERS];
-    QLabel *podiumPlaceLabels[NUMBER_PLAYERS];
+    int playerNr;
+    int order[3];
+    Player *players;
+    Player *sortedPlayers;
+    QWidget *window;
+    QGridLayout *mainGrid;
+    QLabel **podiumPlaceLabels;
 
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
     void assignLabels();
 
     void showPodium();

@@ -28,10 +28,21 @@
 
 #include "player.h"
 
-Player::Player(QString name, int id) :
-        name(name), points(NULL), id(id), key(-1)
+Player::Player() :
+        name(), points(0), id(0), key(-1)
 {
 
+}
+
+Player::Player(QString name, int id) :
+        name(name), points(0), id(id), key(-1)
+{
+
+}
+
+void Player::setId(int id)
+{
+     this->id = id;
 }
 
 int Player::getId()

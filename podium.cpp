@@ -29,14 +29,12 @@
 #include "podium.h"
 #include "ui_podium.h"
 
-Podium::Podium(QWidget *parent, Player *players[NUMBER_PLAYERS]) :
-    QDialog(parent),
-    ui(new Ui::Podium)
+Podium::Podium(QWidget *parent, Player *players, int playerNr) :
+    QDialog(parent), ui(new Ui::Podium), playerNr(playerNr)
 {
     ui->setupUi(this);
-    this->insertPlayers(players);
-    this->assignLabels();
-    this->sort();
+
+    this->players = players;
     this->showPodium();
 }
 
@@ -57,82 +55,65 @@ void Podium::changeEvent(QEvent *e)
     }
 }
 
-void Podium::insertPlayers(Player *players[NUMBER_PLAYERS])
-{
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
-        this->players[i] = players[i];
-}
-
-void Podium::assignLabels()
-{
-    this->podiumPlaceLabels[FIRST_PLAYER] = ui->first;
-    this->podiumPlaceLabels[SECOND_PLAYER] = ui->second;
-    this->podiumPlaceLabels[THIRD_PLAYER] = ui->third;
-}
-
 void Podium::showPodium()
 {
-    QString text;
+    this->sort();
 
-    for(int i = 0; i < NUMBER_PLAYERS; i++)
+    ui->first->setStyleSheet(this->getLabelColorString(0));
+    if(this->playerNr == 1)
+        ui->first->setText(QString("Guess who won... :)"));
+    else
+        ui->first->setText(QString("** %1 **<br>%2").arg(this->players[0].getName()).arg(this->players[0].getPoints()));
+
+    if(this->playerNr > 1)
     {
-        this->podiumPlaceLabels[i]->setStyleSheet(this->getLabelColorString(this->order[i]));
+        ui->second->setStyleSheet(this->getLabelColorString(1));
+        ui->second->setText(QString("2. %1<br>%2").arg(this->players[1].getName()).arg(this->players[1].getPoints()));
+    }
+    else
+        ui->second->setVisible(false);
 
-        if(i == FIRST_PLACE_PODIUM)
-            text = QString("** %1 **").arg(this->players[this->order[i]]->getName());
-        else
-            text = QString("%1. %2").arg(i+1).arg(this->players[this->order[i]]->getName());
-
-        this->podiumPlaceLabels[i]->setText(text);
+    if(this->playerNr > 2)
+    {
+        ui->third->setStyleSheet(this->getLabelColorString(2));
+        ui->third->setText(QString("3. %1<br>%2").arg(this->players[2].getName()).arg(this->players[2].getPoints()));
+    }
+    else
+    {
+        ui->second->setGeometry(40, 220, 662, 171);
+        ui->third->setVisible(false);
     }
 }
 
 void Podium::sort()
 {
-    Player *first, *second, *third;
-
-    first = this->players[FIRST_PLAYER];
-    second = this->players[SECOND_PLAYER];
-    third = this->players[THIRD_PLAYER];
-
-    /* Manual sorting for 3 numbers scales better than known sorting algorithms, I think */
-    if(first->getPoints() <= second->getPoints() && first->getPoints() <= third->getPoints())
+    for(int i = 0; i < this->playerNr; i++)
     {
-        if(second->getPoints() <= third->getPoints())
-            this->setOrder(0, 1, 2);
-        else
-            this->setOrder(0, 2, 1);
-    }
-    else if(second->getPoints() <= first->getPoints() && second->getPoints() <= third->getPoints())
-    {
-        if(first->getPoints() <= third->getPoints())
-            this->setOrder(1, 0, 2);
-        else
-            this->setOrder(1, 2, 0);
-    }
-    else
-    {
-        if(first->getPoints() <= second->getPoints())
-            this->setOrder(2, 0, 1);
-        else
-            this->setOrder(2, 1, 0);
+        for(int j = 0; j < this->playerNr - 1; j++)
+        {
+            if(this->players[j].getPoints() < this->players[j+1].getPoints())
+            {
+                QString nameTmp = this->players[j].getName();
+                QString colorTmp = this->players[j].getColor();
+                int pointsTmp = this->players[j].getPoints();
 
-    }
-}
+                this->players[j].setName(this->players[j+1].getName());
+                this->players[j].setColor(this->players[j+1].getColor());
+                this->players[j].setPoints(this->players[j+1].getPoints());
 
-void Podium::setOrder(int first, int second, int third)
-{
-    order[THIRD_PLACE] = third;
-    order[SECOND_PLACE] = second;
-    order[FIRST_PLACE] = first;
+                this->players[j+1].setName(nameTmp);
+                this->players[j+1].setColor(colorTmp);
+                this->players[j+1].setPoints(pointsTmp);
+            }
+        }
+    }
 }
 
 QString Podium::getLabelColorString(int player)
 {
     QString color;
 
-    color = QString("QLabel { background-color : %1; }").arg(this->players[player]->getColor());
+    color = QString("QLabel { background-color : %1; }").arg(this->players[player].getColor());
 
     return color;
 }
-

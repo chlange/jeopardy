@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gamefield.h'
 **
-** Created: Mon Nov 28 23:31:36 2011
+** Created: Thu Dec 8 02:50:55 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_GameField[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-      26,   14, // methods
+      31,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -57,6 +57,11 @@ static const uint qt_meta_data_GameField[] = {
      635,   10,   10,   10, 0x08,
      661,   10,   10,   10, 0x08,
      687,   10,   10,   10, 0x08,
+     713,   10,   10,   10, 0x08,
+     739,   10,   10,   10, 0x08,
+     765,   10,   10,   10, 0x08,
+     791,   10,   10,   10, 0x08,
+     817,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -69,26 +74,31 @@ static const char qt_meta_stringdata_GameField[] = {
     "on_button_3_100_clicked()\0"
     "on_button_4_100_clicked()\0"
     "on_button_5_100_clicked()\0"
+    "on_button_6_100_clicked()\0"
     "on_button_1_200_clicked()\0"
     "on_button_2_200_clicked()\0"
     "on_button_3_200_clicked()\0"
     "on_button_4_200_clicked()\0"
     "on_button_5_200_clicked()\0"
+    "on_button_6_200_clicked()\0"
     "on_button_1_300_clicked()\0"
     "on_button_2_300_clicked()\0"
     "on_button_3_300_clicked()\0"
     "on_button_4_300_clicked()\0"
     "on_button_5_300_clicked()\0"
+    "on_button_6_300_clicked()\0"
     "on_button_1_400_clicked()\0"
     "on_button_2_400_clicked()\0"
     "on_button_3_400_clicked()\0"
     "on_button_4_400_clicked()\0"
     "on_button_5_400_clicked()\0"
+    "on_button_6_400_clicked()\0"
     "on_button_1_500_clicked()\0"
     "on_button_2_500_clicked()\0"
     "on_button_3_500_clicked()\0"
     "on_button_4_500_clicked()\0"
     "on_button_5_500_clicked()\0"
+    "on_button_6_500_clicked()\0"
 };
 
 const QMetaObject GameField::staticMetaObject = {
@@ -126,29 +136,34 @@ int GameField::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 3: on_button_3_100_clicked(); break;
         case 4: on_button_4_100_clicked(); break;
         case 5: on_button_5_100_clicked(); break;
-        case 6: on_button_1_200_clicked(); break;
-        case 7: on_button_2_200_clicked(); break;
-        case 8: on_button_3_200_clicked(); break;
-        case 9: on_button_4_200_clicked(); break;
-        case 10: on_button_5_200_clicked(); break;
-        case 11: on_button_1_300_clicked(); break;
-        case 12: on_button_2_300_clicked(); break;
-        case 13: on_button_3_300_clicked(); break;
-        case 14: on_button_4_300_clicked(); break;
-        case 15: on_button_5_300_clicked(); break;
-        case 16: on_button_1_400_clicked(); break;
-        case 17: on_button_2_400_clicked(); break;
-        case 18: on_button_3_400_clicked(); break;
-        case 19: on_button_4_400_clicked(); break;
-        case 20: on_button_5_400_clicked(); break;
-        case 21: on_button_1_500_clicked(); break;
-        case 22: on_button_2_500_clicked(); break;
-        case 23: on_button_3_500_clicked(); break;
-        case 24: on_button_4_500_clicked(); break;
-        case 25: on_button_5_500_clicked(); break;
+        case 6: on_button_6_100_clicked(); break;
+        case 7: on_button_1_200_clicked(); break;
+        case 8: on_button_2_200_clicked(); break;
+        case 9: on_button_3_200_clicked(); break;
+        case 10: on_button_4_200_clicked(); break;
+        case 11: on_button_5_200_clicked(); break;
+        case 12: on_button_6_200_clicked(); break;
+        case 13: on_button_1_300_clicked(); break;
+        case 14: on_button_2_300_clicked(); break;
+        case 15: on_button_3_300_clicked(); break;
+        case 16: on_button_4_300_clicked(); break;
+        case 17: on_button_5_300_clicked(); break;
+        case 18: on_button_6_300_clicked(); break;
+        case 19: on_button_1_400_clicked(); break;
+        case 20: on_button_2_400_clicked(); break;
+        case 21: on_button_3_400_clicked(); break;
+        case 22: on_button_4_400_clicked(); break;
+        case 23: on_button_5_400_clicked(); break;
+        case 24: on_button_6_400_clicked(); break;
+        case 25: on_button_1_500_clicked(); break;
+        case 26: on_button_2_500_clicked(); break;
+        case 27: on_button_3_500_clicked(); break;
+        case 28: on_button_4_500_clicked(); break;
+        case 29: on_button_5_500_clicked(); break;
+        case 30: on_button_6_500_clicked(); break;
         default: ;
         }
-        _id -= 26;
+        _id -= 31;
     }
     return _id;
 }

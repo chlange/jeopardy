@@ -34,7 +34,6 @@
 #include <QDialog>
 #include <QLabel>
 
-#define NUMBER_PLAYERS 3
 #define NUMBER_CATEGORIES 5
 #define OFFSET 1
 
@@ -48,8 +47,11 @@ class Player
         int key;
 
     public:
+        Player();
         Player(QString name, int id);
+
         int getId();
+        void setId(int id);
 
         int getPoints();
         void setPoints(int points);
@@ -64,7 +66,6 @@ class Player
 
         int getKey();
         void setKey(int key);
-
 };
 
 #endif // PLAYER_H

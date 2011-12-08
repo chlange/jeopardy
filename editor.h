@@ -30,37 +30,48 @@
 #define EDITOR_H
 
 #include <QLineEdit>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QObject>
+#include <QDebug>
 #include <player.h>
 
-namespace Ui {
-    class Editor;
-}
+#define NUMBER_MAX_PLAYERS 9
 
 class Editor : public QDialog {
     Q_OBJECT
 public:
-    Editor(QWidget *parent = NULL, Player *players[NUMBER_PLAYERS] = NULL);
+    Editor(QWidget *parent = NULL, Player *players = NULL, int playerNr = NULL);
     ~Editor();
+    void show();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::Editor *ui;
-    Player *players[NUMBER_PLAYERS];
-    QLineEdit *playerPointsLines[NUMBER_PLAYERS];
-    QLineEdit *playerNamesLines[NUMBER_PLAYERS];
+    int playerNr;
+    Player *players;
+    QDialog *window;
+    QGridLayout *mainGrid;
+    QGridLayout *lineGrid;
+    QGridLayout *saveGrid;
+    QLineEdit *playerNamesLines[NUMBER_MAX_PLAYERS];
+    QSpinBox *playerPointsLines[NUMBER_MAX_PLAYERS];
+    QPushButton *saveButton;
 
-    void insertPlayers(Player *players[NUMBER_PLAYERS]);
+    void init();
+    void insertLayouts();
     void assignPlayerPointsLines();
     void assignPlayerNamesLines();
+    void assignSaveButton();
 
     void showValues();
 
     void saveChanges();
 
 private slots:
-    void on_save_clicked();
+    void end();
 };
 
 #endif // EDITOR_H

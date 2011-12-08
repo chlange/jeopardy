@@ -23,8 +23,5 @@ HEADERS += jeopardy.h \
     podium.h \
     doublejeopardy.h
 FORMS += jeopardy.ui \
-    gamefield.ui \
     answer.ui \
-    editor.ui \
-    podium.ui \
-    doublejeopardy.ui
+    podium.ui
