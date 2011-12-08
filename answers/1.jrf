@@ -6,9 +6,9 @@ answer
 500: 		- Name this file either 1.jrf, 2.jrf, 3.jrf or 4.jrf for desired round
 text
 100: a<br>b	- Line breaks with <br>
-200: 		- HTML elements allowed, too
-300: 		- Bug: Whitespaces after <br> won't be shown
-400: 
+200: a[b]b	- [b] works, too
+300: 		- HTML elements allowed, too
+400: [nE]text	- Won't escape your text e.g. a "<" won't be escaped as a HTML-tag opening
 500: [l]text	- Align text left e.g. for source code
 images
 100: [img]1.png	- Image behind [img] tag must be in answers/round/ e.g. [img]1.png lays in answers/1/1.png
@@ -23,8 +23,8 @@ other
 400: 		- [dj] opens menu where the player and points can be selected
 500: 		- [dj] min. 100 and up to twice the points of the normal question 
 category5name
-100: [img]2k7.jpg ##a##
-200: [img]npn-transistor.png ##a##
+100: 
+200: 
 300: 
 400: 
 500: 

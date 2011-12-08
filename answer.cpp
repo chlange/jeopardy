@@ -90,11 +90,20 @@ void Answer::setAnswer(int category, int points)
     QRegExp imgTag("^[[]img[]]");
     QRegExp alignLeftTag("[[]l[]]");
     QRegExp doubleJeopardyTag("[[]dj[]]");
+    QRegExp lineBreakTag("[[]b[]]");
+    QRegExp noEscape("[[]nE[]]");
 
     answer.remove(comment);
+    answer.replace(lineBreakTag,"<br>");
 
     if(answer.contains(alignLeftTag))
         this->processAlign(&answer);
+
+    if(answer.contains(noEscape))
+    {
+        answer.remove(noEscape);
+        ui->answer->setTextFormat(Qt::PlainText);
+    }
 
     if(answer.contains(doubleJeopardyTag))
         this->processDoubleJeopardy(&answer);
@@ -166,10 +175,8 @@ void Answer::keyPressEvent(QKeyEvent *event)
     key = event->key();
 
     for(int i = 0; i <  NUMBER_MAX_PLAYERS; i++)
-    {
         if(key == this->players[i].getKey() && this->playerNr >= i + 1)
             this->processKeypress(i);
-    }
 }
 
 void Answer::processKeypress(int player)

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'doublejeopardy.h'
 **
-** Created: Thu Dec 1 23:31:12 2011
+** Created: Thu Dec 8 01:14:36 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
