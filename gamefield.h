@@ -44,12 +44,7 @@
 #include <podium.h>
 #include <answer.h>
 
-#define PLAYER_ONE_STRING "1"
-#define PLAYER_TWO_STRING "2"
 #define WON "1"
-#define PLAYER_ONE 0
-#define PLAYER_TWO 1
-#define PLAYER_THREE 2
 #define NUMBER_ANSWERS 5
 #define NUMBER_MAX_CATEGORIES 6
 #define NUMBER_MAX_ANSWERS 30

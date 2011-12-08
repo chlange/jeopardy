@@ -32,11 +32,6 @@
 #include <QGridLayout>
 #include <player.h>
 
-#define THIRD_PLACE 0
-#define FIRST_PLAYER 0
-#define SECOND_PLAYER 1
-#define THIRD_PLAYER 2
-
 namespace Ui {
     class Podium;
 }

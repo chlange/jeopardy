@@ -276,7 +276,7 @@ void GameField::assignPlayerPointsLabels()
 
     for(int i = 0; i < this->playerNr; i++)
     {
-        if((i+1) <= NUMBER_MAX_PLAYERS / 2)
+        if((i + 1) <= NUMBER_MAX_PLAYERS / 2)
         {
             row = FIRST_LABEL_ROW;
             column = 2 * i + 1;
@@ -531,6 +531,14 @@ void GameField::openFileLoader()
             line = "magenta";
         else if(line == "l")
             line = "lightGray";
+        else if(line == "c")
+            line = "cyan";
+        else if(line == "d")
+            line = "darkRed";
+        else if(line == "w")
+            line = "white";
+        else if(line == "dM")
+            line = "darkMagenta";
 
         line.prepend("QPushButton { background-color : ");
         line.append("; }");
@@ -592,10 +600,11 @@ void GameField::openFileSaver(bool backup)
             /* Just save first character of color */
             QString stylesheet = this->buttons[i]->styleSheet();
             stylesheet.remove(0,COLOR_TEXT_LENGTH);
+
             if(stylesheet.startsWith("gray"))
-            {
                 stylesheet = "gr";
-            }
+            else if(stylesheet.startsWith("darkMagenta"))
+                stylesheet = "dM";
             else
             {
                 int len = stylesheet.length();
