@@ -3,7 +3,7 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		02. Dezember 2011
+* Date:		08. Dezember 2011
 * Version:	0.9.4 experimental version 4
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
@@ -17,7 +17,7 @@ Description
 Features
 --------
 
-* up to 8 players
+* up to 9 players
 * sound
 * colors
 * names
@@ -52,8 +52,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e4 (not released)
-	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e4 (not released)
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e4
+	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e4
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
