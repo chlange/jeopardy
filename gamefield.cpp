@@ -625,6 +625,7 @@ void GameField::openEditor()
     this->editor = new Editor(this, this->players, this->playerNr);
     editor->show();
 
+    this->openFileSaver(true);
     this->updateGameFieldValues();
 }
 
