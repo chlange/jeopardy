@@ -4,7 +4,7 @@ Jeopardy
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
 * Date:		08. Dezember 2011
-* Version:	0.9.4 experimental version 4
+* Version:	0.9.4 stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -27,9 +27,10 @@ Features
 	* load/save game state
 	* player name and points editor
 	* early round ending option
+	* round reset
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
-	* backups ordered by unix timestamp
+	* backups ordered by round and unix timestamp
 * formatted text and (if too big) resized images as answer 
 	* see answers/1.jrf or wiki for further instructions
 * double jeopardy questions 
@@ -52,8 +53,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.4e4
-	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4e4
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.4s
+	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4s
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
