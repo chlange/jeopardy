@@ -226,32 +226,20 @@ void Jeopardy::deleteSound()
 
 void Jeopardy::on_buttonRound1_clicked()
 {
-    if(this->gameField != NULL)
-     delete this->gameField;
-
     initGameField(1);
 }
 
 void Jeopardy::on_buttonRound2_clicked()
 {
-    if(this->gameField != NULL)
-     delete this->gameField;
-
     initGameField(2);
 }
 
 void Jeopardy::on_buttonRound3_clicked()
 {
-    if(this->gameField != NULL)
-     delete this->gameField;
-
     initGameField(3);
 }
 
 void Jeopardy::on_buttonRound4_clicked()
 {
-    if(this->gameField != NULL)
-     delete this->gameField;
-
     initGameField(4);
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'jeopardy.ui'
 **
-** Created: Wed Nov 23 02:44:43 2011
+** Created: Fri Dec 9 08:28:10 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
