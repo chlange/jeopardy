@@ -73,12 +73,16 @@ private:
     bool initPlayers();
     void startRound(int round);
 
+    void deleteSound();
 
 private slots:
     void on_buttonRound1_clicked();
     void on_buttonRound2_clicked();
     void on_buttonRound3_clicked();
     void on_buttonRound4_clicked();
+
+signals:
+        void deleteGameField();
 };
 
 #endif // JEOPARDY_H

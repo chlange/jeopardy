@@ -47,7 +47,10 @@ Jeopardy::~Jeopardy()
         delete [] this->players;
 
     if(this->gameField != NULL)
+    {
         delete this->gameField;
+        this->gameField = NULL;
+    }
 }
 
 void Jeopardy::changeEvent(QEvent *e)
@@ -68,16 +71,17 @@ void Jeopardy::initGameField(int round)
 
     this->setSound();
 
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-
     if(this->sound)
+    {
+        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
         this->music->play();
+    }
 
     complete = this->setCategoryNr();
 
     if(NOT == complete)
     {
-        this->music->stop();
+        this->deleteSound();
         return;
     }
 
@@ -85,22 +89,20 @@ void Jeopardy::initGameField(int round)
 
     if(NOT == complete)
     {
-        this->music->stop();
+        this->deleteSound();
         return;
     }
-
-    if(this->sound)
-        this->music->play();
 
     complete = this->initPlayers();
 
     if(NOT == complete)
     {
-        this->music->stop();
+        this->deleteSound();
         return;
     }
 
-    this->music->stop();
+    this->deleteSound();
+
     this->startRound(round);
 }
 
@@ -213,22 +215,43 @@ void Jeopardy::startRound(int round)
     this->gameField->init();
 }
 
+void Jeopardy::deleteSound()
+{
+    if(this->sound)
+    {
+        this->music->stop();
+        delete this->music;
+    }
+}
+
 void Jeopardy::on_buttonRound1_clicked()
 {
+    if(this->gameField != NULL)
+     delete this->gameField;
+
     initGameField(1);
 }
 
 void Jeopardy::on_buttonRound2_clicked()
 {
+    if(this->gameField != NULL)
+     delete this->gameField;
+
     initGameField(2);
 }
 
 void Jeopardy::on_buttonRound3_clicked()
 {
+    if(this->gameField != NULL)
+     delete this->gameField;
+
     initGameField(3);
 }
 
 void Jeopardy::on_buttonRound4_clicked()
 {
+    if(this->gameField != NULL)
+     delete this->gameField;
+
     initGameField(4);
 }

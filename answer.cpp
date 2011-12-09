@@ -49,13 +49,17 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     this->hideButtons();
     ui->graphicsView->setVisible(false);
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
+
+    if(sound)
+        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
 }
 
 Answer::~Answer()
 {
     delete ui;
-    delete this->music;
+    if(this->sound)
+        delete this->music;
+
     if(this->dj != NULL)
         delete this->dj;
 }
@@ -108,7 +112,7 @@ void Answer::setAnswer(int category, int points)
     if(answer.contains(doubleJeopardyTag))
         this->processDoubleJeopardy(&answer);
 
-    if(this->sound == true)
+    if(this->sound)
         this->music->play();
 
     if(answer.contains(imgTag))
@@ -314,7 +318,8 @@ void Answer::on_buttonEnd_clicked()
 
     if(ret == QMessageBox::Yes)
     {
-        this->music->stop();
+        if(this->sound)
+            this->music->stop();
         this->winner = NO_WINNER;
         done(0);
     }
@@ -327,7 +332,8 @@ void Answer::on_buttonRight_clicked()
     resultTmp.append(WON);
     this->result.append(resultTmp);
     this->releaseKeyListener();
-    this->music->stop();
+    if(this->sound)
+        this->music->stop();
     this->winner = this->currentPlayer.getId() - OFFSET;
     done(0);
 }
@@ -342,7 +348,8 @@ void Answer::on_buttonWrong_clicked()
     this->releaseKeyListener();
     if(this->doubleJeopardy)
     {
-        this->music->stop();
+        if(this->sound)
+            this->music->stop();
         this->winner = NO_WINNER;
         done(0);
     }

@@ -37,8 +37,6 @@ GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *play
 
 GameField::~GameField()
 {
-    if(this->answer != NULL)
-        delete this->answer;
     if(this->randomCtx != NULL)
         delete this->randomCtx;
     if(this->editorCtx != NULL)
@@ -415,6 +413,8 @@ void GameField::openAnswer(int category, int points)
     this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
     this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();
+
+    delete this->answer;
 
     this->processResult();
     this->updateAfterAnswer();
