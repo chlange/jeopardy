@@ -54,7 +54,7 @@ Install
 -------
 
 	wget https://github.com/chlange/jeopardy/tarball/v0.9.4s
-	tar xfv https://github.com/chlange/jeopardy/tarball/v0.9.4s
+	tar xfv v0.9.4s
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
