@@ -38,9 +38,9 @@ Todo
 Software used
 -------------
 
-* Ubuntu 10.04
-* g++
+* gcc 4.4.3
 * Qt 4.6.2
+* phonon
 
 Install
 -------
