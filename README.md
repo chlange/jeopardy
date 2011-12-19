@@ -1,7 +1,6 @@
 Jeopardy
 ========
 
-* Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
 * Date:		19. Dezember 2011
 * Version:	0.9.5 experimental
@@ -40,6 +39,7 @@ Features
 Todo
 ----
 
+* stop video after 30 seconds
 * smoother design
 * ...little here and there
 
