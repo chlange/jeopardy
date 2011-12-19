@@ -31,7 +31,6 @@
 
 #include <QKeyEvent>
 #include <QSound>
-#include <QDebug>
 #include <QFile>
 #include <QDir>
 #include <QPixmap>
@@ -48,6 +47,7 @@
 #define NO_WINNER -1
 #define WON "1"
 #define LOST "0"
+#define THIRTY_SECONDS 30000
 
 namespace Ui {
     class Answer;
@@ -101,8 +101,12 @@ private:
 
     void processText(QString *answer);
     void processImg(QString *answer);
+    void processSound(QString *answer);
+    void processVideo(QString *answer);
     void processDoubleJeopardy(QString *answer);
     void processAlign(QString *answer);
+
+    void prependDir(QString *answer);
 
 private slots:
     void on_buttonCancel_clicked();

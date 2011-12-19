@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'answer.ui'
 **
-** Created: Fri Dec 9 08:28:10 2011
+** Created: Mon Dec 19 00:17:52 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -19,6 +19,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
+#include <phonon/videoplayer.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -32,6 +33,7 @@ public:
     QLabel *currentPlayer;
     QPushButton *buttonCancel;
     QGraphicsView *graphicsView;
+    Phonon::VideoPlayer *videoPlayer;
 
     void setupUi(QDialog *Answer)
     {
@@ -77,7 +79,7 @@ public:
         buttonWrong->setFont(font);
         answer = new QLabel(Answer);
         answer->setObjectName(QString::fromUtf8("answer"));
-        answer->setGeometry(QRect(9, 9, 981, 501));
+        answer->setGeometry(QRect(9, 9, 981, 521));
         sizePolicy1.setHeightForWidth(answer->sizePolicy().hasHeightForWidth());
         answer->setSizePolicy(sizePolicy1);
         QFont font1;
@@ -86,6 +88,7 @@ public:
         font1.setBold(false);
         font1.setWeight(50);
         answer->setFont(font1);
+        answer->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         answer->setTextFormat(Qt::RichText);
         answer->setScaledContents(false);
         answer->setAlignment(Qt::AlignCenter);
@@ -107,6 +110,10 @@ public:
         graphicsView = new QGraphicsView(Answer);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
         graphicsView->setGeometry(QRect(1, 1, 997, 531));
+        videoPlayer = new Phonon::VideoPlayer(Answer);
+        videoPlayer->setObjectName(QString::fromUtf8("videoPlayer"));
+        videoPlayer->setGeometry(QRect(9, 9, 981, 511));
+        videoPlayer->setStyleSheet(QString::fromUtf8(""));
 
         retranslateUi(Answer);
 
@@ -119,7 +126,7 @@ public:
         buttonRight->setText(QApplication::translate("Answer", "Right", 0, QApplication::UnicodeUTF8));
         buttonEnd->setText(QApplication::translate("Answer", "End", 0, QApplication::UnicodeUTF8));
         buttonWrong->setText(QApplication::translate("Answer", "Wrong", 0, QApplication::UnicodeUTF8));
-        answer->setText(QString());
+        answer->setText(QApplication::translate("Answer", "listen...", 0, QApplication::UnicodeUTF8));
         currentPlayer->setText(QApplication::translate("Answer", "currentPlayer", 0, QApplication::UnicodeUTF8));
         buttonCancel->setText(QApplication::translate("Answer", "Cancel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

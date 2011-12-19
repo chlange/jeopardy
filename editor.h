@@ -34,7 +34,6 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QObject>
-#include <QDebug>
 #include <player.h>
 
 #define NUMBER_MAX_PLAYERS 9

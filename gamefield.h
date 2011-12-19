@@ -38,6 +38,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QShortcut>
 #include <QDateTime>
 #include <QGridLayout>
 #include <editor.h>
@@ -54,6 +55,7 @@
 #define PLAYER_INDICATOR 1
 #define RESULT_INDICATOR 1
 #define NOT false
+#define NO_WINNER -1
 
 #define GAMEFIELD_WIDTH 1000
 #define GAMEFIELD_HEIGHT 500
@@ -66,7 +68,7 @@
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNrArr = 0, bool sound = true);
+    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNr = 0, bool sound = true);
     ~GameField();
     void init();
 
@@ -113,6 +115,7 @@ private:
 
     void insertLayouts();
     void assignButtons();
+    void setDefaultButtonAppearance(int i, int currentButton);
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
     void assignCategoryLabels();
@@ -136,12 +139,14 @@ private:
     void openFileLoader();
     void openFileSaver(bool automatedBackup);
     void openEditor();
-    void random();
     void resetRound();
+
+    void keyPressEvent(QKeyEvent *event);
 
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
+    void random();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();
     void on_button_3_100_clicked();

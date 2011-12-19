@@ -3,7 +3,7 @@ Jeopardy
 
 * Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		13. Dezember 2011
+* Date:		19. Dezember 2011
 * Version:	0.9.5 experimental
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
@@ -31,8 +31,9 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by round and unix timestamp
-* formatted text and (if too big) resized images as answer 
+* formatted text, sound, images and videos as answer 
 	* see answers/1.jrf or wiki for further instructions
+	* images and videos will be resized if too big
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
 
@@ -52,8 +53,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.5e (not released)
-	tar xfv v0.9.5e (not released)
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.5e
+	tar xfv v0.9.5e
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
