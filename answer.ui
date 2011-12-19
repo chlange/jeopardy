@@ -125,7 +125,7 @@
      <x>9</x>
      <y>9</y>
      <width>981</width>
-     <height>501</height>
+     <height>521</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -142,8 +142,11 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </property>
    <property name="text">
-    <string/>
+    <string>listen...</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>
@@ -217,7 +220,27 @@
     </rect>
    </property>
   </widget>
+  <widget class="Phonon::VideoPlayer" name="videoPlayer">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>981</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Phonon::VideoPlayer</class>
+   <extends>QWidget</extends>
+   <header location="global">phonon/videoplayer.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

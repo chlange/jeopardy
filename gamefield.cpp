@@ -28,8 +28,8 @@
 
 #include "gamefield.h"
 
-GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNr, bool sound) :
-    QDialog(parent), round(roundArg), alreadyAnswered(0), lastWinner(NO_WINNER),
+GameField::GameField(QWidget *parent, int round, int categoryNr, Player *players, int playerNr, bool sound) :
+    QDialog(parent), round(round), alreadyAnswered(0), lastWinner(NO_WINNER),
     lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
     randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
 {
@@ -140,6 +140,7 @@ void GameField::insertLayouts()
     this->playerLabelGrid->setGeometry(QRect(0, GAMEFIELD_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT, GAMEFIELD_WIDTH, NAME_LABEL_HEIGHT + NAME_LABEL_HEIGHT));
 
     this->window->setLayout(this->mainGrid);
+    this->window->setFocusPolicy(Qt::StrongFocus);
 }
 
 void GameField::assignCategoryLabels()
@@ -162,9 +163,6 @@ void GameField::assignCategoryLabels()
 
 void GameField::assignButtons()
 {
-    QFont font;
-    font.setPointSize(20);
-
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
         this->buttons[i] = new QPushButton();
 
@@ -174,10 +172,8 @@ void GameField::assignButtons()
         {
             int currentButton = (NUMBER_MAX_CATEGORIES * i) + j;
 
-            this->buttons[currentButton]->setFont(font);
-            this->buttons[currentButton]->setText(QString("%1").arg((i + 1) * POINTS_FACTOR));
-            this->buttons[currentButton]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            this->categoryLabelGrid->addWidget(this->buttons[currentButton], i+1, j);
+            this->setDefaultButtonAppearance((i + 1) * POINTS_FACTOR, currentButton);
+            this->categoryLabelGrid->addWidget(this->buttons[currentButton], i + 1, j);
         }
     }
 
@@ -231,6 +227,18 @@ void GameField::assignButtons()
         connect(this->buttons[23], SIGNAL(clicked()), this, SLOT(on_button_6_400_clicked()));
         connect(this->buttons[29], SIGNAL(clicked()), this, SLOT(on_button_6_500_clicked()));
     }
+}
+
+void GameField::setDefaultButtonAppearance(int points, int currentButton)
+{
+    QFont font;
+    font.setPointSize(20);
+
+    this->buttons[currentButton]->setFont(font);
+    this->buttons[currentButton]->setText(QString("%1").arg(points));
+    this->buttons[currentButton]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->buttons[currentButton]->setStyleSheet("");
+    this->buttons[currentButton]->setEnabled(true);
 }
 
 void GameField::assignPlayerNameLabels()
@@ -392,16 +400,13 @@ void GameField::updateAfterAnswer()
 
 QString GameField::getButtonColorByLastWinner()
 {
-    QString color = QString("QPushButton { background-color : lightGray; }");
-
-    if(this->lastWinner != NO_WINNER)
-        color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
-
-    return color;
+    return QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
 }
 
 void GameField::openAnswer(int category, int points)
 {
+    QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
+
     this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
     this->answer->setAnswer(category, points);
 
@@ -409,8 +414,15 @@ void GameField::openAnswer(int category, int points)
 
     this->lastWinner = this->answer->getWinner();
 
-    /* Doing some calculation to get appropriate button */
-    this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
+    /* Write player name on button */
+    if(this->lastWinner != NO_WINNER)
+    {
+        button->setStyleSheet(this->getButtonColorByLastWinner());
+        button->setText(this->players[this->lastWinner].getName());
+    }
+    else
+        button->setText("");
+
     this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();
 
@@ -655,14 +667,17 @@ void GameField::resetRound()
 {
     this->setAlreadyAnswered(0);
     for(int i = 0; i < this->playerNr; i++)
-    {
         this->players[i].setPoints(0);
-    }
-    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+
+    for(int j = 0; j < this->categoryNr; j++)
     {
-        this->buttons[i]->setEnabled(true);
-        this->buttons[i]->setStyleSheet("");
+        for(int i = 0; i < NUMBER_ANSWERS; i++)
+        {
+            int currentButton = (NUMBER_MAX_CATEGORIES * i) + j;
+            this->setDefaultButtonAppearance((i + 1) * POINTS_FACTOR, currentButton);
+        }
     }
+
     this->updatePointsLabels();
 }
 
@@ -712,6 +727,26 @@ void GameField::showPodium()
 {
     this->podium = new Podium(this, this->players, this->playerNr);
     this->podium->exec();
+}
+
+void GameField::keyPressEvent(QKeyEvent *event)
+{
+    qDebug() << "Key: " << event->key();
+
+    if(event->key() == Qt::Key_R)
+        this->random();
+    else
+    {
+        for(int i = 0; i < this->playerNr; i++)
+        {
+            if(this->players[i].getKey() == event->key())
+            {
+                this->playerNameLabels[i]->setStyleSheet("QLabel { background-color: black; }");
+                this->playerNameLabels[i]->setStyleSheet(QString("QLabel { background-color : %1; }").arg(this->players[i].getColor()));
+            }
+        }
+    }
+
 }
 
 /* 100 points buttons */

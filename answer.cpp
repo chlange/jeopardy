@@ -49,6 +49,7 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     this->hideButtons();
     ui->graphicsView->setVisible(false);
+    ui->videoPlayer->setVisible(false);
 
     if(sound)
         this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
@@ -62,6 +63,8 @@ Answer::~Answer()
 
     if(this->dj != NULL)
         delete this->dj;
+
+    ui->videoPlayer->stop();
 }
 
 int Answer::getWinner()
@@ -92,6 +95,8 @@ void Answer::setAnswer(int category, int points)
 
     QRegExp comment("##.+##");
     QRegExp imgTag("^[[]img[]]");
+    QRegExp videoTag("^[[]video[]]");
+    QRegExp soundTag("^[[]sound[]]");
     QRegExp alignLeftTag("[[]l[]]");
     QRegExp doubleJeopardyTag("[[]dj[]]");
     QRegExp lineBreakTag("[[]b[]]");
@@ -112,16 +117,34 @@ void Answer::setAnswer(int category, int points)
     if(answer.contains(doubleJeopardyTag))
         this->processDoubleJeopardy(&answer);
 
-    if(this->sound)
-        this->music->play();
-
     if(answer.contains(imgTag))
     {
+        if(this->sound)
+            this->music->play();
+
+        answer.remove(imgTag);
         answer = answer.trimmed();
         this->processImg(&answer);
     }
+    else if(answer.contains(soundTag))
+    {
+        answer.remove(soundTag);
+        answer = answer.trimmed();
+        this->processSound(&answer);
+    }
+    else if(answer.contains(videoTag))
+    {
+        answer.remove(videoTag);
+        answer = answer.trimmed();
+        this->processVideo(&answer);
+    }
     else
+    {
+        if(this->sound)
+            this->music->play();
+
         this->processText(&answer);
+    }
 }
 
 void Answer::processAlign(QString *answer)
@@ -140,11 +163,7 @@ void Answer::processDoubleJeopardy(QString *answer)
 
 void Answer::processImg(QString *answer)
 {
-    QRegExp imgTag("^[[]img[]]");
-    answer->remove(imgTag);
-
-    answer->prepend(QString("/answers/%1/").arg(this->round));
-    answer->prepend(QDir::currentPath());
+    this->prependDir(answer);
 
     ui->graphicsView->setVisible(true);
 
@@ -162,6 +181,23 @@ void Answer::processImg(QString *answer)
     ui->graphicsView->show();
 }
 
+void Answer::processSound(QString *answer)
+{
+    this->prependDir(answer);
+
+    this->sound = true;
+    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource(*answer));
+    this->music->play();
+}
+
+void Answer::processVideo(QString *answer)
+{
+    this->prependDir(answer);
+
+    ui->videoPlayer->setVisible(true);
+    ui->videoPlayer->play(*answer);
+}
+
 void Answer::processText(QString *answer)
 {
     int count = answer->count("<br>");
@@ -169,24 +205,36 @@ void Answer::processText(QString *answer)
     ui->answer->setText(*answer);
 }
 
+void Answer::prependDir(QString *answer)
+{
+    answer->prepend(QString("/answers/%1/").arg(this->round));
+    answer->prepend(QDir::currentPath());
+}
+
 void Answer::keyPressEvent(QKeyEvent *event)
 {
     int key;
+    int player = -1;
 
     if(this->keyListenerIsLocked() == true)
         return;
+    else
+        this->lockKeyListener();
 
     key = event->key();
 
-    for(int i = 0; i <  NUMBER_MAX_PLAYERS; i++)
-        if(key == this->players[i].getKey() && this->playerNr >= i + 1)
-            this->processKeypress(i);
+    for(int i = 0; i <  this->playerNr; i++)
+        if(key == this->players[i].getKey())
+            player = i;
+
+    if(player != -1)
+        this->processKeypress(player);
+    else
+        this->releaseKeyListener();
 }
 
 void Answer::processKeypress(int player)
 {
-    this->lockKeyListener();
-
     this->currentPlayer = this->players[player];
     ui->currentPlayer->setText(this->currentPlayer.getName());
 
