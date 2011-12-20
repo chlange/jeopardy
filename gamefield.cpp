@@ -405,28 +405,12 @@ QString GameField::getButtonColorByLastWinner()
 
 void GameField::openAnswer(int category, int points)
 {
-    QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
-
     this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
     this->answer->setAnswer(category, points);
 
     this->answer->exec();
 
-    this->lastWinner = this->answer->getWinner();
-
-    /* Write player name on button */
-    if(this->lastWinner != NO_WINNER)
-    {
-        button->setStyleSheet(this->getButtonColorByLastWinner());
-        button->setText(this->players[this->lastWinner].getName());
-    }
-    else
-        button->setText("");
-
-    this->lastPoints = this->answer->getPoints();
-    this->result = answer->getResult();
-
-    delete this->answer;
+    this->processAnswer(category, points);
 
     this->processResult();
     this->updateAfterAnswer();
@@ -441,6 +425,25 @@ void GameField::openAnswer(int category, int points)
         this->showPodium();
         this->window->close();
     }
+}
+
+void GameField::processAnswer(int category, int points)
+{
+    QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
+    this->lastWinner = this->answer->getWinner();
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
+
+    /* Write player name on button */
+    if(this->lastWinner != NO_WINNER)
+    {
+        button->setStyleSheet(this->getButtonColorByLastWinner());
+        button->setText(this->players[this->lastWinner].getName());
+    }
+    else
+        button->setText("");
+
+    delete this->answer;
 }
 
 void GameField::processResult()
@@ -729,6 +732,7 @@ void GameField::showPodium()
     this->podium->exec();
 }
 
+/* TODO: function should work... */
 void GameField::keyPressEvent(QKeyEvent *event)
 {
     qDebug() << "Key: " << event->key();

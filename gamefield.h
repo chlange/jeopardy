@@ -133,6 +133,7 @@ private:
     QString getButtonColorByLastWinner();
 
     void openAnswer(int category, int points);
+    void processAnswer(int category, int points);
     void processResult();
     void showPodium();
 
