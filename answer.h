@@ -47,7 +47,6 @@
 #define NO_WINNER -1
 #define WON "1"
 #define LOST "0"
-#define THIRTY_SECONDS 30000
 
 namespace Ui {
     class Answer;

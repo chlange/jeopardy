@@ -36,6 +36,7 @@
 #include <QFile>
 #include <QColor>
 #include <QDebug>
+#include <QTimer>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QShortcut>
@@ -126,13 +127,13 @@ private:
 
     void updateGameFieldValues();
     void updatePointsLabels();
-    void updateNamesLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
 
     QString getButtonColorByLastWinner();
 
     void openAnswer(int category, int points);
+    void processAnswer(int category, int points);
     void processResult();
     void showPodium();
 
@@ -141,12 +142,13 @@ private:
     void openEditor();
     void resetRound();
 
-    void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *target, QEvent *event);
 
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
     void random();
+    void updateNamesLabels();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();
     void on_button_3_100_clicked();

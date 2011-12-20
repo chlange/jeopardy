@@ -3,7 +3,7 @@ Jeopardy
 
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
 * Date:		19. Dezember 2011
-* Version:	0.9.5 experimental
+* Version:	0.9.5 experimental version 2
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -20,9 +20,9 @@ Features
 * sound
 * colors
 * names
-* choose own key to answer
+* choose own key to answer (Press key on game field to check functionality)
 * right click context menu including
-	* random generator to pick random user
+	* random generator to pick random user (Press "r" on game field for same functionality)
 	* load/save game state
 	* player name and points editor
 	* early round ending option
@@ -53,8 +53,8 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.5e
-	tar xfv v0.9.5e
+	wget https://github.com/chlange/jeopardy/tarball/v0.9.5e2
+	tar xfv v0.9.5e2
 	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy

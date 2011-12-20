@@ -31,12 +31,11 @@
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Jeopardy)
+    ui(new Ui::Jeopardy), sound(false), gameField(NULL)
 {
     ui->setupUi(this);
 
     this->players = new Player[NUMBER_MAX_PLAYERS];
-    this->gameField = NULL;
 }
 
 Jeopardy::~Jeopardy()
@@ -117,7 +116,7 @@ void Jeopardy::setSound()
     if(msgBox.exec() == QMessageBox::Yes)
         this->sound = true;
     else
-        this->sound = false;;
+        this->sound = false;
 }
 
 bool Jeopardy::setPlayerNr()
@@ -140,34 +139,18 @@ bool Jeopardy::setCategoryNr()
 
 bool Jeopardy::initPlayers()
 {
+    bool ok;
+    bool complete = true;
     QString playerName;
     QString text;
     QString key;
     QString color;
-    QStringList keyListOrg;
     QStringList keyList;
     QStringList colorList;
-    int keys[36];
 
     colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
-
-    /* TODO
-     * Key list with saved int values - enum is not the right option cause you need the string for the key, too,
-     * to display them in the combobox and remove them if one player already chose the key.
-     */
-    keyList << "a" << "b" << "c" << "d"  << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
-            << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
-             << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
-    keyListOrg = keyList;
-
-    /* Key to appropriate int value */
-    for(int i = 0; i < 26; i++)
-        keys[i] = 0x41 + i;
-    for(int i = 26; i < 36; i++)
-        keys[i] = 0x30 + (i - 26);
-
-    bool ok;
-    bool complete = true;
+    keyList << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K" << "L" << "M"
+            << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "X" << "Y" << "Z";
 
     for(int i = 0; i < this->playerNr; i++)
     {
@@ -187,7 +170,7 @@ bool Jeopardy::initPlayers()
                 complete = false;
                 break;
             }
-            this->players[i].setKey(keys[keyListOrg.indexOf(key)]);
+            this->players[i].setKey(key.at(0).toAscii());
             keyList.removeOne(key);
 
             color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
