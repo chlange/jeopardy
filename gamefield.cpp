@@ -139,8 +139,8 @@ void GameField::insertLayouts()
     this->buttonGrid->setGeometry(QRect(0, CATEGORY_LABEL_HEIGHT, GAMEFIELD_WIDTH, GAMEFIELD_HEIGHT - CATEGORY_LABEL_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT));
     this->playerLabelGrid->setGeometry(QRect(0, GAMEFIELD_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT, GAMEFIELD_WIDTH, NAME_LABEL_HEIGHT + NAME_LABEL_HEIGHT));
 
+    this->window->installEventFilter(this);
     this->window->setLayout(this->mainGrid);
-    this->window->setFocusPolicy(Qt::StrongFocus);
 }
 
 void GameField::assignCategoryLabels()
@@ -164,7 +164,10 @@ void GameField::assignCategoryLabels()
 void GameField::assignButtons()
 {
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
         this->buttons[i] = new QPushButton();
+        this->buttons[i]->installEventFilter(this);
+    }
 
     for(int j = 0; j < this->categoryNr; j++)
     {
@@ -660,8 +663,8 @@ void GameField::random()
         text = QString("%1's turn").arg(this->players[rn].getName());
 
     msgbox->setText(text);
-
     msgbox->exec();
+    msgbox->setFocus();
 
     delete msgbox;
 }
@@ -732,25 +735,26 @@ void GameField::showPodium()
     this->podium->exec();
 }
 
-/* TODO: function should work... */
-void GameField::keyPressEvent(QKeyEvent *event)
+bool GameField::eventFilter(QObject *target, QEvent *event)
 {
-    qDebug() << "Key: " << event->key();
-
-    if(event->key() == Qt::Key_R)
-        this->random();
-    else
+    if(target == this->window && event->type() == QEvent::KeyPress)
     {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+        if(keyEvent->key() == Qt::Key_R)
+            this->random();
+
         for(int i = 0; i < this->playerNr; i++)
         {
-            if(this->players[i].getKey() == event->key())
+            if(this->players[i].getKey() == keyEvent->key())
             {
-                this->playerNameLabels[i]->setStyleSheet("QLabel { background-color: black; }");
-                this->playerNameLabels[i]->setStyleSheet(QString("QLabel { background-color : %1; }").arg(this->players[i].getColor()));
+                this->playerNameLabels[i]->setText(QString("%1 - Key pressed").arg(this->players[i].getName()));
+                QTimer::singleShot(500, this, SLOT(updateNamesLabels()));
             }
         }
     }
 
+    return QDialog::eventFilter(target, event);
 }
 
 /* 100 points buttons */
