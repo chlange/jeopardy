@@ -188,6 +188,7 @@ void Answer::processSound(QString *answer)
     this->sound = true;
     this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource(*answer));
     this->music->play();
+    QTimer::singleShot(30000, this->music, SLOT(stop()));
 }
 
 void Answer::processVideo(QString *answer)
@@ -196,6 +197,7 @@ void Answer::processVideo(QString *answer)
 
     ui->videoPlayer->setVisible(true);
     ui->videoPlayer->play(*answer);
+    QTimer::singleShot(30000, ui->videoPlayer, SLOT(stop()));
 }
 
 void Answer::processText(QString *answer)

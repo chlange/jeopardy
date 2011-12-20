@@ -34,6 +34,7 @@
 #include <QFile>
 #include <QDir>
 #include <QPixmap>
+#include <QTimer>
 #include <QGraphicsScene>
 #include <phonon/mediaobject.h>
 #include <doublejeopardy.h>
