@@ -2,7 +2,7 @@ Jeopardy
 ========
 
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		19. Dezember 2011
+* Date:		20. Dezember 2011
 * Version:	0.9.5 experimental version 2
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
@@ -33,13 +33,13 @@ Features
 * formatted text, sound, images and videos as answer 
 	* see answers/1.jrf or wiki for further instructions
 	* images and videos will be resized if too big
+	* sound and videos will stop after 30 seconds (normal answer time)
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
 
 Todo
 ----
 
-* stop video after 30 seconds
 * smoother design
 * ...little here and there
 

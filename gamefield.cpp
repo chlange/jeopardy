@@ -741,15 +741,17 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
+        /* Open random user picker if "r" gets pressed */
         if(keyEvent->key() == Qt::Key_R)
             this->random();
 
         for(int i = 0; i < this->playerNr; i++)
         {
+            /* Indicate key press of player over label */
             if(this->players[i].getKey() == keyEvent->key())
             {
                 this->playerNameLabels[i]->setText(QString("%1 - Key pressed").arg(this->players[i].getName()));
-                QTimer::singleShot(500, this, SLOT(updateNamesLabels()));
+                QTimer::singleShot(250, this, SLOT(updateNamesLabels()));
             }
         }
     }
