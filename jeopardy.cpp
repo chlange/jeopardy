@@ -139,14 +139,9 @@ bool Jeopardy::setCategoryNr()
 
 bool Jeopardy::initPlayers()
 {
-    bool ok;
-    bool complete = true;
-    QString playerName;
-    QString text;
-    QString key;
-    QString color;
-    QStringList keyList;
-    QStringList colorList;
+    bool ok, complete;
+    QString playerName, text, key, color;
+    QStringList keyList, colorList;
 
     colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
     keyList << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K" << "L" << "M"
@@ -154,40 +149,43 @@ bool Jeopardy::initPlayers()
 
     for(int i = 0; i < this->playerNr; i++)
     {
+        complete = false;
         playerName = QString("Player %1").arg(i+1);
 
-        text = QInputDialog::getText(this, "Enter name", playerName, QLineEdit::Normal,"", &ok);
-
-        /* Check if name is valid */
-        if(ok && !text.isEmpty())
+        for(;;)
         {
-            this->players[i].setName(text);
-            this->players[i].setId(i+1);
+            text = QInputDialog::getText(this, "Enter name", playerName, QLineEdit::Normal,"", &ok);
 
-            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
-            if(!ok)
-            {
-                complete = false;
+            if(text.length() < 10)
                 break;
-            }
-            this->players[i].setKey(key.at(0).toAscii());
-            keyList.removeOne(key);
 
-            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
-            if(!ok)
-            {
-                complete = false;
-                break;
-            }
-            this->players[i].setColor(color);
-            colorList.removeOne(color);
-            this->players[i].setPoints(0);
+            QMessageBox msgBox;
+            msgBox.setText("Choose a name shorter than 11 letters");
+            msgBox.exec();
         }
-        else
-        {
-            complete = false;
+
+        if(!ok || text.isEmpty())
             break;
-        }
+
+        this->players[i].setName(text);
+        this->players[i].setId(i+1);
+
+        key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[i].setKey(key.at(0).toAscii());
+        keyList.removeOne(key);
+
+        color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[i].setColor(color);
+        colorList.removeOne(color);
+        this->players[i].setPoints(0);
+
+        complete = true;
     }
     return complete;
 }

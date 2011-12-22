@@ -447,6 +447,7 @@ void GameField::processAnswer(int category, int points)
         button->setText("");
 
     delete this->answer;
+
 }
 
 void GameField::processResult()
