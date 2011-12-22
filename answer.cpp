@@ -63,8 +63,6 @@ Answer::~Answer()
 
     if(this->dj != NULL)
         delete this->dj;
-
-    ui->videoPlayer->stop();
 }
 
 int Answer::getWinner()

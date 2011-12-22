@@ -164,31 +164,28 @@ bool Jeopardy::initPlayers()
             msgBox.exec();
         }
 
-        /* Check if name is valid */
-        if(ok && !text.isEmpty())
-        {
-            this->players[i].setName(text);
-            this->players[i].setId(i+1);
-
-            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
-            if(!ok)
-                break;
-
-            this->players[i].setKey(key.at(0).toAscii());
-            keyList.removeOne(key);
-
-            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
-            if(!ok)
-                break;
-
-            this->players[i].setColor(color);
-            colorList.removeOne(color);
-            this->players[i].setPoints(0);
-
-            complete = true;
-        }
-        else
+        if(!ok || text.isEmpty())
             break;
+
+        this->players[i].setName(text);
+        this->players[i].setId(i+1);
+
+        key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[i].setKey(key.at(0).toAscii());
+        keyList.removeOne(key);
+
+        color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[i].setColor(color);
+        colorList.removeOne(color);
+        this->players[i].setPoints(0);
+
+        complete = true;
     }
     return complete;
 }
