@@ -391,8 +391,8 @@ void GameField::updatePointsLabels()
 
 void GameField::updateNamesLabels()
 {
-    for(int i = 0; i < this->playerNr; i++)
-        this->playerNameLabels[i]->setText(this->players[i].getName());
+    this->setNames();
+    this->setLabelColor();
 }
 
 void GameField::updateLabelsAfterAnswer()
@@ -542,7 +542,7 @@ void GameField::openFileLoader()
         lineNr++;
     }
 
-      /* Color buttons with player color */
+    /* Color buttons with player color */
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
         if(line == "r")
@@ -761,6 +761,7 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
             if(this->players[i].getKey() == keyEvent->key())
             {
                 this->playerNameLabels[i]->setText(QString("%1 - Key pressed").arg(this->players[i].getName()));
+                this->playerNameLabels[i]->setStyleSheet(QString("background-color: black;"));
                 QTimer::singleShot(250, this, SLOT(updateNamesLabels()));
             }
         }
