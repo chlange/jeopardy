@@ -29,13 +29,13 @@
 #include "player.h"
 
 Player::Player() :
-        name(), points(0), id(0), key(-1)
+        name(), points(0), id(0), key(0)
 {
 
 }
 
 Player::Player(QString name, int id) :
-        name(name), points(0), id(id), key(-1)
+        name(name), points(0), id(id), key(0)
 {
 
 }

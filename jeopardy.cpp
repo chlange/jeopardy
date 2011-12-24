@@ -31,17 +31,13 @@
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Jeopardy), sound(false), gameField(NULL)
+    sound(false), gameField(NULL)
 {
-    ui->setupUi(this);
-
     this->players = new Player[NUMBER_MAX_PLAYERS];
 }
 
 Jeopardy::~Jeopardy()
 {
-    delete ui;
-
     if(this->players != NULL)
         delete [] this->players;
 
@@ -57,17 +53,47 @@ void Jeopardy::changeEvent(QEvent *e)
     QMainWindow::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
         break;
     default:
         break;
     }
 }
 
-void Jeopardy::initGameField(int round)
+void Jeopardy::init()
+{
+    this->initMenu();
+}
+
+void Jeopardy::initMenu()
+{
+    this->window = new QWidget();
+    this->grid = new QGridLayout();
+
+    for(int i = 0; i < NUMBER_ROUNDS; i++)
+        this->prepareButton(i);
+
+    this->window->setLayout(this->grid);
+    this->window->show();
+}
+
+void Jeopardy::prepareButton(int i)
+{
+    this->buttons[i] = new QPushButton();
+    this->buttons[i]->setText(QString("Round %1").arg(i + 1));
+    this->buttons[i]->setFont(QFont("Helvetica [Cronyx]", 13, QFont::Bold, false));
+    this->buttons[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->grid->addWidget(this->buttons[i], 0, i, 0);
+    this->grid->setSpacing(0);
+    this->grid->setMargin(0);
+    connect(this->buttons[i], SIGNAL(clicked()), this->buttons[i], SLOT(hide()));
+    connect(this->buttons[i], SIGNAL(clicked()), this, SLOT(initGameField()));
+}
+
+void Jeopardy::initGameField()
 {
     bool complete;
 
+    this->round = this->getRound();
     this->setSound();
 
     if(this->sound)
@@ -102,7 +128,20 @@ void Jeopardy::initGameField(int round)
 
     this->deleteSound();
 
-    this->startRound(round);
+    this->startRound(this->round);
+}
+
+int Jeopardy::getRound()
+{
+   for(int i = 0; i < NUMBER_ROUNDS; i++)
+       if(this->buttons[i]->isHidden())
+       {
+            this->round = i + 1;
+            this->buttons[i]->setStyleSheet(QString("background-color: lightGray;"));
+            this->buttons[i]->setHidden(false);
+       }
+
+   return this->round;
 }
 
 void Jeopardy::setSound()
@@ -132,7 +171,7 @@ bool Jeopardy::setCategoryNr()
 {
     bool ok;
 
-    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, 6, 1, &ok);
+    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, NUMBER_MAX_CATEGORIES, 1, &ok);
 
     return ok;
 }
@@ -203,24 +242,4 @@ void Jeopardy::deleteSound()
         this->music->stop();
         delete this->music;
     }
-}
-
-void Jeopardy::on_buttonRound1_clicked()
-{
-    initGameField(1);
-}
-
-void Jeopardy::on_buttonRound2_clicked()
-{
-    initGameField(2);
-}
-
-void Jeopardy::on_buttonRound3_clicked()
-{
-    initGameField(3);
-}
-
-void Jeopardy::on_buttonRound4_clicked()
-{
-    initGameField(4);
 }

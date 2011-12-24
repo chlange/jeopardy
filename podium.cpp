@@ -27,86 +27,119 @@
  */
 
 #include "podium.h"
-#include "ui_podium.h"
 
 Podium::Podium(QWidget *parent, Player *players, int playerNr) :
-    QDialog(parent), ui(new Ui::Podium), playerNr(playerNr)
+    QDialog(parent), playerNr(playerNr)
 {
-    ui->setupUi(this);
-
     this->players = players;
-    this->showPodium();
 }
 
 Podium::~Podium()
 {
-    delete ui;
+    delete this->first;
+    delete this->second;
+    delete this->third;
+    delete this->firstGrid;
+    delete this->secondThirdGrid;
+    delete this->window;
 }
 
-void Podium::changeEvent(QEvent *e)
+void Podium::init()
 {
-    QDialog::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
+    this->window = new QWidget();
+    this->mainGrid = new QGridLayout;
+    this->firstGrid = new QGridLayout();
+    this->secondThirdGrid = new QGridLayout();
+    this->first = new QLabel();
+    this->second = new QLabel();
+    this->third = new QLabel();
+
+    this->initLabels();
+
+    this->firstGrid->addWidget(this->first);
+    this->mainGrid->addLayout(this->firstGrid, 0, 0, 0);
+    this->mainGrid->addLayout(this->secondThirdGrid, 1, 0, 0);
+    this->window->setLayout(this->mainGrid);
+    this->window->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void Podium::initLabels()
+{
+    this->first->setAlignment(Qt::AlignCenter);
+    this->first->setFont(QFont("Helvetica [Cronyx]", 22, QFont::Bold, false));
+    this->first->setMinimumSize(650, 200);
+    this->first->setMaximumSize(650, 200);
+    this->first->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    this->second->setAlignment(Qt::AlignCenter);
+    this->second->setFont(QFont("Helvetica [Cronyx]", 17, -1, false));
+    this->second->setMinimumSize(500, 150);
+    this->second->setMaximumSize(500, 150);
+    this->second->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    this->third->setAlignment(Qt::AlignCenter);
+    this->third->setFont(QFont("Helvetica [Cronyx]", 12, -1, false));
+    this->third->setMinimumSize(500, 150);
+    this->third->setMaximumSize(500, 150);
+    this->third->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void Podium::showPodium()
 {
+    this->init();
     this->sort();
 
-    ui->first->setStyleSheet(this->getLabelColorString(0));
+    this->first->setStyleSheet(this->getLabelColorString(0));
     if(this->playerNr == 1)
-        ui->first->setText(QString("Guess who won... :)"));
+        this->first->setText(QString("Guess who won... :)"));
     else
-        ui->first->setText(QString("** %1 **<br>%2").arg(this->players[0].getName()).arg(this->players[0].getPoints()));
+        this->first->setText(QString("** %1 **<br>%2").arg(this->players[0].getName()).arg(this->players[0].getPoints()));
 
     if(this->playerNr > 1)
     {
-        ui->second->setStyleSheet(this->getLabelColorString(1));
-        ui->second->setText(QString("2. %1<br>%2").arg(this->players[1].getName()).arg(this->players[1].getPoints()));
+        this->second->setStyleSheet(this->getLabelColorString(1));
+        this->second->setText(QString("2. %1<br>%2").arg(this->players[1].getName()).arg(this->players[1].getPoints()));
+        this->secondThirdGrid->addWidget(this->second, 1, 0, 0);
     }
     else
-        ui->second->setVisible(false);
+        this->second->setVisible(false);
 
     if(this->playerNr > 2)
     {
-        ui->third->setStyleSheet(this->getLabelColorString(2));
-        ui->third->setText(QString("3. %1<br>%2").arg(this->players[2].getName()).arg(this->players[2].getPoints()));
+        this->third->setStyleSheet(this->getLabelColorString(2));
+        this->third->setText(QString("3. %1<br>%2").arg(this->players[2].getName()).arg(this->players[2].getPoints()));
+        this->secondThirdGrid->addWidget(this->third, 1, 1, 0);
     }
     else
     {
-        ui->second->setGeometry(40, 220, 662, 171);
-        ui->third->setVisible(false);
+        this->second->setGeometry(40, 220, 662, 171);
+        this->third->setVisible(false);
     }
+
+    this->window->show();
 }
 
 void Podium::sort()
 {
     for(int i = 0; i < this->playerNr; i++)
-    {
         for(int j = 0; j < this->playerNr - 1; j++)
-        {
             if(this->players[j].getPoints() < this->players[j+1].getPoints())
-            {
-                QString nameTmp = this->players[j].getName();
-                QString colorTmp = this->players[j].getColor();
-                int pointsTmp = this->players[j].getPoints();
+                this->swap(j, j + 1);
+}
 
-                this->players[j].setName(this->players[j+1].getName());
-                this->players[j].setColor(this->players[j+1].getColor());
-                this->players[j].setPoints(this->players[j+1].getPoints());
+void Podium::swap(int a, int b)
+{
+    QString nameTmp = this->players[a].getName();
+    QString colorTmp = this->players[a].getColor();
+    int pointsTmp = this->players[a].getPoints();
 
-                this->players[j+1].setName(nameTmp);
-                this->players[j+1].setColor(colorTmp);
-                this->players[j+1].setPoints(pointsTmp);
-            }
-        }
-    }
+    this->players[a].setName(this->players[b].getName());
+    this->players[a].setColor(this->players[b].getColor());
+    this->players[a].setPoints(this->players[b].getPoints());
+
+    this->players[b].setName(nameTmp);
+    this->players[b].setColor(colorTmp);
+    this->players[b].setPoints(pointsTmp);
 }
 
 QString Podium::getLabelColorString(int player)
