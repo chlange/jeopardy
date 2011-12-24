@@ -30,6 +30,7 @@
 #define GAMEFIELD_H
 
 #include <stdlib.h>
+#include <QDir>
 #include <QMenu>
 #include <QAction>
 #include <QLabel>
