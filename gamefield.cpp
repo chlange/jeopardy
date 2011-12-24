@@ -310,8 +310,13 @@ void GameField::setCategoryNames()
     int categoryLine;
     QFont font;
     QString categoryName;
+    QDir dir;
 
     this->fileString = QString("answers/%1.jrf").arg(this->round);
+    qDebug() << this->fileString;
+    this->fileString = dir.absoluteFilePath(this->fileString);
+    qDebug() << this->fileString;
+
     QFile file(this->fileString);
     font.setBold(true);
 
@@ -320,6 +325,7 @@ void GameField::setCategoryNames()
         QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
         this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+        this->fileString = dir.absoluteFilePath(this->fileString);
     }
 
     for(int i = 0; i < this->categoryNr; i++)
@@ -474,10 +480,13 @@ void GameField::processResult()
 void GameField::openFileLoader()
 {
     int lineNr = 0;
+    QDir dir;
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
     if(fileName == "")
         return;
+
+    fileName = dir.absoluteFilePath(fileName);
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
@@ -548,8 +557,6 @@ void GameField::openFileLoader()
             line = "gray";
         else if(line == "m")
             line = "magenta";
-        else if(line == "l")
-            line = "lightGray";
         else if(line == "c")
             line = "cyan";
         else if(line == "d")
@@ -574,18 +581,19 @@ void GameField::openFileLoader()
 
 void GameField::openFileSaver(bool backup)
 {
+    QDir dir;
     QString fileName;
     QDateTime dateTime;
 
     if(backup == true)
-    {
         fileName = QString("gameStates/backups/backup_%1_%2").arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
-    }
     else
         fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
 
     if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");
+
+    fileName = dir.absoluteFilePath(fileName);
 
     if (fileName != "")
     {
@@ -626,6 +634,7 @@ void GameField::openFileSaver(bool backup)
                 stylesheet = "dM";
             else
             {
+                /* chop string expect for first character */
                 int len = stylesheet.length();
                 stylesheet.chop(--len);
             }
