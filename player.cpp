@@ -29,13 +29,13 @@
 #include "player.h"
 
 Player::Player() :
-        name(), points(0), id(0), key(0)
+        name(), points(0), id(0), key(0), pressed(0)
 {
 
 }
 
 Player::Player(QString name, int id) :
-        name(name), points(0), id(id), key(0)
+        name(name), points(0), id(id), key(0), pressed(0)
 {
 
 }
@@ -98,4 +98,19 @@ int Player::getKey()
 void Player::setKey(int key)
 {
     this->key = key;
+}
+
+void Player::setPressed(int i)
+{
+    this->pressed = i;
+}
+
+void Player::incPressed()
+{
+    this->pressed++;
+}
+
+int Player::getPressed()
+{
+    return this->pressed;
 }

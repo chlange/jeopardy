@@ -97,6 +97,8 @@ void DoubleJeopardy::setLabels()
 
     QStringList playerList;
 
+    playerList << "Choose player";
+
     for(int i = 0; i < this->playerNr; i++)
         playerList << this->players[i].getName();
     this->playerComboBox->addItems(playerList);
@@ -126,10 +128,14 @@ int DoubleJeopardy::getPlayer()
 
 void DoubleJeopardy::on_button_clicked()
 {
-    if(this->min <= this->pointsSpinBox->value() && this->pointsSpinBox->value() <= this->max)
+    if(this->playerComboBox->currentIndex() == 0)
+    {
+         QMessageBox::critical(this, tr("Error"), tr("Choose player"));
+    }
+    else if(this->min <= this->pointsSpinBox->value() && this->pointsSpinBox->value() <= this->max)
     {
         this->points = this->pointsSpinBox->value();
-        this->index = this->playerComboBox->currentIndex();
+        this->index = this->playerComboBox->currentIndex() - 1;
         this->window->done(0);
     }
     else

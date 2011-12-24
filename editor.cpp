@@ -107,11 +107,8 @@ void Editor::assignPlayerPointsLines()
 void Editor::assignSaveButton()
 {
     this->saveButton = new QPushButton();
-
     this->saveButton->setText("Save");
-
     this->saveGrid->addWidget(this->saveButton, 0, 0);
-
     QObject::connect(this->saveButton, SIGNAL(clicked()), this, SLOT(end()));
 }
 
@@ -120,7 +117,6 @@ void Editor::showValues()
     for(int i = 0; i < this->playerNr; i++)
     {
         this->playerNamesLines[i]->setText(this->players[i].getName());
-
         this->playerPointsLines[i]->setValue(this->players[i].getPoints());
     }
 }
