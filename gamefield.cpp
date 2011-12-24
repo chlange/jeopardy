@@ -409,7 +409,7 @@ void GameField::updateAfterAnswer()
 
 QString GameField::getButtonColorByLastWinner()
 {
-    return QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
+    return QString("QPushButton { background-color : %1; color : black; }").arg(this->players[this->lastWinner].getColor());
 }
 
 void GameField::openAnswer(int category, int points)
