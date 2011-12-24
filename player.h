@@ -45,6 +45,7 @@ class Player
         int points;
         int id;
         int key;
+        int pressed;
 
     public:
         Player();
@@ -66,6 +67,10 @@ class Player
 
         int getKey();
         void setKey(int key);
+
+        void setPressed(int i);
+        void incPressed();
+        int getPressed();
 };
 
 #endif // PLAYER_H

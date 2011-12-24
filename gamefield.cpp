@@ -359,7 +359,7 @@ void GameField::setLabelColor()
 
     for(int i = 0; i < this->playerNr; i++)
     {
-        color = QString("QLabel { background-color : %1; }").arg(this->players[i].getColor());
+        color = QString("QLabel { background-color : %1; color: black;}").arg(this->players[i].getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
     }
 }
@@ -760,9 +760,16 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
             /* Indicate key press of player over label */
             if(this->players[i].getKey() == keyEvent->key())
             {
-                this->playerNameLabels[i]->setText(QString("%1 - Key pressed").arg(this->players[i].getName()));
-                this->playerNameLabels[i]->setStyleSheet(QString("background-color: black;"));
-                QTimer::singleShot(250, this, SLOT(updateNamesLabels()));
+                this->playerNameLabels[i]->setStyleSheet(QString("background-color: black; color: white;"));
+                this->playerNameLabels[i]->setText(QString("%1 - it works").arg(this->players[i].getName()));
+
+                if(this->players[i].getPressed() > 10)
+                    QMessageBox::critical(this, tr("Error"),
+                                         QString("%1 - STOP IT! You raped your key %2 times!").arg(this->players[i].getName()).arg(this->players[i].getPressed()));
+
+                this->players[i].incPressed();
+
+                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
             }
         }
     }
