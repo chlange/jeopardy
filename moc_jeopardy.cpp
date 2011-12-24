@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'jeopardy.h'
 **
-** Created: Tue Dec 20 21:12:57 2011
+** Created: Sat Dec 24 13:47:00 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_Jeopardy[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,19 +35,12 @@ static const uint qt_meta_data_Jeopardy[] = {
 
  // slots: signature, parameters, type, tag, flags
       28,    9,    9,    9, 0x08,
-      54,    9,    9,    9, 0x08,
-      80,    9,    9,    9, 0x08,
-     106,    9,    9,    9, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Jeopardy[] = {
-    "Jeopardy\0\0deleteGameField()\0"
-    "on_buttonRound1_clicked()\0"
-    "on_buttonRound2_clicked()\0"
-    "on_buttonRound3_clicked()\0"
-    "on_buttonRound4_clicked()\0"
+    "Jeopardy\0\0deleteGameField()\0initGameField()\0"
 };
 
 const QMetaObject Jeopardy::staticMetaObject = {
@@ -80,13 +73,10 @@ int Jeopardy::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: deleteGameField(); break;
-        case 1: on_buttonRound1_clicked(); break;
-        case 2: on_buttonRound2_clicked(); break;
-        case 3: on_buttonRound3_clicked(); break;
-        case 4: on_buttonRound4_clicked(); break;
+        case 1: initGameField(); break;
         default: ;
         }
-        _id -= 5;
+        _id -= 2;
     }
     return _id;
 }

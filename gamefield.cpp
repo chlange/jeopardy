@@ -733,7 +733,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
 void GameField::showPodium()
 {
     this->podium = new Podium(this, this->players, this->playerNr);
-    this->podium->exec();
+    this->podium->showPodium();
 }
 
 bool GameField::eventFilter(QObject *target, QEvent *event)

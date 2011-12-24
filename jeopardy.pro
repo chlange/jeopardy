@@ -22,6 +22,4 @@ HEADERS += jeopardy.h \
     editor.h \
     podium.h \
     doublejeopardy.h
-FORMS += jeopardy.ui \
-    answer.ui \
-    podium.ui
+FORMS += answer.ui

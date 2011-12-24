@@ -41,24 +41,26 @@ class Podium : public QDialog {
 public:
     Podium(QWidget *parent = NULL, Player *players = NULL, int playerNr = NULL);
     ~Podium();
-
-protected:
-    void changeEvent(QEvent *e);
+    void showPodium();
 
 private:
     Ui::Podium *ui;
     int playerNr;
-    int order[3];
     Player *players;
-    Player *sortedPlayers;
     QWidget *window;
-    QGridLayout *mainGrid;
-    QLabel **podiumPlaceLabels;
+    QGridLayout * mainGrid;
+    QGridLayout *firstGrid;
+    QGridLayout *secondThirdGrid;
+    QLabel *first;
+    QLabel *second;
+    QLabel *third;
 
     void assignLabels();
 
-    void showPodium();
+    void init();
+    void initLabels();
     void sort();
+    void swap(int a, int b);
     void setOrder(int first, int second, int third);
 
     QString getLabelColorString(int player);

@@ -38,7 +38,9 @@
 #include <gamefield.h>
 #include <player.h>
 
+#define NUMBER_ROUNDS 4
 #define NUMBER_MAX_PLAYERS 9
+#define NUMBER_MAX_CATEGORIES 6
 #define NOT false
 
 namespace Ui {
@@ -50,24 +52,29 @@ class Jeopardy : public QMainWindow {
 public:
     Jeopardy(QWidget *parent = NULL);
     ~Jeopardy();
+    void init();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::Jeopardy *ui;
     int lastKey;
     int playerNr;
     int categoryNr;
+    int round;
     bool sound;
     bool defaultSetttings;
+    QWidget *window;
+    QGridLayout *grid;
+    QPushButton *buttons[NUMBER_ROUNDS];
     Player *players;
     Phonon::MediaObject *music;
     GameField *gameField;
 
-    bool setDefault();
-    void initGameField(int round);
+    void initMenu();
+    void prepareButton(int i);
     void setSound();
+    int getRound();
     bool setCategoryNr();
     bool setPlayerNr();
     bool initPlayers();
@@ -76,13 +83,10 @@ private:
     void deleteSound();
 
 private slots:
-    void on_buttonRound1_clicked();
-    void on_buttonRound2_clicked();
-    void on_buttonRound3_clicked();
-    void on_buttonRound4_clicked();
+    void initGameField();
 
 signals:
-        void deleteGameField();
+    void deleteGameField();
 };
 
 #endif // JEOPARDY_H

@@ -201,7 +201,7 @@ void Answer::processVideo(QString *answer)
 void Answer::processText(QString *answer)
 {
     int count = answer->count("<br>");
-    ui->answer->setFont(this->meassureFontSize(count));
+    ui->answer->setFont(this->measureFontSize(count));
     ui->answer->setText(*answer);
 }
 
@@ -276,7 +276,7 @@ void Answer::hideButtons()
     ui->currentPlayer->setVisible(false);
 }
 
-QFont Answer::meassureFontSize(int count)
+QFont Answer::measureFontSize(int count)
 {
     QFont font;
 

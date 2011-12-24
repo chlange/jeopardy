@@ -93,7 +93,7 @@ private:
     void hideButtons();
 
     QString getRoundFile();
-    QFont meassureFontSize(int count);
+    QFont measureFontSize(int count);
     int getCategoryLine(int category);
 
     bool getAnswer(int category, int points, QString *answer);
