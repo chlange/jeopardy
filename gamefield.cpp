@@ -538,6 +538,9 @@ void GameField::openFileLoader()
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
         this->buttons[i]->setDisabled(line.toInt());
+        if(line.toInt() == 1)
+            this->buttons[i]->setText("");
+
         line = in.readLine();
         lineNr++;
     }
