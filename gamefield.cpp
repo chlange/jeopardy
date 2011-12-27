@@ -439,6 +439,7 @@ void GameField::openAnswer(int category, int points)
 void GameField::processAnswer(int category, int points)
 {
     QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
+    button->setText("");
     this->lastWinner = this->answer->getWinner();
     this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();
@@ -450,10 +451,9 @@ void GameField::processAnswer(int category, int points)
         button->setText(this->players[this->lastWinner].getName());
     }
     else
-        button->setText("");
+        this->random();
 
     delete this->answer;
-
 }
 
 void GameField::processResult()
@@ -538,8 +538,6 @@ void GameField::openFileLoader()
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
         this->buttons[i]->setDisabled(line.toInt());
-        if(line.toInt() == 1)
-            this->buttons[i]->setText("");
 
         line = in.readLine();
         lineNr++;
@@ -572,6 +570,7 @@ void GameField::openFileLoader()
         line.prepend("QPushButton { background-color : ");
         line.append("; }");
         this->buttons[i]->setStyleSheet(line);
+        this->buttons[i]->setText("");
 
         line = in.readLine();
         lineNr++;
