@@ -86,6 +86,7 @@ void GameField::init()
     connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
 
     this->window->show();
+    this->random();
 }
 
 void GameField::setRound(int round)
@@ -313,9 +314,7 @@ void GameField::setCategoryNames()
     QDir dir;
 
     this->fileString = QString("answers/%1.jrf").arg(this->round);
-    qDebug() << this->fileString;
     this->fileString = dir.absoluteFilePath(this->fileString);
-    qDebug() << this->fileString;
 
     QFile file(this->fileString);
     font.setBold(true);

@@ -36,7 +36,6 @@
 #include <QLabel>
 #include <QFile>
 #include <QColor>
-#include <QDebug>
 #include <QTimer>
 #include <QFileDialog>
 #include <QMessageBox>
