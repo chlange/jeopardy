@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -476,6 +476,7 @@ void GameField::processResult()
     }
 }
 
+/* refactor this! */
 void GameField::openFileLoader()
 {
     int lineNr = 0;
@@ -536,6 +537,9 @@ void GameField::openFileLoader()
     /* Already questioned answers */
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
+        if(line.toInt() == 1)
+            this->buttons[i]->setText("");
+
         this->buttons[i]->setDisabled(line.toInt());
 
         line = in.readLine();
@@ -565,11 +569,18 @@ void GameField::openFileLoader()
             line = "white";
         else if(line == "dM")
             line = "darkMagenta";
+        else
+            line = "";
+
+        if(line != "")
+            for(int j = 0; j < this->playerNr; j++)
+                if(this->players[j].getColor() == line)
+                    this->buttons[i]->setText(this->players[j].getName());
 
         line.prepend("QPushButton { background-color : ");
         line.append("; }");
+
         this->buttons[i]->setStyleSheet(line);
-        this->buttons[i]->setText("");
 
         line = in.readLine();
         lineNr++;
