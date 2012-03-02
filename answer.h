@@ -94,10 +94,10 @@ private:
 
     QString getRoundFile();
     QFont measureFontSize(int count);
-    int getCategoryLine(int category);
 
     bool getAnswer(int category, int points, QString *answer);
     void openDoubleJeopardy();
+    int getCategoryLine(int category);
 
     void processText(QString *answer);
     void processImg(QString *answer);

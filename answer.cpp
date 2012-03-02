@@ -220,6 +220,8 @@ void Answer::keyPressEvent(QKeyEvent *event)
     {
         this->music->stop();
         QTimer::singleShot(100, this->music, SLOT(play()));
+        ui->videoPlayer->stop();
+        QTimer::singleShot(100, ui->videoPlayer, SLOT(play()));
     }
 
     if(this->keyListenerIsLocked() == true)

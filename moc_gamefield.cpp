@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gamefield.h'
 **
-** Created: Thu Jan 12 23:13:41 2012
+** Created: Fri Mar 2 17:44:51 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -32,38 +32,38 @@ static const uint qt_meta_data_GameField[] = {
 
  // slots: signature, parameters, type, tag, flags
       15,   11,   10,   10, 0x08,
-      63,   10,   10,   10, 0x08,
-      72,   10,   10,   10, 0x08,
-      92,   10,   10,   10, 0x08,
-     118,   10,   10,   10, 0x08,
-     144,   10,   10,   10, 0x08,
-     170,   10,   10,   10, 0x08,
-     196,   10,   10,   10, 0x08,
-     222,   10,   10,   10, 0x08,
-     248,   10,   10,   10, 0x08,
-     274,   10,   10,   10, 0x08,
-     300,   10,   10,   10, 0x08,
-     326,   10,   10,   10, 0x08,
-     352,   10,   10,   10, 0x08,
-     378,   10,   10,   10, 0x08,
-     404,   10,   10,   10, 0x08,
-     430,   10,   10,   10, 0x08,
-     456,   10,   10,   10, 0x08,
-     482,   10,   10,   10, 0x08,
-     508,   10,   10,   10, 0x08,
-     534,   10,   10,   10, 0x08,
-     560,   10,   10,   10, 0x08,
-     586,   10,   10,   10, 0x08,
-     612,   10,   10,   10, 0x08,
-     638,   10,   10,   10, 0x08,
-     664,   10,   10,   10, 0x08,
-     690,   10,   10,   10, 0x08,
-     716,   10,   10,   10, 0x08,
-     742,   10,   10,   10, 0x08,
-     768,   10,   10,   10, 0x08,
-     794,   10,   10,   10, 0x08,
-     820,   10,   10,   10, 0x08,
-     846,   10,   10,   10, 0x08,
+      67,   10,   63,   10, 0x08,
+      76,   10,   10,   10, 0x08,
+      96,   10,   10,   10, 0x08,
+     122,   10,   10,   10, 0x08,
+     148,   10,   10,   10, 0x08,
+     174,   10,   10,   10, 0x08,
+     200,   10,   10,   10, 0x08,
+     226,   10,   10,   10, 0x08,
+     252,   10,   10,   10, 0x08,
+     278,   10,   10,   10, 0x08,
+     304,   10,   10,   10, 0x08,
+     330,   10,   10,   10, 0x08,
+     356,   10,   10,   10, 0x08,
+     382,   10,   10,   10, 0x08,
+     408,   10,   10,   10, 0x08,
+     434,   10,   10,   10, 0x08,
+     460,   10,   10,   10, 0x08,
+     486,   10,   10,   10, 0x08,
+     512,   10,   10,   10, 0x08,
+     538,   10,   10,   10, 0x08,
+     564,   10,   10,   10, 0x08,
+     590,   10,   10,   10, 0x08,
+     616,   10,   10,   10, 0x08,
+     642,   10,   10,   10, 0x08,
+     668,   10,   10,   10, 0x08,
+     694,   10,   10,   10, 0x08,
+     720,   10,   10,   10, 0x08,
+     746,   10,   10,   10, 0x08,
+     772,   10,   10,   10, 0x08,
+     798,   10,   10,   10, 0x08,
+     824,   10,   10,   10, 0x08,
+     850,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -71,7 +71,7 @@ static const uint qt_meta_data_GameField[] = {
 static const char qt_meta_stringdata_GameField[] = {
     "GameField\0\0pos\0"
     "on_gameField_customContextMenuRequested(QPoint)\0"
-    "random()\0updateNamesLabels()\0"
+    "int\0random()\0updateNamesLabels()\0"
     "on_button_1_100_clicked()\0"
     "on_button_2_100_clicked()\0"
     "on_button_3_100_clicked()\0"
@@ -134,7 +134,8 @@ int GameField::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: on_gameField_customContextMenuRequested((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 1: random(); break;
+        case 1: { int _r = random();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
         case 2: updateNamesLabels(); break;
         case 3: on_button_1_100_clicked(); break;
         case 4: on_button_2_100_clicked(); break;

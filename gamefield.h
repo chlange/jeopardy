@@ -120,7 +120,7 @@ private:
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
     void assignCategoryLabels();
-    void setCategoryNames();
+    void processCategoryLabels();
     void setLabelColor();
     void setPoints();
     void setNames();
@@ -129,6 +129,7 @@ private:
     void updatePointsLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
+    void updateCurrentPlayerLabel(int currentPlayerId);
 
     QString getButtonColorByLastWinner();
 
@@ -147,7 +148,7 @@ private:
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
-    void random();
+    int random();
     void updateNamesLabels();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();

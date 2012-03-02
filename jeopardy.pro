@@ -5,6 +5,7 @@ QT += xml \
     xmlpatterns \
     multimedia \
     phonon
+CONFIG += qtestlib
 TARGET = jeopardy
 TEMPLATE = app
 SOURCES += main.cpp \

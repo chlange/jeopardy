@@ -66,7 +66,7 @@ void Podium::init()
 void Podium::initLabels()
 {
     this->first->setAlignment(Qt::AlignCenter);
-    this->first->setFont(QFont("Helvetica [Cronyx]", 22, QFont::Bold, false));
+    this->first->setFont(QFont("Helvetica [Cronyx]", 23, QFont::Bold, false));
     this->first->setMinimumSize(650, 200);
     this->first->setMaximumSize(650, 200);
     this->first->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

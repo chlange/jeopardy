@@ -76,7 +76,7 @@ void GameField::init()
     this->assignPlayerNameLabels();
     this->assignPlayerPointsLabels();
     this->assignCategoryLabels();
-    this->setCategoryNames();
+    this->processCategoryLabels();
     this->setNames();
     this->setPoints();
     this->setLabelColor();
@@ -86,7 +86,8 @@ void GameField::init()
     connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
 
     this->window->show();
-    this->random();
+    int currentPlayer = this->random();
+    this->updateCurrentPlayerLabel(currentPlayer);
 }
 
 void GameField::setRound(int round)
@@ -305,8 +306,7 @@ void GameField::assignPlayerPointsLabels()
     }
 }
 
-/* Todo: refactor */
-void GameField::setCategoryNames()
+void GameField::processCategoryLabels()
 {
     int categoryLine;
     QFont font;
@@ -403,7 +403,12 @@ void GameField::updateLabelsAfterAnswer()
 void GameField::updateAfterAnswer()
 {
     this->incAlreadyAnswered(1);
-    this->updateLabelsAfterAnswer();
+    this->updatePointsLabels();
+}
+
+void GameField::updateCurrentPlayerLabel(int currentPlayerId)
+{
+    this->playerNameLabels[currentPlayerId]->setText(QString("%1 *").arg(this->players[currentPlayerId].getName()));
 }
 
 QString GameField::getButtonColorByLastWinner()
@@ -448,9 +453,15 @@ void GameField::processAnswer(int category, int points)
     {
         button->setStyleSheet(this->getButtonColorByLastWinner());
         button->setText(this->players[this->lastWinner].getName());
+        this->updateNamesLabels();
+        this->updateCurrentPlayerLabel(this->lastWinner);
     }
     else
-        this->random();
+    {
+        this->updateNamesLabels();
+        int currentPlayer = this->random();
+        this->updateCurrentPlayerLabel(currentPlayer);
+    }
 
     delete this->answer;
 }
@@ -669,7 +680,7 @@ void GameField::openEditor()
     this->updateGameFieldValues();
 }
 
-void GameField::random()
+int GameField::random()
 {
     srand(time(NULL));
 
@@ -689,6 +700,8 @@ void GameField::random()
     msgbox->setFocus();
 
     delete msgbox;
+
+    return rn;
 }
 
 void GameField::resetRound()
@@ -735,7 +748,11 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     QAction *selectedItem = menu.exec(globalPos);
 
     if(selectedItem == this->randomCtx)
-        this->random();
+    {
+        this->updateNamesLabels();
+        int currentPlayer = this->random();
+        this->updateCurrentPlayerLabel(currentPlayer);
+    }
     else if(selectedItem == this->editorCtx)
         this->openEditor();
     else if(selectedItem == this->saveCtx)
@@ -765,7 +782,11 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
 
         /* Open random user picker if "r" gets pressed */
         if(keyEvent->key() == Qt::Key_R)
-            this->random();
+        {
+            this->updateNamesLabels();
+            int currentPlayer = this->random();
+            this->updateCurrentPlayerLabel(currentPlayer);
+        }
 
         for(int i = 0; i < this->playerNr; i++)
         {
