@@ -143,6 +143,7 @@ private:
     void openEditor();
     void resetRound();
 
+
     bool eventFilter(QObject *target, QEvent *event);
 
 private slots:
@@ -150,6 +151,7 @@ private slots:
     void on_gameField_customContextMenuRequested(QPoint pos);
     int random();
     void updateNamesLabels();
+    void recreatePlayerLabel(int playerId);
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();
     void on_button_3_100_clicked();

@@ -86,8 +86,11 @@ void GameField::init()
     connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
 
     this->window->show();
-    int currentPlayer = this->random();
-    this->updateCurrentPlayerLabel(currentPlayer);
+    if(this->playerNr > 1)
+    {
+        int currentPlayer = this->random();
+        this->updateCurrentPlayerLabel(currentPlayer);
+    }
 }
 
 void GameField::setRound(int round)
@@ -459,8 +462,11 @@ void GameField::processAnswer(int category, int points)
     else
     {
         this->updateNamesLabels();
-        int currentPlayer = this->random();
-        this->updateCurrentPlayerLabel(currentPlayer);
+        if(this->playerNr > 1)
+        {
+            int currentPlayer = this->random();
+            this->updateCurrentPlayerLabel(currentPlayer);
+        }
     }
 
     delete this->answer;
@@ -802,12 +808,18 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
 
                 this->players[i].incPressed();
 
-                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
+                QTimer::singleShot(200, this, SLOT(recreatePlayerLabel(int)));
             }
         }
     }
 
     return QDialog::eventFilter(target, event);
+}
+
+void GameField::recreatePlayerLabel(int playerId)
+{
+    this->playerNameLabels[playerId]->setText(QString("%1").arg(this->players[playerId].getName()));
+    this->playerNameLabels[playerId]->setStyleSheet(QString("background-color: %1;").arg(this->players[playerId].getColor()));
 }
 
 /* 100 points buttons */
