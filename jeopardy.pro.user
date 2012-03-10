@@ -337,7 +337,7 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TIvresnc5l,guid=74a894684291d81d543cab654f58e457</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-5sdEHW3WAJ,guid=9a3cfe6d0d7153d97406dd8e4f5a5aa1</value>
     <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -345,9 +345,9 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=de	nodeadkeys</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-HX1bFu</value>
-    <value type="QString">GNOME_KEYRING_PID=1646</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-WcTJ2E/S.gpg-agent:1710:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-xLUdE8</value>
+    <value type="QString">GNOME_KEYRING_PID=1455</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-08VMzq/S.gpg-agent:1519:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
@@ -359,21 +359,22 @@
     <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/chlange/Apps/dirkdashing</value>
     <value type="QString">PWD=/home/chlange</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1664,unix/chlange-laptop:/tmp/.ICE-unix/1664</value>
+    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1473,unix/chlange-laptop:/tmp/.ICE-unix/1473</value>
     <value type="QString">SHELL=/bin/zsh</value>
     <value type="QString">SHLVL=0</value>
     <value type="QString">SPEECHD_PORT=7560</value>
-    <value type="QString">SSH_AGENT_PID=1709</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-HX1bFu/ssh</value>
+    <value type="QString">SSH_AGENT_PID=1518</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xLUdE8/ssh</value>
     <value type="QString">USER=chlange</value>
     <value type="QString">USERNAME=chlange</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-xlNp98/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-4I4gKy/database</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331225687.494134-2075096616</value>
+    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331321505.50431-1227371232</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString"></value>
    <value key="abstractProcess.workingDirectory" type="QString">/home/chlange/Desktop/HTWG/Projekte Skripte Hilfen/Cpp/jeopardy/jeopardy</value>
+   <value key="workingDirectory" type="QString">$BUILDDIR</value>
   </valuemap>
  </data>
  <data>
@@ -381,7 +382,7 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TIvresnc5l,guid=74a894684291d81d543cab654f58e457</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-5sdEHW3WAJ,guid=9a3cfe6d0d7153d97406dd8e4f5a5aa1</value>
     <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -389,9 +390,9 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=de	nodeadkeys</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-HX1bFu</value>
-    <value type="QString">GNOME_KEYRING_PID=1646</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-WcTJ2E/S.gpg-agent:1710:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-xLUdE8</value>
+    <value type="QString">GNOME_KEYRING_PID=1455</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-08VMzq/S.gpg-agent:1519:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
@@ -403,18 +404,18 @@
     <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/chlange/Apps/dirkdashing</value>
     <value type="QString">PWD=/home/chlange</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1664,unix/chlange-laptop:/tmp/.ICE-unix/1664</value>
+    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1473,unix/chlange-laptop:/tmp/.ICE-unix/1473</value>
     <value type="QString">SHELL=/bin/zsh</value>
     <value type="QString">SHLVL=0</value>
     <value type="QString">SPEECHD_PORT=7560</value>
-    <value type="QString">SSH_AGENT_PID=1709</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-HX1bFu/ssh</value>
+    <value type="QString">SSH_AGENT_PID=1518</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xLUdE8/ssh</value>
     <value type="QString">USER=chlange</value>
     <value type="QString">USERNAME=chlange</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-xlNp98/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-4I4gKy/database</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331225687.494134-2075096616</value>
+    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331321505.50431-1227371232</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
@@ -430,7 +431,7 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TIvresnc5l,guid=74a894684291d81d543cab654f58e457</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-5sdEHW3WAJ,guid=9a3cfe6d0d7153d97406dd8e4f5a5aa1</value>
     <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -438,9 +439,9 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=de	nodeadkeys</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-HX1bFu</value>
-    <value type="QString">GNOME_KEYRING_PID=1646</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-WcTJ2E/S.gpg-agent:1710:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-xLUdE8</value>
+    <value type="QString">GNOME_KEYRING_PID=1455</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-08VMzq/S.gpg-agent:1519:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
@@ -452,21 +453,22 @@
     <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/chlange/Apps/dirkdashing</value>
     <value type="QString">PWD=/home/chlange</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1664,unix/chlange-laptop:/tmp/.ICE-unix/1664</value>
+    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1473,unix/chlange-laptop:/tmp/.ICE-unix/1473</value>
     <value type="QString">SHELL=/bin/zsh</value>
     <value type="QString">SHLVL=0</value>
     <value type="QString">SPEECHD_PORT=7560</value>
-    <value type="QString">SSH_AGENT_PID=1709</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-HX1bFu/ssh</value>
+    <value type="QString">SSH_AGENT_PID=1518</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xLUdE8/ssh</value>
     <value type="QString">USER=chlange</value>
     <value type="QString">USERNAME=chlange</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-xlNp98/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-4I4gKy/database</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331225687.494134-2075096616</value>
+    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331321505.50431-1227371232</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString"></value>
    <value key="abstractProcess.workingDirectory" type="QString">/home/chlange/Desktop/HTWG/Projekte Skripte Hilfen/Cpp/jeopardy/jeopardy</value>
+   <value key="workingDirectory" type="QString">$BUILDDIR</value>
   </valuemap>
  </data>
  <data>
@@ -474,7 +476,7 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-TIvresnc5l,guid=74a894684291d81d543cab654f58e457</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-5sdEHW3WAJ,guid=9a3cfe6d0d7153d97406dd8e4f5a5aa1</value>
     <value type="QString">DEFAULTS_PATH=/usr/share/gconf/gnome.default.path</value>
     <value type="QString">DESKTOP_SESSION=gnome</value>
     <value type="QString">DISPLAY=:0.0</value>
@@ -482,9 +484,9 @@
     <value type="QString">GDM_KEYBOARD_LAYOUT=de	nodeadkeys</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-HX1bFu</value>
-    <value type="QString">GNOME_KEYRING_PID=1646</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-WcTJ2E/S.gpg-agent:1710:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-xLUdE8</value>
+    <value type="QString">GNOME_KEYRING_PID=1455</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-08VMzq/S.gpg-agent:1519:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
@@ -496,18 +498,18 @@
     <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/chlange/Apps/dirkdashing</value>
     <value type="QString">PWD=/home/chlange</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1664,unix/chlange-laptop:/tmp/.ICE-unix/1664</value>
+    <value type="QString">SESSION_MANAGER=local/chlange-laptop:@/tmp/.ICE-unix/1473,unix/chlange-laptop:/tmp/.ICE-unix/1473</value>
     <value type="QString">SHELL=/bin/zsh</value>
     <value type="QString">SHLVL=0</value>
     <value type="QString">SPEECHD_PORT=7560</value>
-    <value type="QString">SSH_AGENT_PID=1709</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-HX1bFu/ssh</value>
+    <value type="QString">SSH_AGENT_PID=1518</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-xLUdE8/ssh</value>
     <value type="QString">USER=chlange</value>
     <value type="QString">USERNAME=chlange</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-xlNp98/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm/auth-for-chlange-4I4gKy/database</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg/xdg-gnome:/etc/xdg</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331225687.494134-2075096616</value>
+    <value type="QString">XDG_SESSION_COOKIE=a1f3c2b04ab6ba8a7e07b5334c403584-1331321505.50431-1227371232</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
     <value type="QString">/home/chlange/Desktop/HTWG/Projekte Skripte Hilfen/Cpp/jeopardy/jeopardy/jeopardy.pro</value>
@@ -516,7 +518,7 @@
     <value type="QString">-r</value>
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/qmake-qt4</value>
-   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.enabled" type="bool">false</value>
    <value key="abstractProcess.workingDirectory" type="QString">/home/chlange/Desktop/HTWG/Projekte Skripte Hilfen/Cpp/jeopardy/jeopardy</value>
   </valuemap>
  </data>

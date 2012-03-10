@@ -88,8 +88,8 @@ void GameField::init()
     this->window->show();
     if(this->playerNr > 1)
     {
-        int currentPlayer = this->random();
-        this->updateCurrentPlayerLabel(currentPlayer);
+        this->currentPlayer = this->random();
+        this->updateCurrentPlayerLabel();
     }
 }
 
@@ -375,7 +375,12 @@ void GameField::setPoints()
 void GameField::setNames()
 {
     for(int i = 0; i < this->playerNr; i++)
-        this->playerNameLabels[i]->setText(this->players[i].getName());
+    {
+        if(this->currentPlayer == i)
+            this->playerNameLabels[i]->setText(QString("%1 *").arg(this->players[i].getName()));
+        else
+            this->playerNameLabels[i]->setText(this->players[i].getName());
+    }
 }
 
 void GameField::updateGameFieldValues()
@@ -409,9 +414,13 @@ void GameField::updateAfterAnswer()
     this->updatePointsLabels();
 }
 
-void GameField::updateCurrentPlayerLabel(int currentPlayerId)
+void GameField::updateCurrentPlayerLabel()
 {
-    this->playerNameLabels[currentPlayerId]->setText(QString("%1 *").arg(this->players[currentPlayerId].getName()));
+    if(this->currentPlayer == -1)
+        return;
+
+    this->updateNamesLabels();
+    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 *").arg(this->players[this->currentPlayer].getName()));
 }
 
 QString GameField::getButtonColorByLastWinner()
@@ -447,7 +456,7 @@ void GameField::processAnswer(int category, int points)
 {
     QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
     button->setText("");
-    this->lastWinner = this->answer->getWinner();
+    this->currentPlayer = this->lastWinner = this->answer->getWinner();
     this->lastPoints = this->answer->getPoints();
     this->result = answer->getResult();
 
@@ -457,15 +466,15 @@ void GameField::processAnswer(int category, int points)
         button->setStyleSheet(this->getButtonColorByLastWinner());
         button->setText(this->players[this->lastWinner].getName());
         this->updateNamesLabels();
-        this->updateCurrentPlayerLabel(this->lastWinner);
+        this->updateCurrentPlayerLabel();
     }
     else
     {
         this->updateNamesLabels();
         if(this->playerNr > 1)
         {
-            int currentPlayer = this->random();
-            this->updateCurrentPlayerLabel(currentPlayer);
+            this->currentPlayer = this->random();
+            this->updateCurrentPlayerLabel();
         }
     }
 
@@ -474,7 +483,7 @@ void GameField::processAnswer(int category, int points)
 
 void GameField::processResult()
 {
-    int playerId;
+    int playerId = 0;
 
     while(this->result.length() > 0)
     {
@@ -756,8 +765,8 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     if(selectedItem == this->randomCtx)
     {
         this->updateNamesLabels();
-        int currentPlayer = this->random();
-        this->updateCurrentPlayerLabel(currentPlayer);
+        this->currentPlayer = this->random();
+        this->updateCurrentPlayerLabel();
     }
     else if(selectedItem == this->editorCtx)
         this->openEditor();
@@ -790,8 +799,8 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
         if(keyEvent->key() == Qt::Key_R)
         {
             this->updateNamesLabels();
-            int currentPlayer = this->random();
-            this->updateCurrentPlayerLabel(currentPlayer);
+            this->currentPlayer = this->random();
+            this->updateCurrentPlayerLabel();
         }
 
         for(int i = 0; i < this->playerNr; i++)
@@ -808,18 +817,12 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
 
                 this->players[i].incPressed();
 
-                QTimer::singleShot(200, this, SLOT(recreatePlayerLabel(int)));
+                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
             }
         }
     }
 
     return QDialog::eventFilter(target, event);
-}
-
-void GameField::recreatePlayerLabel(int playerId)
-{
-    this->playerNameLabels[playerId]->setText(QString("%1").arg(this->players[playerId].getName()));
-    this->playerNameLabels[playerId]->setStyleSheet(QString("background-color: %1;").arg(this->players[playerId].getColor()));
 }
 
 /* 100 points buttons */
