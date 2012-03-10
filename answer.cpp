@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -216,6 +216,14 @@ void Answer::keyPressEvent(QKeyEvent *event)
     int key;
     int player = -1;
 
+    if(this->sound && event->key() == Qt::Key_Shift)
+    {
+        this->music->stop();
+        QTimer::singleShot(100, this->music, SLOT(play()));
+        ui->videoPlayer->stop();
+        QTimer::singleShot(100, ui->videoPlayer, SLOT(play()));
+    }
+
     if(this->keyListenerIsLocked() == true)
         return;
     else
@@ -344,6 +352,7 @@ bool Answer::getAnswer(int category, int points, QString *answer)
 
 void Answer::openDoubleJeopardy()
 {
+    this->lockKeyListener();
     this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players, this->playerNr);
     dj->init();
     dj->show();

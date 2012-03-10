@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'doublejeopardy.h'
 **
-** Created: Sat Dec 24 17:23:19 2011
+** Created: Thu Mar 8 20:03:32 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -10,10 +10,6 @@
 #include "doublejeopardy.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'doublejeopardy.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.6.2. It"
-#error "cannot be used with the include files from this version of Qt."
-#error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE

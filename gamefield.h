@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -36,7 +36,6 @@
 #include <QLabel>
 #include <QFile>
 #include <QColor>
-#include <QDebug>
 #include <QTimer>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -84,6 +83,7 @@ private:
     int lastPoints;
     int playerNr;
     int categoryNr;
+    int currentPlayer;
     bool sound;
     Player *players;
     Editor *editor;
@@ -121,7 +121,7 @@ private:
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
     void assignCategoryLabels();
-    void setCategoryNames();
+    void processCategoryLabels();
     void setLabelColor();
     void setPoints();
     void setNames();
@@ -130,6 +130,7 @@ private:
     void updatePointsLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
+    void updateCurrentPlayerLabel();
 
     QString getButtonColorByLastWinner();
 
@@ -148,7 +149,7 @@ private:
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
-    void random();
+    int random();
     void updateNamesLabels();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();

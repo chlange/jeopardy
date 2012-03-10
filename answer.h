@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -94,10 +94,10 @@ private:
 
     QString getRoundFile();
     QFont measureFontSize(int count);
-    int getCategoryLine(int category);
 
     bool getAnswer(int category, int points, QString *answer);
     void openDoubleJeopardy();
+    int getCategoryLine(int category);
 
     void processText(QString *answer);
     void processImg(QString *answer);
