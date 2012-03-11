@@ -377,7 +377,7 @@ void GameField::setNames()
     for(int i = 0; i < this->playerNr; i++)
     {
         if(this->currentPlayer == i)
-            this->playerNameLabels[i]->setText(QString("%1 *").arg(this->players[i].getName()));
+            this->playerNameLabels[i]->setText(QString("%1 ***").arg(this->players[i].getName()));
         else
             this->playerNameLabels[i]->setText(this->players[i].getName());
     }
@@ -420,7 +420,7 @@ void GameField::updateCurrentPlayerLabel()
         return;
 
     this->updateNamesLabels();
-    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 *").arg(this->players[this->currentPlayer].getName()));
+    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 ***").arg(this->players[this->currentPlayer].getName()));
 }
 
 QString GameField::getButtonColorByLastWinner()
