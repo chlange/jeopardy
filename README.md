@@ -34,6 +34,7 @@ Features
 	* see answers/1.jrf or wiki for further instructions
 	* images and videos will be resized if too big
 	* sound and videos will stop after 30 seconds (normal answer time)
+	* Press Shift to restart sound or video
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
 
