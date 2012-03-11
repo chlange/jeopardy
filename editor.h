@@ -33,6 +33,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QComboBox>
 #include <QObject>
 #include <player.h>
 
@@ -57,12 +58,15 @@ private:
     QGridLayout *saveGrid;
     QLineEdit *playerNamesLines[NUMBER_MAX_PLAYERS];
     QSpinBox *playerPointsLines[NUMBER_MAX_PLAYERS];
+    QComboBox *playerKeyBox[NUMBER_MAX_PLAYERS];
+
     QPushButton *saveButton;
 
     void init();
     void insertLayouts();
     void assignPlayerPointsLines();
     void assignPlayerNamesLines();
+    void assignKeyBoxes();
     void assignSaveButton();
 
     void showValues();

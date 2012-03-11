@@ -38,8 +38,8 @@ Editor::~Editor()
 {
     delete this->lineGrid;
     delete this->saveGrid;
-
     delete this->mainGrid;
+    delete this->saveButton;
     delete this->window;
 }
 
@@ -65,6 +65,7 @@ void Editor::init()
     this->insertLayouts();
     this->assignPlayerNamesLines();
     this->assignPlayerPointsLines();
+    this->assignKeyBoxes();
     this->assignSaveButton();
     this->showValues();
 }
@@ -79,7 +80,6 @@ void Editor::insertLayouts()
 
     this->mainGrid->addLayout(this->lineGrid, 0, 0);
     this->mainGrid->addLayout(this->saveGrid, 1, 0);
-
     this->window->setLayout(this->mainGrid);
 }
 
@@ -101,6 +101,21 @@ void Editor::assignPlayerPointsLines()
         this->playerPointsLines[i]->setMinimum(-50000);
         this->playerPointsLines[i]->setMaximum(50000);
         this->lineGrid->addWidget(this->playerPointsLines[i], i, 1);
+    }
+}
+
+void Editor::assignKeyBoxes()
+{
+    QStringList keyList;
+    keyList << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K" << "L" << "M"
+            << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "X" << "Y" << "Z";
+
+    for(int i = 0; i < this->playerNr; i++)
+    {
+        this->playerKeyBox[i] = new QComboBox();
+        this->playerKeyBox[i]->addItems(keyList);
+        this->playerKeyBox[i]->setCurrentIndex(this->players[i].getKey() - 0x41);
+        this->lineGrid->addWidget(this->playerKeyBox[i], i, 2);
     }
 }
 
@@ -127,6 +142,7 @@ void Editor::saveChanges()
     {
         this->players[i].setName(this->playerNamesLines[i]->text());
         this->players[i].setPoints(this->playerPointsLines[i]->value());
+        this->players[i].setKey(this->playerKeyBox[i]->currentIndex() + 0x41);
     }
 }
 

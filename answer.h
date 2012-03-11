@@ -74,6 +74,7 @@ private:
     int currentPlayerId;
     int winner;
     bool keyLock;
+    bool isVideo;
     bool sound;
     bool doubleJeopardy;
     QString result;

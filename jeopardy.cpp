@@ -102,13 +102,7 @@ void Jeopardy::initGameField()
         this->music->play();
     }
 
-    complete = this->setCategoryNr();
-
-    if(NOT == complete)
-    {
-        this->deleteSound();
-        return;
-    }
+    this->setCategoryNr();
 
     complete = this->setPlayerNr();
 
@@ -134,12 +128,14 @@ void Jeopardy::initGameField()
 int Jeopardy::getRound()
 {
    for(int i = 0; i < NUMBER_ROUNDS; i++)
+   {
        if(this->buttons[i]->isHidden())
        {
             this->round = i + 1;
             this->buttons[i]->setStyleSheet(QString("background-color: lightGray;"));
             this->buttons[i]->setHidden(false);
        }
+   }
 
    return this->round;
 }
@@ -167,13 +163,44 @@ bool Jeopardy::setPlayerNr()
     return ok;
 }
 
-bool Jeopardy::setCategoryNr()
+void Jeopardy::setCategoryNr()
 {
-    bool ok;
+    this->categoryNr = 0;
+    QDir dir;
 
-    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, NUMBER_MAX_CATEGORIES, 1, &ok);
+    QString fileString = QString("answers/%1.jrf").arg(this->round);
+    fileString = dir.absoluteFilePath(fileString);
 
-    return ok;
+    QFile file(fileString);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
+
+        fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+        fileString = dir.absoluteFilePath(fileString);
+    }
+
+    QTextStream in(&file);
+    QString line;
+
+    for(int i = 1; i < 32; i++)
+    {
+        line = in.readLine();
+        if(line.isNull())
+            break;
+
+        /* category lines are 1, 7, 13, 19 and 25 */
+        if(i % 6 == 1)
+        {
+            if(line != "" && line != "category1" && line != "category2"
+               && line != "category3" && line != "category4" && line != "category5"
+               && line != "category6" && line != "category")
+                this->categoryNr++;
+            else
+                break;
+        }
+    }
 }
 
 bool Jeopardy::initPlayers()

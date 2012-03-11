@@ -86,11 +86,9 @@ void GameField::init()
     connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
 
     this->window->show();
+
     if(this->playerNr > 1)
-    {
-        this->currentPlayer = this->random();
         this->updateCurrentPlayerLabel();
-    }
 }
 
 void GameField::setRound(int round)
@@ -377,7 +375,7 @@ void GameField::setNames()
     for(int i = 0; i < this->playerNr; i++)
     {
         if(this->currentPlayer == i)
-            this->playerNameLabels[i]->setText(QString("%1 *").arg(this->players[i].getName()));
+            this->playerNameLabels[i]->setText(QString("%1 ***").arg(this->players[i].getName()));
         else
             this->playerNameLabels[i]->setText(this->players[i].getName());
     }
@@ -416,11 +414,13 @@ void GameField::updateAfterAnswer()
 
 void GameField::updateCurrentPlayerLabel()
 {
+    this->currentPlayer = this->random();
+
     if(this->currentPlayer == -1)
         return;
 
     this->updateNamesLabels();
-    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 *").arg(this->players[this->currentPlayer].getName()));
+    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 ***").arg(this->players[this->currentPlayer].getName()));
 }
 
 QString GameField::getButtonColorByLastWinner()
@@ -472,10 +472,7 @@ void GameField::processAnswer(int category, int points)
     {
         this->updateNamesLabels();
         if(this->playerNr > 1)
-        {
-            this->currentPlayer = this->random();
             this->updateCurrentPlayerLabel();
-        }
     }
 
     delete this->answer;
@@ -701,21 +698,6 @@ int GameField::random()
 
     int rn = rand() % this->playerNr;
 
-    QMessageBox *msgbox = new QMessageBox();
-    msgbox->setWindowTitle("R");
-    QString text;
-
-    if(this->players[rn].getName().endsWith("s"))
-        text = QString("%1 turn").arg(this->players[rn].getName());
-    else
-        text = QString("%1's turn").arg(this->players[rn].getName());
-
-    msgbox->setText(text);
-    msgbox->exec();
-    msgbox->setFocus();
-
-    delete msgbox;
-
     return rn;
 }
 
@@ -765,7 +747,6 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     if(selectedItem == this->randomCtx)
     {
         this->updateNamesLabels();
-        this->currentPlayer = this->random();
         this->updateCurrentPlayerLabel();
     }
     else if(selectedItem == this->editorCtx)
@@ -799,7 +780,6 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
         if(keyEvent->key() == Qt::Key_R)
         {
             this->updateNamesLabels();
-            this->currentPlayer = this->random();
             this->updateCurrentPlayerLabel();
         }
 

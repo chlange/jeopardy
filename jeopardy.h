@@ -75,7 +75,7 @@ private:
     void prepareButton(int i);
     void setSound();
     int getRound();
-    bool setCategoryNr();
+    void setCategoryNr();
     bool setPlayerNr();
     bool initPlayers();
     void startRound(int round);
