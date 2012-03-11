@@ -87,6 +87,7 @@ void GameField::init()
 
     this->window->show();
 
+    this->currentPlayer = this->random();
     this->updateCurrentPlayerLabel();
 }
 
@@ -413,9 +414,6 @@ void GameField::updateAfterAnswer()
 
 void GameField::updateCurrentPlayerLabel()
 {
-    if(this->lastWinner == NO_WINNER)
-        this->currentPlayer = this->random();
-
     this->updateNamesLabels();
     this->playerNameLabels[this->currentPlayer]->setText(QString("%1 ***").arg(this->players[this->currentPlayer].getName()));
 }
@@ -462,13 +460,13 @@ void GameField::processAnswer(int category, int points)
     {
         button->setStyleSheet(this->getButtonColorByLastWinner());
         button->setText(this->players[this->lastWinner].getName());
-        this->updateNamesLabels();
     }
     else
     {
-        this->updateNamesLabels(); 
+        this->currentPlayer = this->random();
     }
 
+    this->updateNamesLabels();
     this->updateCurrentPlayerLabel();
     delete this->answer;
 }
@@ -742,6 +740,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     if(selectedItem == this->randomCtx)
     {
         this->updateNamesLabels();
+        this->currentPlayer = this->random();
         this->updateCurrentPlayerLabel();
     }
     else if(selectedItem == this->editorCtx)
@@ -775,6 +774,7 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
         if(keyEvent->key() == Qt::Key_R)
         {
             this->updateNamesLabels();
+            this->currentPlayer = this->random();
             this->updateCurrentPlayerLabel();
         }
 
