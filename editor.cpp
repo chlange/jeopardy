@@ -148,6 +148,15 @@ void Editor::saveChanges()
 
 void Editor::end()
 {
-    this->saveChanges();
-    this->window->done(0);
+    if(this->playerKeyBox[0]->currentIndex() == this->playerKeyBox[1]->currentIndex() ||
+       this->playerKeyBox[0]->currentIndex() == this->playerKeyBox[2]->currentIndex() ||
+       this->playerKeyBox[1]->currentIndex() == this->playerKeyBox[2]->currentIndex())
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Please choose different keys!"));
+    }
+    else
+    {
+        this->saveChanges();
+        this->window->done(0);
+    }
 }

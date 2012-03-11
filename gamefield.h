@@ -127,7 +127,6 @@ private:
     void setNames();
 
     void updateGameFieldValues();
-    void updatePointsLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
     void updateCurrentPlayerLabel();
@@ -145,12 +144,14 @@ private:
     void resetRound();
 
     bool eventFilter(QObject *target, QEvent *event);
+    void indicateRandom();
 
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
     int random();
     void updateNamesLabels();
+    void updatePointsLabels();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();
     void on_button_3_100_clicked();

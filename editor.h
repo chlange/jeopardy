@@ -35,6 +35,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QObject>
+#include <QMessageBox>
 #include <player.h>
 
 #define NUMBER_MAX_PLAYERS 9

@@ -391,7 +391,10 @@ void GameField::updateGameFieldValues()
 void GameField::updatePointsLabels()
 {
     for(int i = 0; i < this->playerNr; i++)
+    {
+        this->playerPointsLabels[i]->setStyleSheet(QString(""));
         this->playerPointsLabels[i]->setText(QString::number(this->players[i].getPoints()));
+    }
 }
 
 void GameField::updateNamesLabels()
@@ -773,6 +776,7 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
         /* Open random user picker if "r" gets pressed */
         if(keyEvent->key() == Qt::Key_R)
         {
+            this->indicateRandom();
             this->updateNamesLabels();
             this->currentPlayer = this->random();
             this->updateCurrentPlayerLabel();
@@ -798,6 +802,14 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
     }
 
     return QDialog::eventFilter(target, event);
+}
+
+void GameField::indicateRandom()
+{
+    for(int i = 0; i < this->playerNr; i++)
+        this->playerPointsLabels[i]->setStyleSheet(QString("background-color: black"));
+
+    QTimer::singleShot(30, this, SLOT(updatePointsLabels()));
 }
 
 /* 100 points buttons */
