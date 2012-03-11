@@ -37,7 +37,6 @@
 #include <phonon/mediaobject.h>
 #include <gamefield.h>
 #include <player.h>
-#include <QDebug>
 
 #define NUMBER_ROUNDS 4
 #define NUMBER_MAX_PLAYERS 9

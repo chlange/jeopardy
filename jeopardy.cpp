@@ -201,8 +201,6 @@ void Jeopardy::setCategoryNr()
                 break;
         }
     }
-
-    qDebug() << this->categoryNr;
 }
 
 bool Jeopardy::initPlayers()

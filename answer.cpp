@@ -53,6 +53,8 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     if(sound)
         this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
+
+    this->isVideo = false;
 }
 
 Answer::~Answer()
@@ -191,6 +193,7 @@ void Answer::processSound(QString *answer)
 
 void Answer::processVideo(QString *answer)
 {
+    this->isVideo = true;
     this->prependDir(answer);
 
     ui->videoPlayer->setVisible(true);
@@ -218,10 +221,19 @@ void Answer::keyPressEvent(QKeyEvent *event)
 
     if(this->sound && event->key() == Qt::Key_Shift)
     {
-        this->music->stop();
-        QTimer::singleShot(100, this->music, SLOT(play()));
-        ui->videoPlayer->stop();
-        QTimer::singleShot(100, ui->videoPlayer, SLOT(play()));
+        if(this->isVideo == true)
+        {
+            ui->videoPlayer->stop();
+            ui->videoPlayer->seek(0);
+            QTimer::singleShot(100, ui->videoPlayer, SLOT(play()));
+            QTimer::singleShot(30000, ui->videoPlayer, SLOT(stop()));
+        }
+        else
+        {
+            this->music->stop();
+            QTimer::singleShot(100, this->music, SLOT(play()));
+            QTimer::singleShot(30000, this->music, SLOT(stop()));
+        }
     }
 
     if(this->keyListenerIsLocked() == true)
