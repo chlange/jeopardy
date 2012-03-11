@@ -41,8 +41,8 @@ void Answer::changeEvent(QEvent *e)
     }
 }
 
-Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound) :
-        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr),points(0), currentPlayerId(0),
+Answer::Answer(QWidget *parent, QString file, int round, Player *players, int playerNr, bool sound, int currentPlayerId) :
+        QDialog(parent), ui(new Ui::Answer), round(round), playerNr(playerNr),points(0), currentPlayerId(currentPlayerId),
         winner(NO_WINNER), keyLock(false), sound(sound), doubleJeopardy(false), result(), fileString(file), players(players), currentPlayer(), dj(NULL)
 {
     ui->setupUi(this);
@@ -365,7 +365,7 @@ bool Answer::getAnswer(int category, int points, QString *answer)
 void Answer::openDoubleJeopardy()
 {
     this->lockKeyListener();
-    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players, this->playerNr);
+    this->dj = new DoubleJeopardy(this, points / 2, points * 2, this->players, this->playerNr, this->currentPlayerId);
     dj->init();
     dj->show();
     this->currentPlayerId = dj->getPlayer();

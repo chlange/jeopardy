@@ -87,8 +87,7 @@ void GameField::init()
 
     this->window->show();
 
-    if(this->playerNr > 1)
-        this->updateCurrentPlayerLabel();
+    this->updateCurrentPlayerLabel();
 }
 
 void GameField::setRound(int round)
@@ -414,10 +413,8 @@ void GameField::updateAfterAnswer()
 
 void GameField::updateCurrentPlayerLabel()
 {
-    this->currentPlayer = this->random();
-
-    if(this->currentPlayer == -1)
-        return;
+    if(this->lastWinner == NO_WINNER)
+        this->currentPlayer = this->random();
 
     this->updateNamesLabels();
     this->playerNameLabels[this->currentPlayer]->setText(QString("%1 ***").arg(this->players[this->currentPlayer].getName()));
@@ -430,7 +427,7 @@ QString GameField::getButtonColorByLastWinner()
 
 void GameField::openAnswer(int category, int points)
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
+    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound, this->currentPlayer);
     this->answer->setAnswer(category, points);
 
     this->answer->exec();
@@ -466,15 +463,13 @@ void GameField::processAnswer(int category, int points)
         button->setStyleSheet(this->getButtonColorByLastWinner());
         button->setText(this->players[this->lastWinner].getName());
         this->updateNamesLabels();
-        this->updateCurrentPlayerLabel();
     }
     else
     {
-        this->updateNamesLabels();
-        if(this->playerNr > 1)
-            this->updateCurrentPlayerLabel();
+        this->updateNamesLabels(); 
     }
 
+    this->updateCurrentPlayerLabel();
     delete this->answer;
 }
 
