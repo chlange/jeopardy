@@ -33,7 +33,6 @@
 #include <QColor>
 #include <QDialog>
 #include <QLabel>
-#include <QDebug>
 
 #define NUMBER_CATEGORIES 5
 #define OFFSET 1

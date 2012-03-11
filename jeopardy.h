@@ -37,6 +37,7 @@
 #include <phonon/mediaobject.h>
 #include <gamefield.h>
 #include <player.h>
+#include <QDebug>
 
 #define NUMBER_ROUNDS 4
 #define NUMBER_MAX_PLAYERS 9
@@ -75,7 +76,7 @@ private:
     void prepareButton(int i);
     void setSound();
     int getRound();
-    bool setCategoryNr();
+    void setCategoryNr();
     bool setPlayerNr();
     bool initPlayers();
     void startRound(int round);
