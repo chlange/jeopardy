@@ -2,7 +2,7 @@ Jeopardy
 ========
 
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		11. March 2012
+* Date:		15. March 2012
 * Version:	0.9.6 experimental
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
@@ -30,6 +30,8 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by round and unix timestamp
+* scoring
+	* see gameStates/score.jsf for overall scoring
 * formatted text, sound, images and videos as answer 
 	* see answers/1.jrf or wiki for further instructions
 	* images and videos will be resized if too big
@@ -41,6 +43,7 @@ Features
 Todo
 ----
 
+* better score system
 * smoother design
 * ...little here and there
 

@@ -42,6 +42,7 @@ Podium::~Podium()
     delete this->firstGrid;
     delete this->secondThirdGrid;
     delete this->window;
+    delete this->filename;
 }
 
 void Podium::init()
@@ -116,6 +117,7 @@ void Podium::showPodium()
         this->third->setVisible(false);
     }
 
+    this->saveScore();
     this->window->show();
 }
 
@@ -149,4 +151,93 @@ QString Podium::getLabelColorString(int player)
     color = QString("QLabel { background-color : %1; }").arg(this->players[player].getColor());
 
     return color;
+}
+
+bool Podium::setScorefile()
+{
+    this->filename = new QString("gameStates/score.jsf");
+    this->file = new QFile(*this->filename);
+    QDir dir;
+
+    if (!this->file->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open score file, please select one by yourself"));
+        *this->filename = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Score File (*.jsf)"));
+        *this->filename = dir.absoluteFilePath(*this->filename);
+    }
+
+    this->file = new QFile(*this->filename);
+    if (!this->file->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open score file"));
+            return false;
+    }
+
+    return true;
+}
+
+void Podium::saveScore()
+{
+    int rounds = 0, total = 0, avg = 0;
+    QStringList results;
+    QString line, name;
+    bool found;
+
+    if(this->setScorefile() == false)
+        return;
+
+    QTextStream in(this->file);
+    line = in.readLine();
+
+    if(!line.startsWith("name     "))
+        in << "name           rounds         total          avg            \n";
+
+
+    for(int i = 0; i < this->playerNr; i++)
+    {
+            name = this->players[i].getName();
+            name = name.toLower();
+            found = false;
+
+            in.seek(0);
+            // Do until file ends
+            while(!in.atEnd())
+            {
+                    line = in.readLine();
+                    // update player values
+                    if(line.startsWith(name))
+                    {
+                            //name      rounds      total      avg
+                            results = line.split("  ", QString::SkipEmptyParts);
+                            rounds = results[1].toInt() + 1;
+                            total = results[2].toInt() + this->players[i].getPoints();
+                            avg = ceil(total / rounds);
+                            found = true;
+                    }
+            }
+
+            // save new player's score
+            if(!found)
+            {
+                    rounds = 1;
+                    avg = total = this->players[i].getPoints();
+            }
+
+            this->writeScore(name, rounds, total, avg);
+    }
+}
+
+void Podium::writeScore(QString name, int rounds, int total, int avg)
+{
+    // open file and save score
+    QTextStream out(this->file);
+    out.seek(this->file->size());
+    out << qSetFieldWidth(15)
+        << left
+        << QString("%1").arg(name)
+        << QString("%1").arg(rounds)
+        << QString("%1").arg(total)
+        << QString("%1").arg(avg)
+        << qSetFieldWidth(0)
+        << '\n';
 }

@@ -29,8 +29,14 @@
 #ifndef PODIUM_H
 #define PODIUM_H
 
-#include <QGridLayout>
+#include <math.h>
 #include <player.h>
+#include <QGridLayout>
+#include <QFile>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QDebug>
 
 namespace Ui {
     class Podium;
@@ -54,6 +60,8 @@ private:
     QLabel *first;
     QLabel *second;
     QLabel *third;
+    QFile *file;
+    QString *filename;
 
     void assignLabels();
 
@@ -64,6 +72,10 @@ private:
     void setOrder(int first, int second, int third);
 
     QString getLabelColorString(int player);
+
+    void saveScore();
+    bool setScorefile();
+    void writeScore(QString name, int rounds, int total, int avg);
 };
 
 #endif // PODIUM_H
