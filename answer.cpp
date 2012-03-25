@@ -47,6 +47,9 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 {
     ui->setupUi(this);
 
+    this->time = new QTime();
+    this->time->start();
+
     this->hideButtons();
     ui->graphicsView->setVisible(false);
     ui->videoPlayer->setVisible(false);
@@ -65,6 +68,8 @@ Answer::~Answer()
 
     if(this->dj != NULL)
         delete this->dj;
+
+    delete this->time;
 }
 
 int Answer::getWinner()
@@ -101,9 +106,11 @@ void Answer::setAnswer(int category, int points)
     QRegExp doubleJeopardyTag("[[]dj[]]");
     QRegExp lineBreakTag("[[]b[]]");
     QRegExp noEscape("[[]nE[]]");
+    QRegExp space("[[]s[]]");
 
     answer.remove(comment);
     answer.replace(lineBreakTag,"<br>");
+    answer.replace(space, "&nbsp;");
 
     if(answer.contains(alignLeftTag))
         this->processAlign(&answer);
@@ -234,6 +241,8 @@ void Answer::keyPressEvent(QKeyEvent *event)
             QTimer::singleShot(100, this->music, SLOT(play()));
             QTimer::singleShot(30000, this->music, SLOT(stop()));
         }
+
+        this->time->start();
     }
 
     if(this->keyListenerIsLocked() == true)
@@ -255,10 +264,13 @@ void Answer::keyPressEvent(QKeyEvent *event)
 
 void Answer::processKeypress(int player)
 {
-    this->currentPlayer = this->players[player];
-    ui->currentPlayer->setText(this->currentPlayer.getName());
+    if(this->time->elapsed() < this->time->msec() + 31000)
+    {
+        this->currentPlayer = this->players[player];
+        ui->currentPlayer->setText(this->currentPlayer.getName());
 
-    this->showButtons();
+        this->showButtons();
+    }
 }
 
 bool Answer::keyListenerIsLocked()

@@ -36,10 +36,10 @@ Editor::Editor(QWidget *parent, Player *players, int playerNr):
 
 Editor::~Editor()
 {
+    delete this->saveButton;
     delete this->lineGrid;
     delete this->saveGrid;
     delete this->mainGrid;
-    delete this->saveButton;
     delete this->window;
 }
 
@@ -148,15 +148,6 @@ void Editor::saveChanges()
 
 void Editor::end()
 {
-    if(this->playerKeyBox[0]->currentIndex() == this->playerKeyBox[1]->currentIndex() ||
-       this->playerKeyBox[0]->currentIndex() == this->playerKeyBox[2]->currentIndex() ||
-       this->playerKeyBox[1]->currentIndex() == this->playerKeyBox[2]->currentIndex())
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Please choose different keys!"));
-    }
-    else
-    {
-        this->saveChanges();
-        this->window->done(0);
-    }
+    this->saveChanges();
+    this->window->done(0);
 }

@@ -35,6 +35,7 @@
 #include <QDir>
 #include <QPixmap>
 #include <QTimer>
+#include <QTime>
 #include <QGraphicsScene>
 #include <phonon/mediaobject.h>
 #include <doublejeopardy.h>
@@ -73,12 +74,14 @@ private:
     int points;
     int currentPlayerId;
     int winner;
+    unsigned int timeStarted;
     bool keyLock;
     bool isVideo;
     bool sound;
     bool doubleJeopardy;
     QString result;
     QString fileString;
+    QTime *time;
     Player *players;
     Player currentPlayer;
     Phonon::MediaObject *music;
