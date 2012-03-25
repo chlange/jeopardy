@@ -32,6 +32,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon("images/icon.svg"));
     Jeopardy w;
     w.init();
     return a.exec();

@@ -33,6 +33,7 @@ Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
     sound(false), gameField(NULL)
 {
+
     this->players = new Player[NUMBER_MAX_PLAYERS];
 }
 
@@ -187,7 +188,7 @@ void Jeopardy::setCategoryNr()
 bool Jeopardy::initPlayers()
 {
     bool ok, complete;
-    QString playerName, text, key, color, labeltext;
+    QString playerName, text, key, color;
     QStringList keyList, colorList;
 
     colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
@@ -198,18 +199,21 @@ bool Jeopardy::initPlayers()
     {
         complete = false;
         playerName = QString("Player %1").arg(this->playerNr + 1);
-        labeltext = (this->playerNr == 0) ? "Enter name" : "Enter name or press cancel to play";
 
         for(;;)
         {
             QInputDialog playerInput;
-            text = playerInput.getText(this, playerName, labeltext, QLineEdit::Normal,"", &ok);
 
-            if(!ok)
-                break;
+            if(this->playerNr > 0)
+                playerInput.setCancelButtonText("Play");
+            else
+                playerInput.setCancelButtonText("Cancel");
 
-            if(text.isEmpty())
-                continue;
+            playerInput.setLabelText("Enter name");
+
+            playerInput.setOkButtonText("Create player");
+            playerInput.exec();
+            text = playerInput.textValue();
 
             if(text.length() < 10)
                 break;
@@ -219,7 +223,7 @@ bool Jeopardy::initPlayers()
             msgBox.exec();
         }
 
-        if(!ok)
+        if(text.isEmpty())
             break;
 
         this->players[this->playerNr].setName(text);

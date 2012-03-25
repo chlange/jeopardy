@@ -497,12 +497,11 @@ void GameField::processResult()
     }
 }
 
-/* refactor this! */
 void GameField::openFileLoader()
 {
     int lineNr = 0;
     QDir dir;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", "gameStates/", "Jeopardy Game State (*.jgs)");
 
     if(fileName == "")
         return;
@@ -621,7 +620,7 @@ void GameField::openFileSaver(bool backup)
     if(backup == true)
         fileName = QString("gameStates/backups/backup_%1_%2").arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
     else
-        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game State (*.jgs)"));
 
     if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");
@@ -800,14 +799,24 @@ bool GameField::eventFilter(QObject *target, QEvent *event)
             {
                 this->playerNameLabels[i]->setStyleSheet(QString("background-color: black; color: white;"));
                 this->playerNameLabels[i]->setText(QString("%1 - it works").arg(this->players[i].getName()));
+                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
 
-                if(this->players[i].getPressed() > 10)
+                if(this->players[i].getPressed() > 13)
+                {
+                    this->players[i].decPoints(50);
+                    QTimer::singleShot(200, this, SLOT(updatePointsLabels()));
                     QMessageBox::critical(this, tr("Error"),
-                                         QString("%1 - STOP IT! You raped your key %2 times!").arg(this->players[i].getName()).arg(this->players[i].getPressed()));
+                                         QString("%1 - That's enough - 50 points subtracted").arg(this->players[i].getName()));
+                }
+                else if(this->players[i].getPressed() > 10)
+                {
+                    int untilSub = 13 - this->players[i].getPressed() + 1;
+                    QString until = (untilSub != 1) ? QString("presses") : QString("press");
+                    QMessageBox::critical(this, tr("Error"),
+                                         QString("%1 - You raped your key %2 times!\n%3 %4 until subtraction").arg(this->players[i].getName()).arg(this->players[i].getPressed()).arg(untilSub).arg(until));
+                }
 
                 this->players[i].incPressed();
-
-                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
             }
         }
     }
