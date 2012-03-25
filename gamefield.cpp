@@ -49,6 +49,8 @@ GameField::~GameField()
         delete this->endRoundCtx;
     if(this->podium != NULL)
         delete this->podium;
+    if(this->about != NULL)
+        delete this->about;
 
     delete this->categoryLabelGrid;
     delete this->buttonGrid;
@@ -726,6 +728,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     this->saveCtx = new QAction("Save",this);
     this->endRoundCtx = new QAction("End Round", this);
     this->resetRoundCtx = new QAction("Reset Round", this);
+    this->about = new QAction("About", this);
 
     menu.addAction(this->randomCtx);
     menu.addSeparator();
@@ -737,6 +740,8 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     menu.addAction(this->endRoundCtx);
     menu.addSeparator();
     menu.addAction(this->resetRoundCtx);
+    menu.addSeparator();
+    menu.addAction(this->about);
 
     QAction *selectedItem = menu.exec(globalPos);
 
@@ -759,6 +764,12 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     }
     else if(selectedItem == this->resetRoundCtx)
         this->resetRound();
+    else if(selectedItem == this->about)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Jeopardy!\n\nWritten by Christian Lange using Qt framework\n\nwww.github.com/chlange/jeopardy\nwww.ganz-sicher.net/chlange");
+        msgBox.exec();
+    }
 }
 
 void GameField::showPodium()
