@@ -28,6 +28,9 @@
     <height>615</height>
    </size>
   </property>
+  <property name="cursor">
+   <cursorShape>WhatsThisCursor</cursorShape>
+  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::NoContextMenu</enum>
   </property>
@@ -61,6 +64,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Right</string>
    </property>
@@ -87,6 +93,9 @@
      <weight>50</weight>
      <bold>false</bold>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
    </property>
    <property name="text">
     <string>End</string>
@@ -115,6 +124,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Wrong</string>
    </property>
@@ -141,6 +153,9 @@
      <weight>50</weight>
      <bold>false</bold>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -176,6 +191,9 @@
      <pointsize>20</pointsize>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>currentPlayer</string>
    </property>
@@ -206,6 +224,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Cancel</string>
    </property>
@@ -219,6 +240,9 @@
      <height>531</height>
     </rect>
    </property>
+   <property name="cursor" stdset="0">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
   </widget>
   <widget class="Phonon::VideoPlayer" name="videoPlayer">
    <property name="geometry">
@@ -228,6 +252,9 @@
      <width>981</width>
      <height>511</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true"/>

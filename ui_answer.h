@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'answer.ui'
 **
-** Created: Sun Mar 25 11:25:01 2012
+** Created: Sun Mar 25 17:03:48 2012
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -47,6 +47,7 @@ public:
         Answer->setSizePolicy(sizePolicy);
         Answer->setMinimumSize(QSize(998, 615));
         Answer->setMaximumSize(QSize(998, 615));
+        Answer->setCursor(QCursor(Qt::WhatsThisCursor));
         Answer->setContextMenuPolicy(Qt::NoContextMenu);
         QIcon icon;
         icon.addFile(QString::fromUtf8("Initialize"), QSize(), QIcon::Normal, QIcon::Off);
@@ -65,18 +66,21 @@ public:
         font.setBold(false);
         font.setWeight(50);
         buttonRight->setFont(font);
+        buttonRight->setCursor(QCursor(Qt::WhatsThisCursor));
         buttonEnd = new QPushButton(Answer);
         buttonEnd->setObjectName(QString::fromUtf8("buttonEnd"));
         buttonEnd->setGeometry(QRect(10, 570, 85, 32));
         sizePolicy1.setHeightForWidth(buttonEnd->sizePolicy().hasHeightForWidth());
         buttonEnd->setSizePolicy(sizePolicy1);
         buttonEnd->setFont(font);
+        buttonEnd->setCursor(QCursor(Qt::WhatsThisCursor));
         buttonWrong = new QPushButton(Answer);
         buttonWrong->setObjectName(QString::fromUtf8("buttonWrong"));
         buttonWrong->setGeometry(QRect(800, 570, 85, 32));
         sizePolicy1.setHeightForWidth(buttonWrong->sizePolicy().hasHeightForWidth());
         buttonWrong->setSizePolicy(sizePolicy1);
         buttonWrong->setFont(font);
+        buttonWrong->setCursor(QCursor(Qt::WhatsThisCursor));
         answer = new QLabel(Answer);
         answer->setObjectName(QString::fromUtf8("answer"));
         answer->setGeometry(QRect(9, 9, 981, 521));
@@ -88,6 +92,7 @@ public:
         font1.setBold(false);
         font1.setWeight(50);
         answer->setFont(font1);
+        answer->setCursor(QCursor(Qt::WhatsThisCursor));
         answer->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         answer->setTextFormat(Qt::RichText);
         answer->setScaledContents(false);
@@ -100,6 +105,7 @@ public:
         font2.setFamily(QString::fromUtf8("Andale Mono"));
         font2.setPointSize(20);
         currentPlayer->setFont(font2);
+        currentPlayer->setCursor(QCursor(Qt::WhatsThisCursor));
         currentPlayer->setAlignment(Qt::AlignCenter);
         buttonCancel = new QPushButton(Answer);
         buttonCancel->setObjectName(QString::fromUtf8("buttonCancel"));
@@ -107,12 +113,15 @@ public:
         sizePolicy1.setHeightForWidth(buttonCancel->sizePolicy().hasHeightForWidth());
         buttonCancel->setSizePolicy(sizePolicy1);
         buttonCancel->setFont(font);
+        buttonCancel->setCursor(QCursor(Qt::WhatsThisCursor));
         graphicsView = new QGraphicsView(Answer);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
         graphicsView->setGeometry(QRect(1, 1, 997, 531));
+        graphicsView->viewport()->setProperty("cursor", QVariant(QCursor(Qt::WhatsThisCursor)));
         videoPlayer = new Phonon::VideoPlayer(Answer);
         videoPlayer->setObjectName(QString::fromUtf8("videoPlayer"));
         videoPlayer->setGeometry(QRect(9, 9, 981, 511));
+        videoPlayer->setCursor(QCursor(Qt::WhatsThisCursor));
         videoPlayer->setStyleSheet(QString::fromUtf8(""));
 
         retranslateUi(Answer);
