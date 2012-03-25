@@ -100,6 +100,7 @@ private:
     QAction *saveCtx;
     QAction *endRoundCtx;
     QAction *resetRoundCtx;
+    QAction *about;
     QPushButton *buttons[NUMBER_MAX_ANSWERS];
     QLabel *playerNameLabels[NUMBER_MAX_PLAYERS];
     QLabel *playerPointsLabels[NUMBER_MAX_PLAYERS];
