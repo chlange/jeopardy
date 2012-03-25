@@ -245,6 +245,9 @@ void Answer::keyPressEvent(QKeyEvent *event)
         this->time->start();
     }
 
+    if(event->key() == Qt::Key_Escape)
+        this->on_buttonEnd_clicked();
+
     if(this->keyListenerIsLocked() == true)
         return;
     else

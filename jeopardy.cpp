@@ -204,7 +204,7 @@ bool Jeopardy::initPlayers()
         {
             QInputDialog playerInput;
 
-            if(this->playerNr > 1)
+            if(this->playerNr > 0)
                 playerInput.setCancelButtonText("Play");
             else
                 playerInput.setCancelButtonText("Cancel");
