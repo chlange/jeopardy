@@ -76,7 +76,6 @@ private:
     void setSound();
     int getRound();
     void setCategoryNr();
-    bool setPlayerNr();
     bool initPlayers();
     void startRound(int round);
 

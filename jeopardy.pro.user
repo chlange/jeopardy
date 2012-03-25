@@ -351,6 +351,7 @@
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
     <value type="QString">LIBGL_DRIVERS_PATH=/usr/lib/fglrx/dri</value>
     <value type="QString">LOGNAME=chlange</value>
@@ -396,6 +397,7 @@
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
     <value type="QString">LIBGL_DRIVERS_PATH=/usr/lib/fglrx/dri</value>
     <value type="QString">LOGNAME=chlange</value>
@@ -445,6 +447,7 @@
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
     <value type="QString">LIBGL_DRIVERS_PATH=/usr/lib/fglrx/dri</value>
     <value type="QString">LOGNAME=chlange</value>
@@ -490,6 +493,7 @@
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/chlange</value>
     <value type="QString">LANG=en_US.utf8</value>
+    <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
     <value type="QString">LIBGL_DRIVERS_PATH=/usr/lib/fglrx/dri</value>
     <value type="QString">LOGNAME=chlange</value>

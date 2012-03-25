@@ -31,7 +31,7 @@
 GameField::GameField(QWidget *parent, int round, int categoryNr, Player *players, int playerNr, bool sound) :
     QDialog(parent), round(round), alreadyAnswered(0), lastWinner(NO_WINNER),
     lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
-    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
+    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL), about(NULL)
 {
 }
 
