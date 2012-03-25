@@ -497,12 +497,11 @@ void GameField::processResult()
     }
 }
 
-/* refactor this! */
 void GameField::openFileLoader()
 {
     int lineNr = 0;
     QDir dir;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", "gameStates/", "Jeopardy Game State (*.jgs)");
 
     if(fileName == "")
         return;
@@ -621,7 +620,7 @@ void GameField::openFileSaver(bool backup)
     if(backup == true)
         fileName = QString("gameStates/backups/backup_%1_%2").arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
     else
-        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game State (*.jgs)"));
 
     if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");
