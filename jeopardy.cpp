@@ -208,6 +208,7 @@ bool Jeopardy::initPlayers()
     {
         complete = false;
         playerName = QString("Player %1").arg(this->playerNr + 1);
+        int dialogcode;
 
         for(;;)
         {
@@ -221,7 +222,7 @@ bool Jeopardy::initPlayers()
             playerInput.setLabelText("Enter name");
 
             playerInput.setOkButtonText("Create player");
-            playerInput.exec();
+            dialogcode = playerInput.exec();
             text = playerInput.textValue();
 
             if(text.length() < 10)
@@ -232,7 +233,7 @@ bool Jeopardy::initPlayers()
             msgBox.exec();
         }
 
-        if(text.isEmpty())
+        if(text.isEmpty() || dialogcode == 0)
             break;
 
         this->players[this->playerNr].setName(text);
