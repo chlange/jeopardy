@@ -64,6 +64,7 @@ private:
     int round;
     bool sound;
     bool defaultSetttings;
+    QString fileString;
     QWidget *window;
     QGridLayout *grid;
     QPushButton *buttons[NUMBER_ROUNDS];

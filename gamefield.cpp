@@ -28,10 +28,10 @@
 
 #include "gamefield.h"
 
-GameField::GameField(QWidget *parent, int round, int categoryNr, Player *players, int playerNr, bool sound) :
+GameField::GameField(QWidget *parent, int round, int categoryNr, Player *players, int playerNr, bool sound, QString fileString) :
     QDialog(parent), round(round), alreadyAnswered(0), lastWinner(NO_WINNER),
     lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
-    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL), about(NULL)
+    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL), about(NULL), fileString(fileString)
 {
 }
 
@@ -314,21 +314,7 @@ void GameField::processCategoryLabels()
     int categoryLine;
     QFont font;
     QString categoryName;
-    QDir dir;
-
-    this->fileString = QString("answers/%1.jrf").arg(this->round);
-    this->fileString = dir.absoluteFilePath(this->fileString);
-
-    QFile file(this->fileString);
     font.setBold(true);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
-
-        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
-        this->fileString = dir.absoluteFilePath(this->fileString);
-    }
 
     for(int i = 0; i < this->categoryNr; i++)
     {
