@@ -103,8 +103,6 @@ void Jeopardy::initGameField()
         this->music->play();
     }
 
-    this->setCategoryNr();
-
     complete = this->initPlayers();
 
     if(NOT == complete)
@@ -114,6 +112,8 @@ void Jeopardy::initGameField()
     }
 
     this->deleteSound();
+
+    this->setCategoryNr();
 
     this->startRound(this->round);
 }
@@ -151,21 +151,29 @@ void Jeopardy::setCategoryNr()
 {
     this->categoryNr = 0;
     QDir dir;
+    QFile *file;
 
-    QString fileString = QString("answers/%1.jrf").arg(this->round);
-    fileString = dir.absoluteFilePath(fileString);
+    this->fileString = QString("answers/%1.jrf").arg(this->round);
+    this->fileString = dir.absoluteFilePath(this->fileString);
 
-    QFile file(fileString);
+    file = new QFile(this->fileString);
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
-        fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
-        fileString = dir.absoluteFilePath(fileString);
+        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+        this->fileString = dir.absoluteFilePath(this->fileString);
+        file = new QFile(this->fileString);
+
+        if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          return;
+        }
     }
 
-    QTextStream in(&file);
+    QTextStream in(file);
     QString line;
 
     for(int i = 1; i < 32; i++)
@@ -183,6 +191,7 @@ void Jeopardy::setCategoryNr()
                 break;
         }
     }
+    delete file;
 }
 
 bool Jeopardy::initPlayers()
@@ -199,6 +208,7 @@ bool Jeopardy::initPlayers()
     {
         complete = false;
         playerName = QString("Player %1").arg(this->playerNr + 1);
+        int dialogcode;
 
         for(;;)
         {
@@ -212,7 +222,7 @@ bool Jeopardy::initPlayers()
             playerInput.setLabelText("Enter name");
 
             playerInput.setOkButtonText("Create player");
-            playerInput.exec();
+            dialogcode = playerInput.exec();
             text = playerInput.textValue();
 
             if(text.length() < 10)
@@ -223,7 +233,7 @@ bool Jeopardy::initPlayers()
             msgBox.exec();
         }
 
-        if(text.isEmpty())
+        if(text.isEmpty() || dialogcode == 0)
             break;
 
         this->players[this->playerNr].setName(text);
@@ -251,7 +261,7 @@ bool Jeopardy::initPlayers()
 
 void Jeopardy::startRound(int round)
 {
-    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
+    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound, this->fileString);
     this->gameField->init();
 }
 

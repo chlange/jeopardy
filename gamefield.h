@@ -69,7 +69,7 @@
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNr = 0, bool sound = true);
+    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNr = 0, bool sound = true, QString filesString = "");
     ~GameField();
     void init();
 
