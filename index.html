@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Jeopardy : Implementation of well known Jeopardy! quiz show in C++ using Qt framework." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Jeopardy</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/chlange/jeopardy">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Jeopardy</h1>
+          <h2 id="project_tagline">Implementation of well known Jeopardy! quiz show in C++ using Qt framework.</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/chlange/jeopardy/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/chlange/jeopardy/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Jeopardy</h1>
+
+<ul>
+<li>Description:<br>
+</li>
+<li>Author:   Christian Lange (<a href="mailto:chlange@htwg-konstanz.de">chlange@htwg-konstanz.de</a>)</li>
+<li>Github:   <a href="https://github.com/chlange/jeopardy">https://github.com/chlange/jeopardy</a></li>
+<li>Homepage: <a href="http://ganz-sicher.net/chlange">http://ganz-sicher.net/chlange</a></li>
+<li>License:  New BSD License (3-clause BSD license)</li>
+</ul><h2>Description</h2>
+
+<ul>
+<li>Implementation of well known Jeopardy! quiz show in C++ using Qt library</li>
+</ul><h2>Features</h2>
+
+<ul>
+<li>up to 9 players</li>
+<li>sound</li>
+<li>colors</li>
+<li>names</li>
+<li>choose own key to answer</li>
+<li>right click context menu including
+
+<ul>
+<li>random generator to pick random user</li>
+<li>load/save game state</li>
+<li>player name and points editor</li>
+<li>early round ending option</li>
+<li>round reset</li>
+</ul>
+</li>
+<li>automated game state backup after each answer 
+
+<ul>
+<li>backups can be found in gameStates/backups/</li>
+<li>backups ordered by round and unix timestamp</li>
+</ul>
+</li>
+<li>formatted text and (if too big) resized images as answer 
+
+<ul>
+<li>see answers/1.jrf or wiki for further instructions</li>
+</ul>
+</li>
+<li>double jeopardy questions 
+
+<ul>
+<li>see answers/1.jrf or wiki for further instructions</li>
+</ul>
+</li>
+</ul><h2>Todo</h2>
+
+<ul>
+<li>smoother design</li>
+<li>...little here and there</li>
+</ul><h2>Software used</h2>
+
+<ul>
+<li>Qt 4.6.2</li>
+<li>Phonon</li>
+</ul><h2>Install</h2>
+
+<pre><code>Download and extract tarball
+make
+chmod u+x jeopardy
+./jeopardy
+</code></pre>
+
+<h2>Play</h2>
+
+<ul>
+<li>Edit answers/round.jrf
+
+<ul>
+<li>see answers/1.jrf or wiki for further instructions</li>
+</ul>
+</li>
+<li>Choose round to play</li>
+<li>Enter names, keys and colors of players</li>
+<li>Select question</li>
+</ul><h2>Screenshots</h2>
+
+<p>Round choice:</p>
+
+<p><img src="http://i.imgur.com/PdzVW.png" alt=""></p>
+
+<p>Player input:</p>
+
+<p><img src="http://i.imgur.com/kZTJF.png" alt=""></p>
+
+<p>Game field: </p>
+
+<p><img src="http://i.imgur.com/TojZ7.png" alt=""></p>
+
+<p>Colored game field:</p>
+
+<p><img src="http://i.imgur.com/4kwY6.png" alt=""></p>
+
+<p>Answer:</p>
+
+<p><img src="http://i.imgur.com/hMVrk.png" alt=""></p>
+
+<p>Podium:</p>
+
+<p><img src="http://i.imgur.com/lIQgj.png" alt=""></p>
+
+<h2>Bugs? Feature requests? Have some Beer?</h2>
+
+<p>Don't hesitate to contact me!</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Jeopardy maintained by <a href="https://github.com/chlange">chlange</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
