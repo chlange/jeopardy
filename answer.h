@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -31,10 +31,11 @@
 
 #include <QKeyEvent>
 #include <QSound>
-#include <QDebug>
 #include <QFile>
 #include <QDir>
 #include <QPixmap>
+#include <QTimer>
+#include <QTime>
 #include <QGraphicsScene>
 #include <phonon/mediaobject.h>
 #include <doublejeopardy.h>
@@ -56,7 +57,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players = NULL, int playerNr = NULL, bool sound = true);
+    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players = NULL, int playerNr = NULL, bool sound = true, int currentPlayerId = 0);
     ~Answer();
     void setAnswer(int category, int points);
     int getPoints();
@@ -73,11 +74,14 @@ private:
     int points;
     int currentPlayerId;
     int winner;
+    unsigned int timeStarted;
     bool keyLock;
+    bool isVideo;
     bool sound;
     bool doubleJeopardy;
     QString result;
     QString fileString;
+    QTime *time;
     Player *players;
     Player currentPlayer;
     Phonon::MediaObject *music;
@@ -93,16 +97,20 @@ private:
     void hideButtons();
 
     QString getRoundFile();
-    QFont meassureFontSize(int count);
-    int getCategoryLine(int category);
+    QFont measureFontSize(int count);
 
     bool getAnswer(int category, int points, QString *answer);
     void openDoubleJeopardy();
+    int getCategoryLine(int category);
 
     void processText(QString *answer);
     void processImg(QString *answer);
+    void processSound(QString *answer);
+    void processVideo(QString *answer);
     void processDoubleJeopardy(QString *answer);
     void processAlign(QString *answer);
+
+    void prependDir(QString *answer);
 
 private slots:
     void on_buttonCancel_clicked();

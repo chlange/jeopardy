@@ -28,6 +28,9 @@
     <height>615</height>
    </size>
   </property>
+  <property name="cursor">
+   <cursorShape>WhatsThisCursor</cursorShape>
+  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::NoContextMenu</enum>
   </property>
@@ -61,6 +64,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Right</string>
    </property>
@@ -87,6 +93,9 @@
      <weight>50</weight>
      <bold>false</bold>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
    </property>
    <property name="text">
     <string>End</string>
@@ -115,6 +124,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Wrong</string>
    </property>
@@ -125,7 +137,7 @@
      <x>9</x>
      <y>9</y>
      <width>981</width>
-     <height>501</height>
+     <height>521</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -142,8 +154,14 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </property>
    <property name="text">
-    <string/>
+    <string>listen...</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>
@@ -172,6 +190,9 @@
      <family>Andale Mono</family>
      <pointsize>20</pointsize>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
    </property>
    <property name="text">
     <string>currentPlayer</string>
@@ -203,6 +224,9 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Cancel</string>
    </property>
@@ -216,8 +240,34 @@
      <height>531</height>
     </rect>
    </property>
+   <property name="cursor" stdset="0">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
+  </widget>
+  <widget class="Phonon::VideoPlayer" name="videoPlayer">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>981</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>WhatsThisCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Phonon::VideoPlayer</class>
+   <extends>QWidget</extends>
+   <header location="global">phonon/videoplayer.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

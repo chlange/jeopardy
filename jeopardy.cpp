@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -31,23 +31,22 @@
 
 Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Jeopardy)
+    sound(false), gameField(NULL)
 {
-    ui->setupUi(this);
 
     this->players = new Player[NUMBER_MAX_PLAYERS];
-    this->gameField = NULL;
 }
 
 Jeopardy::~Jeopardy()
 {
-    delete ui;
-
     if(this->players != NULL)
         delete [] this->players;
 
     if(this->gameField != NULL)
+    {
         delete this->gameField;
+        this->gameField = NULL;
+    }
 }
 
 void Jeopardy::changeEvent(QEvent *e)
@@ -55,53 +54,83 @@ void Jeopardy::changeEvent(QEvent *e)
     QMainWindow::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
         break;
     default:
         break;
     }
 }
 
-void Jeopardy::initGameField(int round)
+void Jeopardy::init()
+{
+    this->initMenu();
+}
+
+void Jeopardy::initMenu()
+{
+    this->window = new QWidget();
+    this->grid = new QGridLayout();
+
+    for(int i = 0; i < NUMBER_ROUNDS; i++)
+        this->prepareButton(i);
+
+    this->window->setLayout(this->grid);
+    this->window->show();
+}
+
+void Jeopardy::prepareButton(int i)
+{
+    this->buttons[i] = new QPushButton();
+    this->buttons[i]->setText(QString("Round %1").arg(i + 1));
+    this->buttons[i]->setFont(QFont("Helvetica [Cronyx]", 13, QFont::Bold, false));
+    this->buttons[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->grid->addWidget(this->buttons[i], 0, i, 0);
+    this->grid->setSpacing(0);
+    this->grid->setMargin(0);
+    connect(this->buttons[i], SIGNAL(clicked()), this->buttons[i], SLOT(hide()));
+    connect(this->buttons[i], SIGNAL(clicked()), this, SLOT(initGameField()));
+}
+
+void Jeopardy::initGameField()
 {
     bool complete;
 
+    this->round = this->getRound();
     this->setSound();
 
-    this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-
     if(this->sound)
-        this->music->play();
-
-    complete = this->setCategoryNr();
-
-    if(NOT == complete)
     {
-        this->music->stop();
-        return;
-    }
-
-    complete = this->setPlayerNr();
-
-    if(NOT == complete)
-    {
-        this->music->stop();
-        return;
-    }
-
-    if(this->sound)
+        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
         this->music->play();
+    }
 
     complete = this->initPlayers();
 
     if(NOT == complete)
     {
-        this->music->stop();
+        this->deleteSound();
         return;
     }
 
-    this->music->stop();
-    this->startRound(round);
+    this->deleteSound();
+
+    this->setCategoryNr();
+
+    this->startRound(this->round);
+}
+
+int Jeopardy::getRound()
+{
+   for(int i = 0; i < NUMBER_ROUNDS; i++)
+   {
+       if(this->buttons[i]->isHidden())
+       {
+            this->round = i + 1;
+            this->buttons[i]->setStyleSheet(QString("background-color: lightGray;"));
+            this->buttons[i]->setHidden(false);
+       }
+   }
+
+   return this->round;
 }
 
 void Jeopardy::setSound()
@@ -115,120 +144,132 @@ void Jeopardy::setSound()
     if(msgBox.exec() == QMessageBox::Yes)
         this->sound = true;
     else
-        this->sound = false;;
+        this->sound = false;
 }
 
-bool Jeopardy::setPlayerNr()
+void Jeopardy::setCategoryNr()
 {
-    bool ok;
+    this->categoryNr = 0;
+    QDir dir;
+    QFile *file;
 
-    this->playerNr = QInputDialog::getInt(this, "Select number of players", "Players", 3, 1, NUMBER_MAX_PLAYERS, 1, &ok);
+    this->fileString = QString("answers/%1.jrf").arg(this->round);
+    this->fileString = dir.absoluteFilePath(this->fileString);
 
-    return ok;
-}
+    file = new QFile(this->fileString);
 
-bool Jeopardy::setCategoryNr()
-{
-    bool ok;
+    if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
 
-    this->categoryNr = QInputDialog::getInt(this, "Select number of categories", "Categories", 5, 1, 6, 1, &ok);
+        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+        this->fileString = dir.absoluteFilePath(this->fileString);
+        file = new QFile(this->fileString);
 
-    return ok;
+        if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          return;
+        }
+    }
+
+    QTextStream in(file);
+    QString line;
+
+    for(int i = 1; i < 32; i++)
+    {
+        line = in.readLine();
+        if(line.isNull())
+            break;
+
+        /* category lines are 1, 7, 13, 19 and 25 */
+        if(i % 6 == 1)
+        {
+            if(line != "" && !(line.startsWith("category") && line.length() == 9) && line != "category")
+                this->categoryNr++;
+            else
+                break;
+        }
+    }
+    delete file;
 }
 
 bool Jeopardy::initPlayers()
 {
-    QString playerName;
-    QString text;
-    QString key;
-    QString color;
-    QStringList keyListOrg;
-    QStringList keyList;
-    QStringList colorList;
-    int keys[36];
+    bool ok, complete;
+    QString playerName, text, key, color;
+    QStringList keyList, colorList;
 
     colorList << "red" << "green" << "yellow" << "blue" << "gray" << "magenta" << "darkRed" << "cyan" << "white" << "darkMagenta";
+    keyList << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H" << "I" << "J" << "K" << "L" << "M"
+            << "N" << "O" << "P" << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "X" << "Y" << "Z";
 
-    /* TODO
-     * Key list with saved int values - enum is not the right option cause you need the string for the key, too,
-     * to display them in the combobox and remove them if one player already chose the key.
-     */
-    keyList << "a" << "b" << "c" << "d"  << "e" << "f" << "g" << "h" << "i" << "j" << "k" << "l" << "m"
-            << "n" << "o" << "p" << "q" << "r" << "s" << "t" << "u" << "v" << "w" << "x" << "y" << "z"
-             << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "0";
-    keyListOrg = keyList;
-
-    /* Key to appropriate int value */
-    for(int i = 0; i < 26; i++)
-        keys[i] = 0x41 + i;
-    for(int i = 26; i < 36; i++)
-        keys[i] = 0x30 + (i - 26);
-
-    bool ok;
-    bool complete = true;
-
-    for(int i = 0; i < this->playerNr; i++)
+    for(this->playerNr = 0; this->playerNr < NUMBER_MAX_PLAYERS; this->playerNr++)
     {
-        playerName = QString("Player %1").arg(i+1);
+        complete = false;
+        playerName = QString("Player %1").arg(this->playerNr + 1);
+        int dialogcode;
 
-        text = QInputDialog::getText(this, "Enter name", playerName, QLineEdit::Normal,"", &ok);
-
-        /* Check if name is valid */
-        if(ok && !text.isEmpty())
+        for(;;)
         {
-            this->players[i].setName(text);
-            this->players[i].setId(i+1);
+            QInputDialog playerInput;
 
-            key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
-            if(!ok)
-            {
-                complete = false;
-                break;
-            }
-            this->players[i].setKey(keys[keyListOrg.indexOf(key)]);
-            keyList.removeOne(key);
+            if(this->playerNr > 0)
+                playerInput.setCancelButtonText("Play");
+            else
+                playerInput.setCancelButtonText("Cancel");
 
-            color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
-            if(!ok)
-            {
-                complete = false;
+            playerInput.setLabelText("Enter name");
+
+            playerInput.setOkButtonText("Create player");
+            dialogcode = playerInput.exec();
+            text = playerInput.textValue();
+
+            if(text.length() < 10)
                 break;
-            }
-            this->players[i].setColor(color);
-            colorList.removeOne(color);
-            this->players[i].setPoints(0);
+
+            QMessageBox msgBox;
+            msgBox.setText("Choose a name shorter than 11 letters");
+            msgBox.exec();
         }
-        else
-        {
-            complete = false;
+
+        if(text.isEmpty() || dialogcode == 0)
             break;
-        }
+
+        this->players[this->playerNr].setName(text);
+        this->players[this->playerNr].setId(this->playerNr + 1);
+        this->players[this->playerNr].setPressed(0);
+
+        key = QInputDialog::getItem(this, "Choose key", "Choose key:", keyList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[this->playerNr].setKey(key.at(0).toAscii());
+        keyList.removeOne(key);
+
+        color = QInputDialog::getItem(this, "Choose color ", "Color:", colorList, 0, false, &ok);
+        if(!ok)
+            break;
+
+        this->players[this->playerNr].setColor(color);
+        colorList.removeOne(color);
+        this->players[this->playerNr].setPoints(0);
     }
-    return complete;
+
+    return (this->playerNr > 0) ? true : false;
 }
 
 void Jeopardy::startRound(int round)
 {
-    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound);
+    this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound, this->fileString);
     this->gameField->init();
 }
 
-void Jeopardy::on_buttonRound1_clicked()
+void Jeopardy::deleteSound()
 {
-    initGameField(1);
-}
-
-void Jeopardy::on_buttonRound2_clicked()
-{
-    initGameField(2);
-}
-
-void Jeopardy::on_buttonRound3_clicked()
-{
-    initGameField(3);
-}
-
-void Jeopardy::on_buttonRound4_clicked()
-{
-    initGameField(4);
+    if(this->sound)
+    {
+        this->music->stop();
+        delete this->music;
+    }
 }

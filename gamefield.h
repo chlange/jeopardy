@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -30,14 +30,16 @@
 #define GAMEFIELD_H
 
 #include <stdlib.h>
+#include <QDir>
 #include <QMenu>
 #include <QAction>
 #include <QLabel>
 #include <QFile>
 #include <QColor>
-#include <QDebug>
+#include <QTimer>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QShortcut>
 #include <QDateTime>
 #include <QGridLayout>
 #include <editor.h>
@@ -54,6 +56,7 @@
 #define PLAYER_INDICATOR 1
 #define RESULT_INDICATOR 1
 #define NOT false
+#define NO_WINNER -1
 
 #define GAMEFIELD_WIDTH 1000
 #define GAMEFIELD_HEIGHT 500
@@ -66,7 +69,7 @@
 class GameField : public QDialog {
     Q_OBJECT
 public:
-    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNrArr = 0, bool sound = true);
+    GameField(QWidget *parent = NULL, int round = 0, int categoryNr = 0, Player *players = NULL, int playerNr = 0, bool sound = true, QString filesString = "");
     ~GameField();
     void init();
 
@@ -80,6 +83,7 @@ private:
     int lastPoints;
     int playerNr;
     int categoryNr;
+    int currentPlayer;
     bool sound;
     Player *players;
     Editor *editor;
@@ -96,6 +100,7 @@ private:
     QAction *saveCtx;
     QAction *endRoundCtx;
     QAction *resetRoundCtx;
+    QAction *about;
     QPushButton *buttons[NUMBER_MAX_ANSWERS];
     QLabel *playerNameLabels[NUMBER_MAX_PLAYERS];
     QLabel *playerPointsLabels[NUMBER_MAX_PLAYERS];
@@ -113,35 +118,41 @@ private:
 
     void insertLayouts();
     void assignButtons();
+    void setDefaultButtonAppearance(int i, int currentButton);
     void assignPlayerNameLabels();
     void assignPlayerPointsLabels();
     void assignCategoryLabels();
-    void setCategoryNames();
+    void processCategoryLabels();
     void setLabelColor();
     void setPoints();
     void setNames();
 
     void updateGameFieldValues();
-    void updatePointsLabels();
-    void updateNamesLabels();
     void updateLabelsAfterAnswer();
     void updateAfterAnswer();
+    void updateCurrentPlayerLabel();
 
     QString getButtonColorByLastWinner();
 
     void openAnswer(int category, int points);
+    void processAnswer(int category, int points);
     void processResult();
     void showPodium();
 
     void openFileLoader();
     void openFileSaver(bool automatedBackup);
     void openEditor();
-    void random();
     void resetRound();
+
+    bool eventFilter(QObject *target, QEvent *event);
+    void indicateRandom();
 
 private slots:
     /* Context Menu */
     void on_gameField_customContextMenuRequested(QPoint pos);
+    int random();
+    void updateNamesLabels();
+    void updatePointsLabels();
     void on_button_1_100_clicked();
     void on_button_2_100_clicked();
     void on_button_3_100_clicked();

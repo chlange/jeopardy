@@ -1,10 +1,9 @@
 Jeopardy
 ========
 
-* Description:	
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		08. Dezember 2011
-* Version:	0.9.4 stable
+* Date:		30. May 2012
+* Version:	0.9.6 experimental version 3
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -12,7 +11,7 @@ Jeopardy
 Description
 -----------
 
-* Implementation of well known Jeopardy! quiz show in C++ using Qt library
+* Implementation of well known Jeopardy! quiz show in C++ using Qt framework
 
 Features
 --------
@@ -21,9 +20,9 @@ Features
 * sound
 * colors
 * names
-* choose own key to answer
+* choose own key to answer (Press key on game field to check functionality)
 * right click context menu including
-	* random generator to pick random user
+	* random generator to pick random user (Press "r" on game field for same functionality)
 	* load/save game state
 	* player name and points editor
 	* early round ending option
@@ -31,14 +30,22 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by round and unix timestamp
-* formatted text and (if too big) resized images as answer 
+* scoring
+	* see gameStates/score.jsf for overall scoring
+* formatted text, sound, images and videos as answer 
 	* see answers/1.jrf or wiki for further instructions
+	* images and videos will be resized if too big
+	* sound and videos will stop after 30 seconds (normal answer time)
+	* Press Shift to restart sound or video
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
+* maybe more...
+
 
 Todo
 ----
 
+* better score system
 * smoother design
 * ...little here and there
 
@@ -47,14 +54,11 @@ Software used
 
 * gcc 4.4.3
 * Qt 4.6.2
-* Phonon
+* phonon
 
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.4s
-	tar xfv v0.9.4s
-	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
 	./jeopardy

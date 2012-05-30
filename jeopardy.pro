@@ -5,6 +5,7 @@ QT += xml \
     xmlpatterns \
     multimedia \
     phonon
+CONFIG += qtestlib
 TARGET = jeopardy
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -22,6 +23,4 @@ HEADERS += jeopardy.h \
     editor.h \
     podium.h \
     doublejeopardy.h
-FORMS += jeopardy.ui \
-    answer.ui \
-    podium.ui
+FORMS += answer.ui

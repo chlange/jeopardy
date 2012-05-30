@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -28,17 +28,15 @@
 
 #include "gamefield.h"
 
-GameField::GameField(QWidget *parent, int roundArg, int categoryNr, Player *players, int playerNr, bool sound) :
-    QDialog(parent), round(roundArg), alreadyAnswered(0), lastWinner(NO_WINNER),
+GameField::GameField(QWidget *parent, int round, int categoryNr, Player *players, int playerNr, bool sound, QString fileString) :
+    QDialog(parent), round(round), alreadyAnswered(0), lastWinner(NO_WINNER),
     lastPoints(0), playerNr(playerNr), categoryNr(categoryNr), sound(sound), players(players), answer(), podium(NULL),
-    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL)
+    randomCtx(NULL), editorCtx(NULL), loadCtx(NULL), saveCtx(NULL), endRoundCtx(NULL), about(NULL), fileString(fileString)
 {
 }
 
 GameField::~GameField()
 {
-    if(this->answer != NULL)
-        delete this->answer;
     if(this->randomCtx != NULL)
         delete this->randomCtx;
     if(this->editorCtx != NULL)
@@ -51,6 +49,8 @@ GameField::~GameField()
         delete this->endRoundCtx;
     if(this->podium != NULL)
         delete this->podium;
+    if(this->about != NULL)
+        delete this->about;
 
     delete this->categoryLabelGrid;
     delete this->buttonGrid;
@@ -78,7 +78,7 @@ void GameField::init()
     this->assignPlayerNameLabels();
     this->assignPlayerPointsLabels();
     this->assignCategoryLabels();
-    this->setCategoryNames();
+    this->processCategoryLabels();
     this->setNames();
     this->setPoints();
     this->setLabelColor();
@@ -88,6 +88,9 @@ void GameField::init()
     connect(this->window, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_gameField_customContextMenuRequested(QPoint)));
 
     this->window->show();
+
+    this->currentPlayer = this->random();
+    this->updateCurrentPlayerLabel();
 }
 
 void GameField::setRound(int round)
@@ -141,6 +144,7 @@ void GameField::insertLayouts()
     this->buttonGrid->setGeometry(QRect(0, CATEGORY_LABEL_HEIGHT, GAMEFIELD_WIDTH, GAMEFIELD_HEIGHT - CATEGORY_LABEL_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT));
     this->playerLabelGrid->setGeometry(QRect(0, GAMEFIELD_HEIGHT - NAME_LABEL_HEIGHT - NAME_LABEL_HEIGHT, GAMEFIELD_WIDTH, NAME_LABEL_HEIGHT + NAME_LABEL_HEIGHT));
 
+    this->window->installEventFilter(this);
     this->window->setLayout(this->mainGrid);
 }
 
@@ -164,11 +168,11 @@ void GameField::assignCategoryLabels()
 
 void GameField::assignButtons()
 {
-    QFont font;
-    font.setPointSize(20);
-
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+    {
         this->buttons[i] = new QPushButton();
+        this->buttons[i]->installEventFilter(this);
+    }
 
     for(int j = 0; j < this->categoryNr; j++)
     {
@@ -176,10 +180,8 @@ void GameField::assignButtons()
         {
             int currentButton = (NUMBER_MAX_CATEGORIES * i) + j;
 
-            this->buttons[currentButton]->setFont(font);
-            this->buttons[currentButton]->setText(QString("%1").arg((i + 1) * POINTS_FACTOR));
-            this->buttons[currentButton]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            this->categoryLabelGrid->addWidget(this->buttons[currentButton], i+1, j);
+            this->setDefaultButtonAppearance((i + 1) * POINTS_FACTOR, currentButton);
+            this->categoryLabelGrid->addWidget(this->buttons[currentButton], i + 1, j);
         }
     }
 
@@ -233,6 +235,18 @@ void GameField::assignButtons()
         connect(this->buttons[23], SIGNAL(clicked()), this, SLOT(on_button_6_400_clicked()));
         connect(this->buttons[29], SIGNAL(clicked()), this, SLOT(on_button_6_500_clicked()));
     }
+}
+
+void GameField::setDefaultButtonAppearance(int points, int currentButton)
+{
+    QFont font;
+    font.setPointSize(20);
+
+    this->buttons[currentButton]->setFont(font);
+    this->buttons[currentButton]->setText(QString("%1").arg(points));
+    this->buttons[currentButton]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->buttons[currentButton]->setStyleSheet("");
+    this->buttons[currentButton]->setEnabled(true);
 }
 
 void GameField::assignPlayerNameLabels()
@@ -295,23 +309,12 @@ void GameField::assignPlayerPointsLabels()
     }
 }
 
-/* Todo: refactor */
-void GameField::setCategoryNames()
+void GameField::processCategoryLabels()
 {
     int categoryLine;
     QFont font;
     QString categoryName;
-
-    this->fileString = QString("answers/%1.jrf").arg(this->round);
-    QFile file(this->fileString);
     font.setBold(true);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
-
-        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
-    }
 
     for(int i = 0; i < this->categoryNr; i++)
     {
@@ -344,7 +347,7 @@ void GameField::setLabelColor()
 
     for(int i = 0; i < this->playerNr; i++)
     {
-        color = QString("QLabel { background-color : %1; }").arg(this->players[i].getColor());
+        color = QString("QLabel { background-color : %1; color: black;}").arg(this->players[i].getColor());
         this->playerNameLabels[i]->setStyleSheet(color);
     }
 }
@@ -358,7 +361,12 @@ void GameField::setPoints()
 void GameField::setNames()
 {
     for(int i = 0; i < this->playerNr; i++)
-        this->playerNameLabels[i]->setText(this->players[i].getName());
+    {
+        if(this->currentPlayer == i)
+            this->playerNameLabels[i]->setText(QString("%1 ***").arg(this->players[i].getName()));
+        else
+            this->playerNameLabels[i]->setText(this->players[i].getName());
+    }
 }
 
 void GameField::updateGameFieldValues()
@@ -371,13 +379,16 @@ void GameField::updateGameFieldValues()
 void GameField::updatePointsLabels()
 {
     for(int i = 0; i < this->playerNr; i++)
+    {
+        this->playerPointsLabels[i]->setStyleSheet(QString(""));
         this->playerPointsLabels[i]->setText(QString::number(this->players[i].getPoints()));
+    }
 }
 
 void GameField::updateNamesLabels()
 {
-    for(int i = 0; i < this->playerNr; i++)
-        this->playerNameLabels[i]->setText(this->players[i].getName());
+    this->setNames();
+    this->setLabelColor();
 }
 
 void GameField::updateLabelsAfterAnswer()
@@ -389,32 +400,28 @@ void GameField::updateLabelsAfterAnswer()
 void GameField::updateAfterAnswer()
 {
     this->incAlreadyAnswered(1);
-    this->updateLabelsAfterAnswer();
+    this->updatePointsLabels();
+}
+
+void GameField::updateCurrentPlayerLabel()
+{
+    this->updateNamesLabels();
+    this->playerNameLabels[this->currentPlayer]->setText(QString("%1 ***").arg(this->players[this->currentPlayer].getName()));
 }
 
 QString GameField::getButtonColorByLastWinner()
 {
-    QString color = QString("QPushButton { background-color : lightGray; }");
-
-    if(this->lastWinner != NO_WINNER)
-        color = QString("QPushButton { background-color : %1; }").arg(this->players[this->lastWinner].getColor());
-
-    return color;
+    return QString("QPushButton { background-color : %1; color : black; }").arg(this->players[this->lastWinner].getColor());
 }
 
 void GameField::openAnswer(int category, int points)
 {
-    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound);
+    this->answer = new Answer(this, this->fileString, this->round, this->players, this->playerNr, this->sound, this->currentPlayer);
     this->answer->setAnswer(category, points);
 
     this->answer->exec();
 
-    this->lastWinner = this->answer->getWinner();
-
-    /* Doing some calculation to get appropriate button */
-    this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET]->setStyleSheet(this->getButtonColorByLastWinner());
-    this->lastPoints = this->answer->getPoints();
-    this->result = answer->getResult();
+    this->processAnswer(category, points);
 
     this->processResult();
     this->updateAfterAnswer();
@@ -431,9 +438,33 @@ void GameField::openAnswer(int category, int points)
     }
 }
 
+void GameField::processAnswer(int category, int points)
+{
+    QPushButton *button = this->buttons[NUMBER_MAX_CATEGORIES * (points / POINTS_FACTOR - OFFSET) + category - OFFSET];
+    button->setText("");
+    this->currentPlayer = this->lastWinner = this->answer->getWinner();
+    this->lastPoints = this->answer->getPoints();
+    this->result = answer->getResult();
+
+    /* Write player name on button */
+    if(this->lastWinner != NO_WINNER)
+    {
+        button->setStyleSheet(this->getButtonColorByLastWinner());
+        button->setText(this->players[this->lastWinner].getName());
+    }
+    else
+    {
+        this->currentPlayer = this->random();
+    }
+
+    this->updateNamesLabels();
+    this->updateCurrentPlayerLabel();
+    delete this->answer;
+}
+
 void GameField::processResult()
 {
-    int playerId;
+    int playerId = 0;
 
     while(this->result.length() > 0)
     {
@@ -455,10 +486,13 @@ void GameField::processResult()
 void GameField::openFileLoader()
 {
     int lineNr = 0;
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+    QDir dir;
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", "gameStates/", "Jeopardy Game State (*.jgs)");
 
     if(fileName == "")
         return;
+
+    fileName = dir.absoluteFilePath(fileName);
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
@@ -509,12 +543,16 @@ void GameField::openFileLoader()
     /* Already questioned answers */
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
+        if(line.toInt() == 1)
+            this->buttons[i]->setText("");
+
         this->buttons[i]->setDisabled(line.toInt());
+
         line = in.readLine();
         lineNr++;
     }
 
-      /* Color buttons with player color */
+    /* Color buttons with player color */
     for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
     {
         if(line == "r")
@@ -529,8 +567,6 @@ void GameField::openFileLoader()
             line = "gray";
         else if(line == "m")
             line = "magenta";
-        else if(line == "l")
-            line = "lightGray";
         else if(line == "c")
             line = "cyan";
         else if(line == "d")
@@ -539,9 +575,17 @@ void GameField::openFileLoader()
             line = "white";
         else if(line == "dM")
             line = "darkMagenta";
+        else
+            line = "";
+
+        if(line != "")
+            for(int j = 0; j < this->playerNr; j++)
+                if(this->players[j].getColor() == line)
+                    this->buttons[i]->setText(this->players[j].getName());
 
         line.prepend("QPushButton { background-color : ");
         line.append("; }");
+
         this->buttons[i]->setStyleSheet(line);
 
         line = in.readLine();
@@ -555,18 +599,19 @@ void GameField::openFileLoader()
 
 void GameField::openFileSaver(bool backup)
 {
+    QDir dir;
     QString fileName;
     QDateTime dateTime;
 
     if(backup == true)
-    {
         fileName = QString("gameStates/backups/backup_%1_%2").arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
-    }
     else
-        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game States (*.jgs)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game State (*.jgs)"));
 
     if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");
+
+    fileName = dir.absoluteFilePath(fileName);
 
     if (fileName != "")
     {
@@ -607,6 +652,7 @@ void GameField::openFileSaver(bool backup)
                 stylesheet = "dM";
             else
             {
+                /* chop string expect for first character */
                 int len = stylesheet.length();
                 stylesheet.chop(--len);
             }
@@ -629,40 +675,30 @@ void GameField::openEditor()
     this->updateGameFieldValues();
 }
 
-void GameField::random()
+int GameField::random()
 {
     srand(time(NULL));
 
     int rn = rand() % this->playerNr;
 
-    QMessageBox *msgbox = new QMessageBox();
-    msgbox->setWindowTitle("R");
-    QString text;
-
-    if(this->players[rn].getName().endsWith("s"))
-        text = QString("%1 turn").arg(this->players[rn].getName());
-    else
-        text = QString("%1's turn").arg(this->players[rn].getName());
-
-    msgbox->setText(text);
-
-    msgbox->exec();
-
-    delete msgbox;
+    return rn;
 }
 
 void GameField::resetRound()
 {
     this->setAlreadyAnswered(0);
     for(int i = 0; i < this->playerNr; i++)
-    {
         this->players[i].setPoints(0);
-    }
-    for(int i = 0; i < NUMBER_MAX_ANSWERS; i++)
+
+    for(int j = 0; j < this->categoryNr; j++)
     {
-        this->buttons[i]->setEnabled(true);
-        this->buttons[i]->setStyleSheet("");
+        for(int i = 0; i < NUMBER_ANSWERS; i++)
+        {
+            int currentButton = (NUMBER_MAX_CATEGORIES * i) + j;
+            this->setDefaultButtonAppearance((i + 1) * POINTS_FACTOR, currentButton);
+        }
     }
+
     this->updatePointsLabels();
 }
 
@@ -677,6 +713,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     this->saveCtx = new QAction("Save",this);
     this->endRoundCtx = new QAction("End Round", this);
     this->resetRoundCtx = new QAction("Reset Round", this);
+    this->about = new QAction("About", this);
 
     menu.addAction(this->randomCtx);
     menu.addSeparator();
@@ -688,11 +725,17 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     menu.addAction(this->endRoundCtx);
     menu.addSeparator();
     menu.addAction(this->resetRoundCtx);
+    menu.addSeparator();
+    menu.addAction(this->about);
 
     QAction *selectedItem = menu.exec(globalPos);
 
     if(selectedItem == this->randomCtx)
-        this->random();
+    {
+        this->updateNamesLabels();
+        this->currentPlayer = this->random();
+        this->updateCurrentPlayerLabel();
+    }
     else if(selectedItem == this->editorCtx)
         this->openEditor();
     else if(selectedItem == this->saveCtx)
@@ -706,12 +749,73 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     }
     else if(selectedItem == this->resetRoundCtx)
         this->resetRound();
+    else if(selectedItem == this->about)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Jeopardy!\n\nWritten by Christian Lange using Qt framework\n\nwww.github.com/chlange/jeopardy\nwww.ganz-sicher.net/chlange");
+        msgBox.exec();
+    }
 }
 
 void GameField::showPodium()
 {
     this->podium = new Podium(this, this->players, this->playerNr);
-    this->podium->exec();
+    this->podium->showPodium();
+}
+
+bool GameField::eventFilter(QObject *target, QEvent *event)
+{
+    if(target == this->window && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+        /* Open random user picker if "r" gets pressed */
+        if(keyEvent->key() == Qt::Key_R)
+        {
+            this->indicateRandom();
+            this->updateNamesLabels();
+            this->currentPlayer = this->random();
+            this->updateCurrentPlayerLabel();
+        }
+
+        for(int i = 0; i < this->playerNr; i++)
+        {
+            /* Indicate key press of player over label */
+            if(this->players[i].getKey() == keyEvent->key())
+            {
+                this->playerNameLabels[i]->setStyleSheet(QString("background-color: black; color: white;"));
+                this->playerNameLabels[i]->setText(QString("%1 - it works").arg(this->players[i].getName()));
+                QTimer::singleShot(200, this, SLOT(updateNamesLabels()));
+
+                if(this->players[i].getPressed() > 13)
+                {
+                    this->players[i].decPoints(50);
+                    QTimer::singleShot(200, this, SLOT(updatePointsLabels()));
+                    QMessageBox::critical(this, tr("Error"),
+                                         QString("%1 - That's enough - 50 points subtracted").arg(this->players[i].getName()));
+                }
+                else if(this->players[i].getPressed() > 10)
+                {
+                    int untilSub = 13 - this->players[i].getPressed() + 1;
+                    QString until = (untilSub != 1) ? QString("presses") : QString("press");
+                    QMessageBox::critical(this, tr("Error"),
+                                         QString("%1 - You raped your key %2 times!\n%3 %4 until subtraction").arg(this->players[i].getName()).arg(this->players[i].getPressed()).arg(untilSub).arg(until));
+                }
+
+                this->players[i].incPressed();
+            }
+        }
+    }
+
+    return QDialog::eventFilter(target, event);
+}
+
+void GameField::indicateRandom()
+{
+    for(int i = 0; i < this->playerNr; i++)
+        this->playerPointsLabels[i]->setStyleSheet(QString("background-color: black"));
+
+    QTimer::singleShot(30, this, SLOT(updatePointsLabels()));
 }
 
 /* 100 points buttons */

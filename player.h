@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -45,6 +45,7 @@ class Player
         int points;
         int id;
         int key;
+        int pressed;
 
     public:
         Player();
@@ -66,6 +67,10 @@ class Player
 
         int getKey();
         void setKey(int key);
+
+        void setPressed(int i);
+        void incPressed();
+        int getPressed();
 };
 
 #endif // PLAYER_H

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -29,8 +29,8 @@
 #include "doublejeopardy.h"
 #include "ui_doublejeopardy.h"
 
-DoubleJeopardy::DoubleJeopardy(QWidget *parent, int min, int max, Player *players, int playerNr) :
-    QDialog(parent), min(min), max(max), playerNr(playerNr)
+DoubleJeopardy::DoubleJeopardy(QWidget *parent, int min, int max, Player *players, int playerNr, int currentPlayer) :
+    QDialog(parent), min(min), max(max), playerNr(playerNr), currentPlayerId(currentPlayer)
 {
     this->players = players;
 }
@@ -97,9 +97,13 @@ void DoubleJeopardy::setLabels()
 
     QStringList playerList;
 
+    playerList << "Choose player";
+
     for(int i = 0; i < this->playerNr; i++)
         playerList << this->players[i].getName();
+
     this->playerComboBox->addItems(playerList);
+    this->playerComboBox->setCurrentIndex(this->currentPlayerId + 1);
 
     this->minLabel->setText(QString("Min: %1").arg(this->min));
 
@@ -126,10 +130,14 @@ int DoubleJeopardy::getPlayer()
 
 void DoubleJeopardy::on_button_clicked()
 {
-    if(this->min <= this->pointsSpinBox->value() && this->pointsSpinBox->value() <= this->max)
+    if(this->playerComboBox->currentIndex() == 0)
+    {
+         QMessageBox::critical(this, tr("Error"), tr("Choose player"));
+    }
+    else if(this->min <= this->pointsSpinBox->value() && this->pointsSpinBox->value() <= this->max)
     {
         this->points = this->pointsSpinBox->value();
-        this->index = this->playerComboBox->currentIndex();
+        this->index = this->playerComboBox->currentIndex() - 1;
         this->window->done(0);
     }
     else

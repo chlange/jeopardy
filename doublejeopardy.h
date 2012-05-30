@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -42,7 +42,7 @@
 class DoubleJeopardy : public QDialog {
     Q_OBJECT
 public:
-    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players = NULL, int playerNr = NULL);
+    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players = NULL, int playerNr = NULL, int currentPlayer = 0);
     ~DoubleJeopardy();
 
     void show();
@@ -60,6 +60,7 @@ private:
     int points;
     int index;
     int playerNr;
+    int currentPlayerId;
     Player *players;
     QDialog *window;
     QGridLayout *grid;

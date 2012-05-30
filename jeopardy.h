@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -38,7 +38,9 @@
 #include <gamefield.h>
 #include <player.h>
 
+#define NUMBER_ROUNDS 4
 #define NUMBER_MAX_PLAYERS 9
+#define NUMBER_MAX_CATEGORIES 6
 #define NOT false
 
 namespace Ui {
@@ -50,35 +52,41 @@ class Jeopardy : public QMainWindow {
 public:
     Jeopardy(QWidget *parent = NULL);
     ~Jeopardy();
+    void init();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::Jeopardy *ui;
     int lastKey;
     int playerNr;
     int categoryNr;
+    int round;
     bool sound;
     bool defaultSetttings;
+    QString fileString;
+    QWidget *window;
+    QGridLayout *grid;
+    QPushButton *buttons[NUMBER_ROUNDS];
     Player *players;
     Phonon::MediaObject *music;
     GameField *gameField;
 
-    bool setDefault();
-    void initGameField(int round);
+    void initMenu();
+    void prepareButton(int i);
     void setSound();
-    bool setCategoryNr();
-    bool setPlayerNr();
+    int getRound();
+    void setCategoryNr();
     bool initPlayers();
     void startRound(int round);
 
+    void deleteSound();
 
 private slots:
-    void on_buttonRound1_clicked();
-    void on_buttonRound2_clicked();
-    void on_buttonRound3_clicked();
-    void on_buttonRound4_clicked();
+    void initGameField();
+
+signals:
+    void deleteGameField();
 };
 
 #endif // JEOPARDY_H

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Christian Lange
+ * Copyright (c) 2011-2012, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -33,8 +33,9 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QComboBox>
 #include <QObject>
-#include <QDebug>
+#include <QMessageBox>
 #include <player.h>
 
 #define NUMBER_MAX_PLAYERS 9
@@ -58,12 +59,15 @@ private:
     QGridLayout *saveGrid;
     QLineEdit *playerNamesLines[NUMBER_MAX_PLAYERS];
     QSpinBox *playerPointsLines[NUMBER_MAX_PLAYERS];
+    QComboBox *playerKeyBox[NUMBER_MAX_PLAYERS];
+
     QPushButton *saveButton;
 
     void init();
     void insertLayouts();
     void assignPlayerPointsLines();
     void assignPlayerNamesLines();
+    void assignKeyBoxes();
     void assignSaveButton();
 
     void showValues();
