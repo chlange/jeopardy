@@ -2,8 +2,8 @@ Jeopardy
 ========
 
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		25. March 2012
-* Version:	0.9.6 experimental version 2
+* Date:		30. May 2012
+* Version:	0.9.6 experimental version 3
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -39,6 +39,8 @@ Features
 	* Press Shift to restart sound or video
 * double jeopardy questions 
 	* see answers/1.jrf or wiki for further instructions
+* maybe more...
+
 
 Todo
 ----
@@ -57,9 +59,6 @@ Software used
 Install
 -------
 
-	wget https://github.com/chlange/jeopardy/tarball/v0.9.6e2
-	tar xfv v0.9.6e2
-	cd chlange-jeopardy-...
 	make
 	chmod +x jeopardy
 	./jeopardy
