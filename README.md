@@ -2,8 +2,8 @@ Jeopardy
 ========
 
 * Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
-* Date:		30. May 2012
-* Version:	0.9.6 experimental version 3
+* Date:		07. June 2012
+* Version:	0.9.6 Testing
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -52,15 +52,14 @@ Todo
 Software used
 -------------
 
-* gcc 4.4.3
-* Qt 4.6.2
+* gcc 4.7.0
+* Qt 4.8.1
 * phonon
 
 Install
 -------
 
 	make
-	chmod +x jeopardy
 	./jeopardy
 
 Play
