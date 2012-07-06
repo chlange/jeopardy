@@ -60,8 +60,8 @@ Install
 -------
 
    qmake
-	make
-	./jeopardy
+   make
+   ./jeopardy
 
 Play
 ----
