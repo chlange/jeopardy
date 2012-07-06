@@ -59,7 +59,7 @@ Software used
 Install
 -------
 
-        qmake
+   qmake
 	make
 	./jeopardy
 
