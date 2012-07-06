@@ -59,9 +59,9 @@ Software used
 Install
 -------
 
-   qmake
-   make
-   ./jeopardy
+    qmake
+    make
+    ./jeopardy
 
 Play
 ----
