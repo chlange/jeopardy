@@ -8,10 +8,6 @@
 *****************************************************************************/
 
 #include "editor.h"
-#if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'editor.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 62
-#endif
 
 QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_Editor[] = {
