@@ -115,7 +115,13 @@ void Jeopardy::initGameField()
 
     this->setCategoryNr();
 
-    this->startRound(this->round);
+    if(this->categoryNr > 0) {
+        this->startRound(this->round);
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("No category in round file specified!");
+        msgBox.exec();
+    }
 }
 
 int Jeopardy::getRound()
@@ -196,7 +202,7 @@ void Jeopardy::setCategoryNr()
 
 bool Jeopardy::initPlayers()
 {
-    bool ok, complete;
+    bool ok;
     QString playerName, text, key, color;
     QStringList keyList, colorList;
 
@@ -206,7 +212,6 @@ bool Jeopardy::initPlayers()
 
     for(this->playerNr = 0; this->playerNr < NUMBER_MAX_PLAYERS; this->playerNr++)
     {
-        complete = false;
         playerName = QString("Player %1").arg(this->playerNr + 1);
         int dialogcode;
 
