@@ -59,9 +59,13 @@ Software used
 Install
 -------
 
+   Linux:
     qmake
     make
     ./jeopardy
+
+   Windows:
+    Download WindowsExperimental.zip from "Downloads"
 
 Play
 ----
