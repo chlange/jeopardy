@@ -3,7 +3,6 @@
 # -------------------------------------------------
 QT += xml \
     xmlpatterns \
-    multimedia \
     phonon
 CONFIG += qtestlib
 TARGET = jeopardy
