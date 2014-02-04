@@ -65,7 +65,7 @@ Install
     ./jeopardy
 
     Windows:
-    Download WindowsExperimental.zip from "Downloads"
+    https://github.com/chlange/jeopardy/wiki/Windows
 
 Play
 ----
