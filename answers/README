@@ -1,0 +1,36 @@
+answer
+100: answer 	- Whitespace between ":" and the answer
+200: 		- One answer per line
+300: 
+400: 		
+500: 		- Name this file either 1.jrf, 2.jrf, 3.jrf or 4.jrf for desired round
+text
+100: a<br>b	- Line breaks with <br>
+200: a[b]b	- [b] works, too
+300: 		- HTML elements allowed, too
+400: [nE]text	- Won't escape your text e.g. a "<" won't be escaped as a HTML-tag-opening (HTML escape code for "<": &lt;)
+500: [l]text	- Align text left e.g. for source code
+images
+100: [img]1.png	- Image behind [img] tag must be placed in answers/round/ e.g. [img]1.png lays in answers/1/1.png
+200: [img]1.gif	- [img] tag must be at the beginning
+300: [img]1.bmp - Don't mix an image with text
+400: [img]1.jpg - Image will be resized if too big
+500:
+sound
+100: [sound]1.mp3 - Soundfile behind [sound] tag must be placed in answers/round/ e.g. [sound]1.mp3 lays in answers/1/1.mp3
+200: [sound]1.ogg - Don't mix sound with text
+300: [sound]1.wma - Sound will stop after 30 seconds
+400: 
+500: 
+video
+100: [video]1.avi - Video behind [video] tag must be placed in answers/round/ e.g. [video]1.avi lays in answers/1/1.avi
+200: [video]1.mkv - Don't mix a video with text 
+300: [video]1.mpg - Video will be resized
+400: [video]1.mpg - Video will stop after 30 seconds
+500: 
+other
+100: ##comment##- ##comment won't be shown##
+200: 
+300: [dj]answer - [dj] indicates double jeopardy question
+400: 		- [dj] opens menu where the player and points can be selected
+500: 		- [dj] min. 50 and up to twice the points of the normal question 
