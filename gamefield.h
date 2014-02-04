@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2012, Christian Lange
+ * Copyright (c) 2011-2014, Christian Lange
  * (chlange) <chlange@htwg-konstanz.de> <Christian_Lange@hotmail.com>
  * All rights reserved.
  *
@@ -28,6 +28,10 @@
 
 #ifndef GAMEFIELD_H
 #define GAMEFIELD_H
+
+#ifdef _WIN32
+    #include <time.h>
+#endif
 
 #include <stdlib.h>
 #include <QDir>
