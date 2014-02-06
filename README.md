@@ -63,7 +63,7 @@ Linux:
 * ./jeopardy
 
 Windows:
-* See https://github.com/chlange/jeopardy/wiki/Windows
+* [Link to Wiki](wiki/Windows)
 
 Play
 ----
