@@ -58,9 +58,9 @@ Install
 -------
 
 Linux:
+* Install qt4 and libphonon-dev
 * qmake (or qmake-qt4)
 * make
-* ./jeopardy
 
 Windows:
 * [Follow me](https://github.com/chlange/jeopardy/wiki/Windows)
