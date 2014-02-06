@@ -1,7 +1,7 @@
 Jeopardy
 ========
 
-* Author:	Christian Lange (<Christian_Lange@hotmail.com>)
+* Author:	Christian Lange (Christian_Lange@hotmail.com)
 * Date:		06. February 2014
 * Version:	0.9.6 Stable
 * Github:	https://github.com/chlange/jeopardy
@@ -11,7 +11,7 @@ Jeopardy
 Description
 -----------
 
-* Implementation of well known Jeopardy! quiz show in C++ with Qt
+* Implementation of well known Jeopardy! quiz show in C++ with Qt.
 
 Features
 --------
