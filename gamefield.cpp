@@ -752,7 +752,7 @@ void GameField::on_gameField_customContextMenuRequested(QPoint pos)
     else if(selectedItem == this->about)
     {
         QMessageBox msgBox;
-        msgBox.setText("Jeopardy!\n\nWritten by Christian Lange using Qt framework\n\nwww.github.com/chlange/jeopardy\nwww.ganz-sicher.net/chlange");
+        msgBox.setText("Jeopardy!\n\nWritten by Christian Lange.\nChristian_Lange@hotmail.com\n\nwww.github.com/chlange/jeopardy\nwww.ganz-sicher.net/chlange");
         msgBox.exec();
     }
 }
