@@ -21,7 +21,7 @@ Features
 * colors
 * names
 * choose own key to answer (Press key on game field to check functionality)
-* right click context menu including
+* right click context menu includes
 	* random generator to pick random user (Press "r" on game field for same functionality)
 	* load/save game state
 	* player name and points editor
@@ -30,8 +30,6 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by round and unix timestamp
-* scoring
-	* see gameStates/score.jsf for overall scoring
 * formatted text, sound, images and videos as answer 
 	* see answers/README or wiki for further instructions
 	* images and videos will be resized if too big
