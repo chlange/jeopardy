@@ -58,7 +58,7 @@ Install
 -------
 
 Linux:
-* Install qt4 and libphonon-dev
+* Install qt4 SDK and libphonon-dev
 * qmake (or qmake-qt4)
 * make
 
