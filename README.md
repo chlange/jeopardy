@@ -58,12 +58,12 @@ Install
 -------
 
 Linux:
-    qmake (or qmake-qt4)
-    make
-    ./jeopardy
+* qmake (or qmake-qt4)
+* make
+* ./jeopardy
 
 Windows:
-https://github.com/chlange/jeopardy/wiki/Windows
+* [Follow me](https://github.com/chlange/jeopardy/wiki/Windows)
 
 Play
 ----
