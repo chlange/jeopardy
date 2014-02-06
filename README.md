@@ -1,7 +1,7 @@
 Jeopardy
 ========
 
-* Author:	Christian Lange (<chlange@htwg-konstanz.de><Christian_Lange@hotmail.com>)
+* Author:	Christian Lange (<Christian_Lange@hotmail.com>)
 * Date:		04. February 2014
 * Version:	0.9.6 Stable
 * Github:	https://github.com/chlange/jeopardy
