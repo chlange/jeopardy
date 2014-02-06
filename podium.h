@@ -45,7 +45,7 @@ namespace Ui {
 class Podium : public QDialog {
     Q_OBJECT
 public:
-    Podium(QWidget *parent = NULL, Player *players = NULL, int playerNr = NULL);
+    Podium(QWidget *parent = NULL, Player *players = NULL, int playerNr = 0);
     ~Podium();
     void showPodium();
 

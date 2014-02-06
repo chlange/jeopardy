@@ -57,7 +57,7 @@ namespace Ui {
 class Answer : public QDialog {
     Q_OBJECT
 public:
-    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players = NULL, int playerNr = NULL, bool sound = true, int currentPlayerId = 0);
+    Answer(QWidget *parent = NULL, QString file = NULL, int round = 0, Player *players = NULL, int playerNr = 0, bool sound = true, int currentPlayerId = 0);
     ~Answer();
     void setAnswer(int category, int points);
     int getPoints();

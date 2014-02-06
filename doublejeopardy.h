@@ -42,7 +42,7 @@
 class DoubleJeopardy : public QDialog {
     Q_OBJECT
 public:
-    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players = NULL, int playerNr = NULL, int currentPlayer = 0);
+    DoubleJeopardy(QWidget *parent = NULL, int min = 0, int max = 0, Player *players = NULL, int playerNr = 0, int currentPlayer = 0);
     ~DoubleJeopardy();
 
     void show();
