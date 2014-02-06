@@ -117,8 +117,8 @@ void Podium::showPodium()
         this->third->setVisible(false);
     }
 
-    if(this->playerNr > 1)
-        this->saveScore();
+    //if(this->playerNr > 1)
+    //    this->saveScore();
 
     this->window->show();
 }

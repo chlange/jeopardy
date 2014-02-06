@@ -97,11 +97,13 @@ void Jeopardy::initGameField()
     this->round = this->getRound();
     this->setSound();
 
+    /*
     if(this->sound)
     {
         this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
         this->music->play();
     }
+    */
 
     complete = this->initPlayers();
 

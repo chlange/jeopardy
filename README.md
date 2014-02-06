@@ -1,8 +1,8 @@
 Jeopardy
 ========
 
-* Author:	Christian Lange (<Christian_Lange@hotmail.com>)
-* Date:		04. February 2014
+* Author:	Christian Lange (Christian_Lange@hotmail.com)
+* Date:		06. February 2014
 * Version:	0.9.6 Stable
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
@@ -11,7 +11,7 @@ Jeopardy
 Description
 -----------
 
-* Implementation of well known Jeopardy! quiz show in C++ using Qt framework
+* Implementation of well known Jeopardy! quiz show in C++ with Qt.
 
 Features
 --------
@@ -21,7 +21,7 @@ Features
 * colors
 * names
 * choose own key to answer (Press key on game field to check functionality)
-* right click context menu including
+* right click context menu includes
 	* random generator to pick random user (Press "r" on game field for same functionality)
 	* load/save game state
 	* player name and points editor
@@ -30,15 +30,13 @@ Features
 * automated game state backup after each answer 
 	* backups can be found in gameStates/backups/
 	* backups ordered by round and unix timestamp
-* scoring
-	* see gameStates/score.jsf for overall scoring
 * formatted text, sound, images and videos as answer 
-	* see answers/1.jrf or wiki for further instructions
+	* see answers/README or wiki for further instructions
 	* images and videos will be resized if too big
 	* sound and videos will stop after 30 seconds (normal answer time)
 	* Press Shift to restart sound or video
 * double jeopardy questions 
-	* see answers/1.jrf or wiki for further instructions
+	* see answers/README or wiki for further instructions
 * maybe more...
 
 
@@ -59,19 +57,19 @@ Software used
 Install
 -------
 
-    Linux:
-    qmake
+Linux:
+    qmake (or qmake-qt4)
     make
     ./jeopardy
 
-    Windows:
-    https://github.com/chlange/jeopardy/wiki/Windows
+Windows:
+https://github.com/chlange/jeopardy/wiki/Windows
 
 Play
 ----
 
-* Edit answers/round.jrf
-	* see answers/1.jrf or wiki for further instructions
+* Edit answers/roundnumber.jrf
+	* see answers/README or wiki for further instructions
 * Choose round to play
 * Enter names, keys and colors of players
 * Select question
@@ -79,29 +77,17 @@ Play
 Screenshots
 -----------
 
-Round choice:
+Main:
 
-![](http://i.imgur.com/PdzVW.png)
+![](http://i.imgur.com/iTd8N6o.png)
 
-Player input:
+Player:
 
-![](http://i.imgur.com/kZTJF.png)
-
-Game field: 
-
-![](http://i.imgur.com/TojZ7.png)
+![](http://i.imgur.com/4KsajRv.png)
 
 Colored game field:
 
-![](http://i.imgur.com/4kwY6.png)
-
-Answer:
-
-![](http://i.imgur.com/hMVrk.png)
-
-Podium:
-
-![](http://i.imgur.com/lIQgj.png)
+![](http://i.imgur.com/AwaO8gd.png)
 
 Bugs? Feature requests? Have some Beer?
 ------------------------------------------

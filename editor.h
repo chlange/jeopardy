@@ -43,7 +43,7 @@
 class Editor : public QDialog {
     Q_OBJECT
 public:
-    Editor(QWidget *parent = NULL, Player *players = NULL, int playerNr = NULL);
+    Editor(QWidget *parent = NULL, Player *players = NULL, int playerNr = 0);
     ~Editor();
     void show();
 
