@@ -49,6 +49,10 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
 
     this->time = new QTime();
     this->time->start();
+    timer = new QTimer();
+    timer->setInterval(1*1000);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
+    timer->start();
 
     this->hideButtons();
     ui->graphicsView->setVisible(false);
@@ -70,6 +74,16 @@ Answer::~Answer()
         delete this->dj;
 
     delete this->time;
+    delete timer;
+}
+
+void Answer::updateTime()
+{
+    int seconds = 31 - this->time->elapsed() / 1000;
+    if(seconds >= 0)
+        ui->time->setText(QString("%1").arg(seconds, 2));
+    else
+        ui->time->setText(QString("Ended..."));
 }
 
 int Answer::getWinner()
