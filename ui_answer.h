@@ -33,6 +33,7 @@ public:
     QPushButton *buttonCancel;
     QGraphicsView *graphicsView;
     Phonon::VideoPlayer *videoPlayer;
+    QLabel *time;
 
     void setupUi(QDialog *Answer)
     {
@@ -122,6 +123,12 @@ public:
         videoPlayer->setGeometry(QRect(9, 9, 981, 511));
         videoPlayer->setCursor(QCursor(Qt::WhatsThisCursor));
         videoPlayer->setStyleSheet(QString::fromUtf8(""));
+        time = new QLabel(Answer);
+        time->setObjectName(QString::fromUtf8("time"));
+        time->setGeometry(QRect(20, 540, 221, 16));
+        QFont font3;
+        font3.setPointSize(14);
+        time->setFont(font3);
 
         retranslateUi(Answer);
 
@@ -137,6 +144,7 @@ public:
         answer->setText(QApplication::translate("Answer", "listen...", 0, QApplication::UnicodeUTF8));
         currentPlayer->setText(QApplication::translate("Answer", "currentPlayer", 0, QApplication::UnicodeUTF8));
         buttonCancel->setText(QApplication::translate("Answer", "Cancel", 0, QApplication::UnicodeUTF8));
+        time->setText(QString());
     } // retranslateUi
 
 };
