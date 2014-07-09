@@ -109,11 +109,11 @@ void Jeopardy::initGameField()
 
     if(NOT == complete)
     {
-        this->deleteSound();
+        //this->deleteSound();
         return;
     }
 
-    this->deleteSound();
+    //this->deleteSound();
 
     this->setCategoryNr();
 
