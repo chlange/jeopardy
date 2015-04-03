@@ -2,8 +2,8 @@ Jeopardy
 ========
 
 * Author:	Christian Lange (Christian_Lange@hotmail.com)
-* Date:		06. February 2014
-* Version:	0.9.6 Stable
+* Date:	03. April 2015
+* Version:	0.9.7 Stable (Linux version)
 * Github:	https://github.com/chlange/jeopardy
 * Homepage:	http://ganz-sicher.net/chlange
 * License:	New BSD License (3-clause BSD license)
@@ -37,6 +37,8 @@ Features
 	* Press Shift to restart sound or video
 * double jeopardy questions 
 	* see answers/README or wiki for further instructions
+* Custom game data path
+	* export the environment variable jeopardyRoot to desired path (default: /usr/share/jeopardy)
 * maybe more...
 
 
@@ -50,7 +52,7 @@ Todo
 Software used
 -------------
 
-* gcc 4.7.0
+* gcc 5.4.1
 * Qt 4.8.1
 * phonon
 
