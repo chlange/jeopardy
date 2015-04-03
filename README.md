@@ -37,8 +37,9 @@ Features
 	* Press Shift to restart sound or video
 * double jeopardy questions 
 	* see answers/README or wiki for further instructions
-* Custom game data path
-	* export the environment variable jeopardyRoot to desired path (default: /usr/share/jeopardy)
+* custom game data path
+	* set the environment variable jeopardyRoot to the desired path (default: /usr/share/jeopardy)
+    * jeopardy creates the necessary directories in the custom path but keep in mind that you need to copy the content (sound, icon, answers)
 * maybe more...
 
 

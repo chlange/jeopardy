@@ -3,7 +3,8 @@
 # -------------------------------------------------
 QT += xml \
     xmlpatterns \
-    phonon
+    phonon \
+    multimediawidgets
 CONFIG += qtestlib
 TARGET = jeopardy
 TEMPLATE = app
