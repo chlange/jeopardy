@@ -67,10 +67,10 @@ int main(int argc, char *argv[])
     makeDir(QDir(imagesPath));
     makeDir(QDir(answersPath));
 
-    makeDir(QDir(QString("%1/1").arg(answersPath));
-    makeDir(QDir(QString("%1/2").arg(answersPath));
-    makeDir(QDir(QString("%1/3").arg(answersPath));
-    makeDir(QDir(QString("%1/4").arg(answersPath));
+    makeDir(QDir(QString("%1/1").arg(answersPath)));
+    makeDir(QDir(QString("%1/2").arg(answersPath)));
+    makeDir(QDir(QString("%1/3").arg(answersPath)));
+    makeDir(QDir(QString("%1/4").arg(answersPath)));
     
     a.setWindowIcon(QIcon(QString("%1/icon.svg").arg(imagesPath)));
     Jeopardy w;
