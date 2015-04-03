@@ -27,12 +27,49 @@
  */
 
 #include <QtGui/QApplication>
+#include <QtDebug>
 #include "jeopardy.h"
+
+QString rootPath;
+QString gameStatePath;
+QString backupPath;
+QString soundPath;
+QString imagesPath;
+QString answersPath;
+
+void makeDir(QDir dir) {
+    if (!dir.exists()) {
+        if(!dir.mkpath(".")) {
+            QMessageBox::critical(0, "Error", QString("Unable to create directory %1. Please check the permissions \
+                of the directory or set the environment variable \"jeopardyRoot\" to specify a \
+                custom jeopardy home (i.e. export jeopardyRoot=/home/chlange/jeopardy).").arg(dir.path()));
+            exit(1);
+        }
+    }
+}
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon("images/icon.svg"));
+
+    QString envRoot = qgetenv("jeopardyRoot").constData();
+    if(envRoot.isEmpty())
+        rootPath = "/usr/share/jeopardy";
+    else
+        rootPath = envRoot;
+
+    gameStatePath = QString("%1/gameStates").arg(rootPath);
+    backupPath = QString("%1/backups").arg(gameStatePath);
+    soundPath = QString("%1/sound").arg(rootPath);
+    imagesPath = QString("%1/images").arg(rootPath);
+    answersPath = QString("%1/answers").arg(rootPath);
+
+    makeDir(QDir(backupPath));
+    makeDir(QDir(soundPath));
+    makeDir(QDir(imagesPath));    
+    makeDir(QDir(answersPath));
+    
+    a.setWindowIcon(QIcon(QString("%1/icon.svg").arg(imagesPath)));
     Jeopardy w;
     w.init();
     return a.exec();
