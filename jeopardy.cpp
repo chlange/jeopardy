@@ -100,11 +100,8 @@ void Jeopardy::initGameField()
 
     if(NOT == complete)
     {
-        this->deleteSound();
         return;
     }
-
-    this->deleteSound();
 
     this->setCategoryNr();
 
@@ -152,7 +149,7 @@ void Jeopardy::setCategoryNr()
     QDir dir;
     QFile *file;
 
-    this->fileString = QString("%1/answers/%2.jrf").arg(rootPath).arg(this->round);
+    this->fileString = QString("%1/%2.jrf").arg(answersPath).arg(this->round);
     this->fileString = dir.absoluteFilePath(this->fileString);
 
     file = new QFile(this->fileString);
@@ -261,13 +258,4 @@ void Jeopardy::startRound(int round)
 {
     this->gameField = new GameField(this, round, this->categoryNr, this->players, this->playerNr, this->sound, this->fileString);
     this->gameField->init();
-}
-
-void Jeopardy::deleteSound()
-{
-    if(this->sound)
-    {
-        this->music->stop();
-        delete this->music;
-    }
 }
