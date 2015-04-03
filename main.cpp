@@ -40,9 +40,7 @@ QString answersPath;
 void makeDir(QDir dir) {
     if (!dir.exists()) {
         if(!dir.mkpath(".")) {
-            QMessageBox::critical(0, "Error", QString("Unable to create directory %1. Please check the permissions "
-                "of the directory or set the environment variable \"jeopardyRoot\" to specify a "
-                "custom jeopardy home (i.e. export jeopardyRoot=/home/chlange/jeopardy).").arg(dir.path()));
+            QMessageBox::critical(0, "Error", QString("Unable to create directory %1. Please check the permissions of the parent directory.").arg(dir.path()));
             exit(1);
         }
     }
@@ -66,8 +64,13 @@ int main(int argc, char *argv[])
 
     makeDir(QDir(backupPath));
     makeDir(QDir(soundPath));
-    makeDir(QDir(imagesPath));    
+    makeDir(QDir(imagesPath));
     makeDir(QDir(answersPath));
+
+    makeDir(QDir(QString("%1/1").arg(answersPath));
+    makeDir(QDir(QString("%1/2").arg(answersPath));
+    makeDir(QDir(QString("%1/3").arg(answersPath));
+    makeDir(QDir(QString("%1/4").arg(answersPath));
     
     a.setWindowIcon(QIcon(QString("%1/icon.svg").arg(imagesPath)));
     Jeopardy w;
