@@ -321,7 +321,7 @@ void GameField::processCategoryLabels()
         QFile file(this->fileString);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          QMessageBox::critical(this, tr("Error"), QString("Could not open file %1").arg(fileString));
           return;
         }
 
@@ -487,7 +487,7 @@ void GameField::openFileLoader()
 {
     int lineNr = 0;
     QDir dir;
-    QString fileName = QFileDialog::getOpenFileName(this, "Open File", "gameStates/", "Jeopardy Game State (*.jgs)");
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", gameStatePath, "Jeopardy Game State (*.jgs)");
 
     if(fileName == "")
         return;
@@ -497,7 +497,7 @@ void GameField::openFileLoader()
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+        QMessageBox::critical(this, tr("Error"), QString("Could not open file %1").arg(fileName));
         return;
     }
 
@@ -604,9 +604,9 @@ void GameField::openFileSaver(bool backup)
     QDateTime dateTime;
 
     if(backup == true)
-        fileName = QString("gameStates/backups/backup_%1_%2").arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
+        fileName = QString("%1/backup_%2_%3").arg(backupPath).arg(this->getRound()).arg(dateTime.currentDateTime().toTime_t());
     else
-        fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "gameStates/", tr("Jeopardy Game State (*.jgs)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"),  gameStatePath, tr("Jeopardy Game State (*.jgs)"));
 
     if(NOT == fileName.endsWith(".jgs"))
         fileName.append(".jgs");

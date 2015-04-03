@@ -50,6 +50,12 @@
 #define WON "1"
 #define LOST "0"
 
+extern QString rootPath;
+extern QString gameStatePath;
+extern QString backupPath;
+extern QString soundPath;
+extern QString answersPath;
+
 namespace Ui {
     class Answer;
 }

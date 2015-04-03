@@ -43,6 +43,12 @@
 #define NUMBER_MAX_CATEGORIES 6
 #define NOT false
 
+extern QString rootPath;
+extern QString gameStatePath;
+extern QString backupPath;
+extern QString answersPath;
+
+
 namespace Ui {
     class Jeopardy;
 }

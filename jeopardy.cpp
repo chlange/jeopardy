@@ -33,8 +33,7 @@ Jeopardy::Jeopardy(QWidget *parent) :
     QMainWindow(parent),
     sound(false), gameField(NULL)
 {
-
-    this->players = new Player[NUMBER_MAX_PLAYERS];
+    players = new Player[NUMBER_MAX_PLAYERS];
 }
 
 Jeopardy::~Jeopardy()
@@ -97,14 +96,6 @@ void Jeopardy::initGameField()
     this->round = this->getRound();
     this->setSound();
 
-    /*
-    if(this->sound)
-    {
-        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/title.ogg"));
-        this->music->play();
-    }
-    */
-
     complete = this->initPlayers();
 
     if(NOT == complete)
@@ -161,22 +152,22 @@ void Jeopardy::setCategoryNr()
     QDir dir;
     QFile *file;
 
-    this->fileString = QString("answers/%1.jrf").arg(this->round);
+    this->fileString = QString("%1/answers/%2.jrf").arg(rootPath).arg(this->round);
     this->fileString = dir.absoluteFilePath(this->fileString);
 
     file = new QFile(this->fileString);
 
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open round file, please select one by yourself"));
+        QMessageBox::critical(this, tr("Error"), QString("Could not open round file (%1), please select one by yourself").arg(fileString));
 
-        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), "answers/", tr("Jeopardy Round File (*.jrf)"));
+        this->fileString = QFileDialog::getOpenFileName(this, tr("Open File"), answersPath, tr("Jeopardy Round File (*.jrf)"));
         this->fileString = dir.absoluteFilePath(this->fileString);
         file = new QFile(this->fileString);
 
         if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
         {
-          QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+          QMessageBox::critical(this, tr("Error"), QString("Could not open file %1").arg(fileString));
           return;
         }
     }

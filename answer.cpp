@@ -55,7 +55,7 @@ Answer::Answer(QWidget *parent, QString file, int round, Player *players, int pl
     ui->videoPlayer->setVisible(false);
 
     if(sound)
-        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource("sound/jeopardy.wav"));
+        this->music = Phonon::createPlayer(Phonon::NoCategory, Phonon::MediaSource(QString("%1/sound/jeopardy.wav").arg(rootPath)));
 
     this->isVideo = false;
 }
@@ -217,7 +217,7 @@ void Answer::processText(QString *answer)
 
 void Answer::prependDir(QString *answer)
 {
-    answer->prepend(QString("/answers/%1/").arg(this->round));
+    answer->prepend(QString("%1/%2/").arg(answersPath).arg(this->round));
     answer->prepend(QDir::currentPath());
 }
 
@@ -351,7 +351,7 @@ bool Answer::getAnswer(int category, int points, QString *answer)
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QMessageBox::critical(this, tr("Error"), tr("Could not open round file"));
+        QMessageBox::critical(this, tr("Error"), QString("Could not open round file %1").arg(getRoundFile()));
         return false;
     }
 

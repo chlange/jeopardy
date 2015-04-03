@@ -70,6 +70,9 @@
 #define SPLIT_FOR_TWO_LABELS 2
 #define OFFSET 1
 
+extern QString gameStatePath;
+extern QString backupPath;
+
 class GameField : public QDialog {
     Q_OBJECT
 public:
