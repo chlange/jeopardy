@@ -40,9 +40,9 @@ QString answersPath;
 void makeDir(QDir dir) {
     if (!dir.exists()) {
         if(!dir.mkpath(".")) {
-            QMessageBox::critical(0, "Error", QString("Unable to create directory %1. Please check the permissions \
-                of the directory or set the environment variable \"jeopardyRoot\" to specify a \
-                custom jeopardy home (i.e. export jeopardyRoot=/home/chlange/jeopardy).").arg(dir.path()));
+            QMessageBox::critical(0, "Error", QString("Unable to create directory %1. Please check the permissions "
+                "of the directory or set the environment variable \"jeopardyRoot\" to specify a "
+                "custom jeopardy home (i.e. export jeopardyRoot=/home/chlange/jeopardy).").arg(dir.path()));
             exit(1);
         }
     }
